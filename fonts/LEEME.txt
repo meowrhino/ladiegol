@@ -1,0 +1,11 @@
+Aquí van los .woff2:
+
+  jetbrains-mono-400.woff2   (JetBrains Mono, licencia libre OFL)
+  bksmono-regular.woff2      (de pago — hay que comprarla o pedirla al cliente)
+  akkurat.woff2              (de pago, Lineto — idem)
+
+Cuando estén, descomentar el bloque @font-face de css/style.css.
+Mientras tanto la web usa la mono del sistema y no se rompe nada.
+
+Falta también el logotipo "LA DIEGOL" (la gótica del Figma):
+exportarlo como SVG o conseguir el .woff2 de esa tipo.

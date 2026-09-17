@@ -1,0 +1,92 @@
+{
+  "_ayuda": {
+    "slug": "identificador interno: tiene que llamarse igual la carpeta dentro de _PROJECTS/",
+    "destacado": "true = ocupa una casilla grande en el grid de la home",
+    "visible": "false = no sale en la home, pero la url /<slug> sigue funcionando",
+    "stills": "cuántas fotos hay en la carpeta (1.webp … n.webp). Lo actualiza tools/build-assets.sh",
+    "vimeo": "ids de los videos de vimeo, en orden. Solo el número"
+  },
+  "meta": {
+    "nombre": "LA DIEGOL",
+    "titulo": "LA DIEGOL — director",
+    "email": "",
+    "instagram": "",
+    "bio": "Marta aka LA DIEGOL is a director born and raised in Barcelona. Her work explores everyday life through a contemporary, urban and human lens, with a strong focus on performance, rhythm and visual storytelling.\n\nWith a background in dance and performing arts, movement is central to the way she builds a scene, from the body and camera to the edit. She works closely and collaboratively with actors, creating an environment of trust where performances feel spontaneous and full of personality. Across advertising and music, LA DIEGOL combines cinematic imagery with a strong sense of narrative, always looking for emotion in the details.",
+    "clientes": [
+      "CUPRA",
+      "FC BARCELONA",
+      "LEROY MERLIN",
+      "COCHES.NET",
+      "GENERALITAT DE CATALUNYA",
+      "YUYO CALM"
+    ]
+  },
+  "projects": [
+    {
+      "slug": "are-you-one-of-us",
+      "titulo": "ARE YOU ONE OF US?",
+      "cliente": "CUPRA",
+      "tipo": "COMMERCIAL",
+      "destacado": true,
+      "visible": true,
+      "vimeo": ["930328854"],
+      "stills": 12,
+      "creditos": ""
+    },
+    {
+      "slug": "aftermatch",
+      "titulo": "AFTERMATCH",
+      "cliente": "FC BARCELONA",
+      "tipo": "COMMERCIAL",
+      "destacado": true,
+      "visible": true,
+      "vimeo": ["1174739797"],
+      "stills": 16,
+      "creditos": ""
+    },
+    {
+      "slug": "no-te-hace-falta",
+      "titulo": "No te hace falta… ¿o sí?",
+      "cliente": "LEROY MERLIN",
+      "tipo": "COMMERCIAL",
+      "destacado": true,
+      "visible": true,
+      "vimeo": ["1103052790", "1103049614"],
+      "stills": 12,
+      "creditos": ""
+    },
+    {
+      "slug": "coches-net",
+      "titulo": "Coches.NET",
+      "cliente": "COCHES.NET",
+      "tipo": "COMMERCIALS",
+      "destacado": false,
+      "visible": true,
+      "vimeo": ["1170052328", "1170052216"],
+      "stills": 9,
+      "creditos": ""
+    },
+    {
+      "slug": "llegir",
+      "titulo": "Llegir, el centre dels teus plans",
+      "cliente": "GENERALITAT DE CATALUNYA",
+      "tipo": "COMMERCIAL",
+      "destacado": false,
+      "visible": true,
+      "vimeo": ["1003647463"],
+      "stills": 11,
+      "creditos": ""
+    },
+    {
+      "slug": "yuyo-calm",
+      "titulo": "Tómatelo con calma",
+      "cliente": "YUYO CALM",
+      "tipo": "COMMERCIAL",
+      "destacado": false,
+      "visible": true,
+      "vimeo": ["673202952"],
+      "stills": 7,
+      "creditos": ""
+    }
+  ]
+}

@@ -1,0 +1,223 @@
+/* LA DIEGOL — estilos. Todo lo editable está en :root */
+
+:root {
+  --bg: #0c0c0c;
+  --fg: #ededed;
+  --fg-dim: #8a8a8a;
+  --line: #262626;
+
+  /* Tipografías. Cuando tengamos los archivos, se activan los @font-face de abajo */
+  --font-mono: "JetBrains Mono", "BKSMono", ui-monospace, SFMono-Regular, Menlo, monospace;
+  --font-sans: "Akkurat", var(--font-mono);
+  --font-display: "LaDiegol Display", "UnifrakturCook", var(--font-mono);
+
+  --gap: 10px;
+  --pad: 16px;
+  --dur: .45s;
+}
+
+/*
+Cuando tengamos las tipos (woff2 en /fonts), descomentar:
+
+@font-face { font-family:"JetBrains Mono"; src:url(/fonts/jetbrains-mono-400.woff2) format("woff2");
+             font-weight:400; font-style:normal; font-display:swap; }
+@font-face { font-family:"BKSMono"; src:url(/fonts/bksmono-regular.woff2) format("woff2");
+             font-weight:400; font-style:normal; font-display:swap; }
+@font-face { font-family:"Akkurat"; src:url(/fonts/akkurat.woff2) format("woff2");
+             font-weight:400; font-style:normal; font-display:swap; }
+*/
+
+*, *::before, *::after { box-sizing: border-box; }
+
+html { background: var(--bg); }
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--fg);
+  font-family: var(--font-mono);
+  font-size: 13px;
+  line-height: 1.5;
+  letter-spacing: .01em;
+  -webkit-font-smoothing: antialiased;
+}
+
+a { color: inherit; text-decoration: none; }
+img, video { display: block; width: 100%; height: 100%; object-fit: cover; }
+
+/* ---------- cabecera ---------- */
+
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: var(--pad) var(--pad) calc(var(--pad) * .75);
+  background: linear-gradient(var(--bg) 70%, transparent);
+}
+
+.wordmark {
+  font-family: var(--font-display);
+  font-size: clamp(22px, 3.4vw, 34px);
+  letter-spacing: .02em;
+  line-height: 1;
+}
+
+.site-nav { display: flex; gap: 1rem; color: var(--fg-dim); }
+.site-nav a:hover, .site-nav a.is-active { color: var(--fg); }
+
+.app { padding: 0 var(--pad) calc(var(--pad) * 4); }
+.loading { color: var(--fg-dim); }
+
+/* ---------- home: grid ---------- */
+
+.grid {
+  display: grid;
+  container-type: inline-size;
+  grid-template-columns: repeat(3, 1fr);
+  /* la altura de fila sale del ancho de columna, para que la casilla sea 16:9
+     y la casilla doble (2x2) sea otro 16:9 el doble de grande */
+  grid-auto-rows: calc((100cqw - var(--gap) * 2) / 3 * 0.5625);
+  gap: var(--gap);
+  grid-auto-flow: row dense;
+}
+
+.tile {
+  position: relative;
+  display: block;
+  overflow: hidden;
+  background: #151515;
+}
+
+/* los proyectos destacados ocupan dos columnas y dos filas, alternando lado */
+.tile--big { grid-column: span 2; grid-row: span 2; }
+.tile--big.tile--right { grid-column: 2 / span 2; }
+
+.tile__still,
+.tile__loop {
+  position: absolute;
+  inset: 0;
+  transition: opacity var(--dur) ease;
+}
+
+.tile__loop { opacity: 0; }
+.tile.is-playing .tile__loop { opacity: 1; }
+.tile.is-playing .tile__still { opacity: 0; }
+
+.tile__meta {
+  position: absolute;
+  inset: auto 0 0 0;
+  display: flex;
+  justify-content: space-between;
+  gap: .75rem;
+  padding: .5rem .6rem;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: .06em;
+  color: #fff;
+  background: linear-gradient(transparent, rgba(0, 0, 0, .65));
+  opacity: 0;
+  transition: opacity var(--dur) ease;
+}
+
+.tile:hover .tile__meta,
+.tile.is-active .tile__meta,
+.tile:focus-visible .tile__meta { opacity: 1; }
+
+.tile__meta span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.tile__meta span:first-child { flex: 0 1 auto; }
+.tile__meta span:last-child { flex: 1 1 auto; text-align: right; color: var(--fg-dim); }
+.tile__meta span:only-child { flex: 1 1 auto; }
+
+/* ---------- proyecto ---------- */
+
+.project { max-width: 1100px; margin: 0 auto; }
+
+.project__head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: .5rem 1.25rem;
+  padding: .5rem 0 1rem;
+  border-bottom: 1px solid var(--line);
+  margin-bottom: var(--gap);
+}
+
+.project__title { margin: 0; font-size: 15px; font-weight: 400; text-transform: uppercase; letter-spacing: .06em; }
+.project__meta { color: var(--fg-dim); text-transform: uppercase; letter-spacing: .06em; font-size: 11px; }
+
+/* vimeo: portada estática hasta que se clica (no cargamos el player sin querer) */
+.player {
+  position: relative;
+  aspect-ratio: 16 / 9;
+  background: #151515;
+  margin-bottom: var(--gap);
+  cursor: pointer;
+  overflow: hidden;
+}
+
+.player iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
+
+.player__play {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  font-size: 30px;
+  color: #fff;
+  text-shadow: 0 0 20px rgba(0, 0, 0, .6);
+  transition: transform var(--dur) ease;
+}
+
+.player:hover .player__play { transform: scale(1.12); }
+
+.stills { display: flex; flex-direction: column; gap: var(--gap); }
+.stills img { height: auto; }
+.still { background: #151515; }
+.still:nth-child(3n + 2) { width: min(100%, 62%); align-self: flex-start; }
+.still:nth-child(4n + 3) { width: min(100%, 78%); align-self: flex-end; }
+
+.credits {
+  margin-top: calc(var(--gap) * 3);
+  padding-top: 1rem;
+  border-top: 1px solid var(--line);
+  color: var(--fg-dim);
+  white-space: pre-wrap;
+}
+
+.back { display: inline-block; margin-top: 2rem; color: var(--fg-dim); }
+.back:hover { color: var(--fg); }
+
+/* ---------- about ---------- */
+
+.about { max-width: 62ch; padding-top: 1rem; }
+.about p { white-space: pre-wrap; }
+.about__clients { margin-top: 2rem; color: var(--fg-dim); text-transform: uppercase; letter-spacing: .06em; font-size: 11px; }
+.about__portrait { margin-top: 2rem; }
+
+/* ---------- móvil ---------- */
+
+@media (max-width: 720px) {
+  :root { --gap: 6px; --pad: 12px; }
+  .grid {
+    grid-template-columns: repeat(2, 1fr);
+    grid-auto-rows: calc((100cqw - var(--gap)) / 2 * 0.5625);
+  }
+  .tile--big { grid-column: span 2; grid-row: span 2; }
+  .tile--big.tile--right { grid-column: span 2; }
+  .still:nth-child(3n + 2), .still:nth-child(4n + 3) { width: 100%; }
+  /* en móvil el rótulo aparece en la casilla que queda en el centro */
+  .tile__meta { font-size: 9px; padding: .35rem .4rem; letter-spacing: .04em; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * { transition: none !important; }
+}
