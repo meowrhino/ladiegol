@@ -22,5 +22,3 @@ export const shuffled = (arr) => {
   }
   return copy;
 };
-
-export const pick = (arr) => arr[Math.floor(Math.random() * arr.length)];

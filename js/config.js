@@ -5,8 +5,8 @@
 export const BASE = new URL("../", import.meta.url).pathname;
 
 export const canHover = matchMedia("(hover: hover) and (pointer: fine)").matches;
-export const reducedMotion = matchMedia("(prefers-reduced-motion: reduce)").matches;
-export const saveData = navigator.connection?.saveData === true;
+const reducedMotion = matchMedia("(prefers-reduced-motion: reduce)").matches;
+const saveData = navigator.connection?.saveData === true;
 
 // si el usuario pide menos movimiento o va con ahorro de datos, nada de loops
 export const loopsEnabled = !reducedMotion && !saveData;

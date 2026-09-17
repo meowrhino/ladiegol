@@ -10,7 +10,6 @@ export async function load() {
 }
 
 export const meta = () => data.meta;
-export const projects = () => data.projects;
 export const visibles = () => data.projects.filter((p) => p.visible !== false);
 export const bySlug = (slug) => data.projects.find((p) => p.slug === slug);
 

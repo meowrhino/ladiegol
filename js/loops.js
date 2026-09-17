@@ -19,7 +19,7 @@ export function makeLoop(slug) {
   return v;
 }
 
-export function loadSources(v) {
+function loadSources(v) {
   if (!v || v.dataset.loaded) return;
   v.dataset.loaded = "1";
   const webm = el("source");
@@ -34,7 +34,7 @@ export function loadSources(v) {
 
 // "activo" = hover en escritorio, o casilla centrada en móvil.
 // Enciende el rótulo siempre; el loop, solo si toca.
-export function play(tile) {
+function play(tile) {
   tile.classList.add("is-active");
   if (!loopsEnabled) return;
   const v = tile.querySelector(".tile__loop");
@@ -55,7 +55,7 @@ export function play(tile) {
   else v.addEventListener("canplay", start, { once: true });
 }
 
-export function stop(tile) {
+function stop(tile) {
   tile.classList.remove("is-active", "is-playing");
   const v = tile.querySelector(".tile__loop");
   if (!v) return;

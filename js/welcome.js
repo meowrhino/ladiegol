@@ -6,10 +6,10 @@
      stills → lo mismo pero con stills sueltos
 
    Se elige en data.json (meta.welcome.modo) y se pueden ver los dos en
-   /welcome/loop y /welcome/stills. */
+   /welcome-loop y /welcome-stills. */
 
 import { asset, loopsEnabled } from "./config.js";
-import { el, pick, shuffled } from "./dom.js";
+import { el, shuffled } from "./dom.js";
 import { allStills, meta, withLoop } from "./data.js";
 import { wordmark, autoShuffle } from "./wordmark.js";
 
@@ -172,6 +172,3 @@ function runStills(layers) {
     });
   };
 }
-
-/* por si algún día queremos un still suelto al azar en otro sitio */
-export const stillAlAzar = () => pick(allStills());
