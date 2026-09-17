@@ -10,10 +10,10 @@ Portfolio de LA DIEGOL. Web estática (JAMstack): un `index.html`, un `data.json
 
 - **Home** (`/`): un grid con un proyecto por casilla. Se ve el **primer still**; al pasar el ratón por encima arranca el **loop** de ese proyecto (el gif, ya convertido a video). En **móvil no hay hover**, así que se activa solo lo que queda en la **franja central** de la pantalla mientras haces scroll.
 - Los proyectos con `"destacado": true` ocupan una **casilla doble**, alternando lado.
-- **Proyecto** (`/<slug>`): título + cliente, el/los videos de Vimeo (no cargan hasta que los clicas) y la galería de stills.
-- **About** (`/about`): la bio y la lista de clientes, de `data.json`.
+- **Proyecto** (`/<slug>`): primero el/los videos de Vimeo (no cargan hasta que los clicas), debajo la ficha (título · cliente · tipo) y después la galería de stills, todos del mismo ancho.
+- **About** (`/about`): la bio y la lista de clientes, de `data.json`. Se entra **clicando el nombre** de la cabecera; para volver, el "index" de arriba a la derecha.
 - **Welcome** (`/welcome`): la portada de bienvenida, con el nombre cambiando de tipografía letra a letra sobre un pase de los proyectos. Hay dos versiones para comparar: **`/welcome-loop`** (los loops, uno tras otro) y **`/welcome-stills`** (stills sueltos).
-- El **logo** reparte seis góticas entre las letras, una distinta cada vez que se carga la página (y al pasarle el ratón por encima en la cabecera).
+- El **logo** reparte seis góticas entre las letras, una distinta cada vez que se carga la página (y al pasarle el ratón por encima en la cabecera). En la home va grande y se va con el scroll; en el resto se queda pequeño y fijo arriba.
 
 ---
 

@@ -6,13 +6,14 @@ import { el, link } from "./dom.js";
 export function project(p) {
   const wrap = el("article", "project");
 
+  // primero el video, que es lo importante; luego la ficha; luego las fotos
+  (p.vimeo || []).forEach((id, i) => wrap.append(player(id, p, i)));
+
   const head = el("div", "project__head");
   head.append(el("h1", "project__title", p.titulo));
   const ficha = [p.cliente, p.tipo].filter(Boolean).join(" · ");
   if (ficha) head.append(el("p", "project__meta", ficha));
   wrap.append(head);
-
-  (p.vimeo || []).forEach((id, i) => wrap.append(player(id, p, i)));
 
   const stills = el("div", "stills");
   for (let i = 1; i <= (p.stills || 0); i++) {

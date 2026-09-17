@@ -69,12 +69,23 @@ img, video { display: block; width: 100%; height: 100%; object-fit: cover; }
   line-height: 1;
 }
 
-.wordmark__dash { font-family: var(--font-mono); white-space: pre; }
-.wordmark__letter { display: inline-block; transition: font-family 0s; }
-.wordmark__space { width: .35em; display: inline-block; }
+.wordmark__letter { display: inline-block; }
+.wordmark__space { width: .28em; display: inline-block; }
+
+/* en la home el nombre manda: grande, con aire, y se va con el scroll */
+body[data-vista="home"] .site-header { position: static; }
+
+body[data-vista="home"] .wordmark {
+  font-size: clamp(44px, 9vw, 112px);
+}
+
+body[data-vista="home"] .site-header {
+  align-items: flex-end;
+  padding: calc(var(--pad) * 1.5) var(--pad) calc(var(--pad) * 1.5);
+}
 
 .site-nav { display: flex; gap: 1rem; color: var(--fg-dim); }
-.site-nav a:hover, .site-nav a.is-active { color: var(--fg); }
+.site-nav a:hover { color: var(--fg); }
 
 .app { padding: 0 var(--pad) calc(var(--pad) * 4); }
 .loading { color: var(--fg-dim); }

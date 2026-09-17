@@ -2,7 +2,7 @@
    'mounted' se llama al pintarla y devuelve su función de limpieza. */
 
 import { BASE, href } from "./config.js";
-import { el } from "./dom.js";
+import { el, link } from "./dom.js";
 import { load, bySlug, meta } from "./data.js";
 import { wordmark, reshuffle } from "./wordmark.js";
 import { home } from "./home.js";
@@ -109,9 +109,8 @@ function render() {
   app.replaceChildren(view.node);
   if (view.mounted) limpiar = view.mounted();
 
-  nav.querySelectorAll("a").forEach((a) =>
-    a.classList.toggle("is-active", a.getAttribute("href") === location.pathname)
-  );
+  // desde la home no hay a dónde volver; desde el resto, un "index"
+  nav.replaceChildren(...(path === "" ? [] : [link("site-nav__index", href(), "index")]));
   window.scrollTo(0, 0);
 }
 
@@ -130,14 +129,11 @@ addEventListener("popstate", render);
 
 load()
   .then(() => {
-    marca.href = href();
+    // el nombre es el enlace al about
+    marca.href = href("about");
     marca.dataset.link = "";
-    marca.replaceChildren(el("span", "wordmark__dash", "– "), wordmark(meta().nombre));
+    marca.replaceChildren(wordmark(meta().nombre));
     marca.addEventListener("pointerenter", () => reshuffle(marca));
-
-    nav.querySelectorAll("a[data-path]").forEach((a) => {
-      a.href = href(a.dataset.path);
-    });
 
     render();
   })

@@ -7,9 +7,10 @@
   flex-wrap: wrap;
   align-items: baseline;
   gap: .5rem 1.25rem;
-  padding: .5rem 0 1rem;
-  border-bottom: 1px solid var(--line);
+  padding: 1rem 0;
   margin-bottom: var(--gap);
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
 }
 
 .project__title {
@@ -56,9 +57,3 @@
 .stills { display: flex; flex-direction: column; gap: var(--gap); }
 .stills img { height: auto; }
 .still { background: #151515; }
-.still:nth-child(3n + 2) { width: min(100%, 62%); align-self: flex-start; }
-.still:nth-child(4n + 3) { width: min(100%, 78%); align-self: flex-end; }
-
-@media (max-width: 720px) {
-  .still:nth-child(3n + 2), .still:nth-child(4n + 3) { width: 100%; }
-}

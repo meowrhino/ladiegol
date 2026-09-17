@@ -1,7 +1,8 @@
 /* El about: bio y clientes, tal cual salen de data.json. */
 
-import { el } from "./dom.js";
+import { el, link } from "./dom.js";
 import { meta } from "./data.js";
+import { href } from "./config.js";
 
 export function about() {
   const m = meta();
@@ -30,5 +31,6 @@ export function about() {
     wrap.append(p);
   }
 
+  wrap.append(link("back", href(), "← index"));
   return { node: wrap };
 }
