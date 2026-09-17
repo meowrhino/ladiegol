@@ -8,14 +8,14 @@
    Se elige en data.json (meta.welcome.modo) y se pueden ver los dos en
    /welcome/loop y /welcome/stills. */
 
-import { asset, href, loopsEnabled } from "./config.js";
+import { asset, loopsEnabled } from "./config.js";
 import { el, pick, shuffled } from "./dom.js";
 import { allStills, meta, withLoop } from "./data.js";
 import { wordmark, autoShuffle } from "./wordmark.js";
 
 const STILL_MS = 1400; // lo que dura cada still en pantalla
 
-export function welcome(modo, go) {
+export function welcome(modo, salir) {
   // sin loops (ahorro de datos o reduced motion) el modo video no tiene sentido
   const mode = modo === "loop" && loopsEnabled ? "loop" : "stills";
 
@@ -29,8 +29,7 @@ export function welcome(modo, go) {
 
   wrap.append(media, el("div", "welcome__veil"), name, el("p", "welcome__hint", "enter"));
 
-  const enter = () => go(href());
-  wrap.addEventListener("click", enter);
+  wrap.addEventListener("click", salir);
 
   return {
     node: wrap,
@@ -38,7 +37,7 @@ export function welcome(modo, go) {
       const stopName = autoShuffle(name, 260, 1100);
       const stopPase = mode === "loop" ? runLoops(layers) : runStills(layers);
       const onKey = (e) => {
-        if (e.key === "Enter" || e.key === " " || e.key === "Escape") enter();
+        if (e.key === "Enter" || e.key === " " || e.key === "Escape") salir();
       };
       addEventListener("keydown", onKey);
       return () => {
@@ -67,11 +66,8 @@ function slot(mode) {
 }
 
 /* webm si el navegador puede; si no, mp4 (Safari viejo) */
-const loopSrc = (slug) => {
-  const probe = document.createElement("video");
-  const webm = probe.canPlayType('video/webm; codecs="vp9"');
-  return asset(slug, webm ? "hover.webm" : "hover.mp4");
-};
+const soportaWebm = document.createElement("video").canPlayType('video/webm; codecs="vp9"') !== "";
+const loopSrc = (slug) => asset(slug, soportaWebm ? "hover.webm" : "hover.mp4");
 
 /* Pase de loops: cada clip se ve entero y encadena con el siguiente.
    Mientras uno suena, el otro ya se está cargando, así no hay parón. */

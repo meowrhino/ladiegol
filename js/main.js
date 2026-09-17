@@ -30,15 +30,37 @@ function go(url) {
   render();
 }
 
+/* salir del welcome: si ya estamos en la portada no hay a dónde navegar,
+   solo hay que volver a pintar (la marca de "ya visto" está puesta) */
+const salirDelWelcome = () => (ruta() === "" ? render() : go(href()));
+
+/* en navegación privada sessionStorage puede petar: que no tumbe la web */
+const visto = {
+  get: () => {
+    try {
+      return sessionStorage.getItem("welcome-visto");
+    } catch {
+      return null;
+    }
+  },
+  set: () => {
+    try {
+      sessionStorage.setItem("welcome-visto", "1");
+    } catch {
+      /* nada */
+    }
+  },
+};
+
 /* ---------- vistas ---------- */
 
 function vista(path) {
   if (path === "") {
     const w = meta().welcome;
     // el welcome solo sale de portada si está activado, y una vez por visita
-    if (w?.activo && !sessionStorage.getItem("welcome-visto")) {
-      sessionStorage.setItem("welcome-visto", "1");
-      return [welcome(w.modo, go), meta().titulo || meta().nombre];
+    if (w?.activo && !visto.get()) {
+      visto.set();
+      return [welcome(w.modo, salirDelWelcome), meta().titulo || meta().nombre];
     }
     return [home(), meta().titulo || meta().nombre];
   }
@@ -49,7 +71,7 @@ function vista(path) {
   // porque el html enlaza css y js con rutas relativas
   if (path === "welcome" || path.startsWith("welcome-")) {
     const modo = path.slice("welcome-".length) || meta().welcome?.modo || "loop";
-    return [welcome(modo, go), `welcome — ${meta().nombre}`];
+    return [welcome(modo, salirDelWelcome), `welcome — ${meta().nombre}`];
   }
 
   const p = bySlug(path);
