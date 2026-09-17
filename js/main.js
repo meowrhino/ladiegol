@@ -108,11 +108,19 @@ function play(tile) {
   const v = tile.querySelector(".tile__loop");
   if (!v) return;
   loadSources(v);
-  tile.classList.add("is-playing");
-  v.play().catch(() => {
-    // si el navegador se niega (autoplay bloqueado), nos quedamos con el still
-    tile.classList.remove("is-playing");
-  });
+
+  const start = () => {
+    // si mientras cargaba el ratón ya se ha ido, no arrancamos
+    if (!tile.classList.contains("is-active")) return;
+    v.play()
+      .then(() => tile.classList.add("is-playing"))
+      // si el navegador se niega (autoplay bloqueado), nos quedamos con el still
+      .catch(() => tile.classList.remove("is-playing"));
+  };
+
+  // pedir play() antes de que haya datos aborta la reproducción: esperamos
+  if (v.readyState >= 2) start();
+  else v.addEventListener("canplay", start, { once: true });
 }
 
 function stop(tile) {
