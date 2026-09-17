@@ -18,10 +18,15 @@
   position: absolute;
   inset: 0;
   opacity: 0;
-  transition: opacity .6s ease;
+  /* el fundido largo es lo que hace que el pase no parezca un parpadeo;
+     si se cambia, cambiar también FUNDIDO_MS en js/welcome.js */
+  transition: opacity 1.1s ease;
 }
 
 .welcome__slot.is-front { opacity: 1; }
+
+/* los loops se encadenan más rápido: cada clip ya trae su propio movimiento */
+.welcome--loop .welcome__slot { transition: opacity .6s ease; }
 
 /* el velo baja el contraste del pase para que el nombre se lea siempre */
 .welcome__veil {

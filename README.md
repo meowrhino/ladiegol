@@ -110,6 +110,11 @@ Se configura en `data.json`, dentro de `meta`:
 
 Se sale clicando en cualquier sitio (o con enter / espacio / esc).
 
+El ritmo del pase de stills está arriba de `js/welcome.js`: `STILL_MS` (2,6 s por foto) y
+`FUNDIDO_MS` (1,1 s de fundido, que va también en `css/welcome.css`). Nunca salen dos fotos
+seguidas del mismo proyecto, y cada una lleva un zoom lentísimo para que no parezca un
+pase de diapositivas.
+
 > Los loops son los mismos de la home, de 960 px de ancho. Si nos quedamos con el modo
 > `loop`, conviene generarlos más grandes para pantalla completa (subir `HOVER_W` en
 > `tools/build-assets.sh`, o hacer unos aparte solo para el welcome).
