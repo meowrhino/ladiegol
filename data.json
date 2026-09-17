@@ -4,7 +4,9 @@
     "destacado": "true = ocupa una casilla grande en el grid de la home",
     "visible": "false = no sale en la home, pero la url /<slug> sigue funcionando",
     "stills": "cuántas fotos hay en la carpeta (1.webp … n.webp). Lo actualiza tools/build-assets.sh",
-    "vimeo": "ids de los videos de vimeo, en orden. Solo el número"
+    "vimeo": "ids de los videos de vimeo, en orden. Solo el número",
+    "loop": "false = ese proyecto no tiene loop de hover (ni sale en el welcome)",
+    "welcome": "la portada de bienvenida: activo (si sale al entrar) y modo (loop o stills)"
   },
   "meta": {
     "nombre": "LA DIEGOL",
@@ -19,7 +21,11 @@
       "COCHES.NET",
       "GENERALITAT DE CATALUNYA",
       "YUYO CALM"
-    ]
+    ],
+    "welcome": {
+      "activo": false,
+      "modo": "loop"
+    }
   },
   "projects": [
     {
@@ -29,9 +35,11 @@
       "tipo": "COMMERCIAL",
       "destacado": true,
       "visible": true,
-      "vimeo": ["930328854"],
+      "vimeo": [
+        "930328854"
+      ],
       "stills": 12,
-      "creditos": ""
+      "loop": true
     },
     {
       "slug": "aftermatch",
@@ -40,9 +48,11 @@
       "tipo": "COMMERCIAL",
       "destacado": true,
       "visible": true,
-      "vimeo": ["1174739797"],
+      "vimeo": [
+        "1174739797"
+      ],
       "stills": 16,
-      "creditos": ""
+      "loop": true
     },
     {
       "slug": "no-te-hace-falta",
@@ -51,9 +61,12 @@
       "tipo": "COMMERCIAL",
       "destacado": true,
       "visible": true,
-      "vimeo": ["1103052790", "1103049614"],
+      "vimeo": [
+        "1103052790",
+        "1103049614"
+      ],
       "stills": 12,
-      "creditos": ""
+      "loop": true
     },
     {
       "slug": "coches-net",
@@ -62,9 +75,12 @@
       "tipo": "COMMERCIALS",
       "destacado": false,
       "visible": true,
-      "vimeo": ["1170052328", "1170052216"],
+      "vimeo": [
+        "1170052328",
+        "1170052216"
+      ],
       "stills": 9,
-      "creditos": ""
+      "loop": true
     },
     {
       "slug": "llegir",
@@ -73,9 +89,11 @@
       "tipo": "COMMERCIAL",
       "destacado": false,
       "visible": true,
-      "vimeo": ["1003647463"],
+      "vimeo": [
+        "1003647463"
+      ],
       "stills": 11,
-      "creditos": ""
+      "loop": true
     },
     {
       "slug": "yuyo-calm",
@@ -84,9 +102,11 @@
       "tipo": "COMMERCIAL",
       "destacado": false,
       "visible": true,
-      "vimeo": ["673202952"],
+      "vimeo": [
+        "673202952"
+      ],
       "stills": 7,
-      "creditos": ""
+      "loop": false
     }
   ]
 }

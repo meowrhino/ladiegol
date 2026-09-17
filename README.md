@@ -2,7 +2,7 @@
 
 Portfolio de LA DIEGOL. Web estática (JAMstack): un `index.html`, un `data.json` y una carpeta de archivos por proyecto. Sin build, sin dependencias.
 
-**Regla de oro:** el contenido se toca en **`data.json`** y en **`_PROJECTS/`**. El código (`index.html`, `css/style.css`, `js/main.js`) no hace falta tocarlo.
+**Regla de oro:** el contenido se toca en **`data.json`** y en **`_PROJECTS/`**. El código (`index.html`, `css/`, `js/`) no hace falta tocarlo.
 
 ---
 
@@ -12,6 +12,8 @@ Portfolio de LA DIEGOL. Web estática (JAMstack): un `index.html`, un `data.json
 - Los proyectos con `"destacado": true` ocupan una **casilla doble**, alternando lado.
 - **Proyecto** (`/<slug>`): título + cliente, el/los videos de Vimeo (no cargan hasta que los clicas) y la galería de stills.
 - **About** (`/about`): la bio y la lista de clientes, de `data.json`.
+- **Welcome** (`/welcome`): la portada de bienvenida, con el nombre cambiando de tipografía letra a letra sobre un pase de los proyectos. Hay dos versiones para comparar: **`/welcome-loop`** (los loops, uno tras otro) y **`/welcome-stills`** (stills sueltos).
+- El **logo** reparte seis góticas entre las letras, una distinta cada vez que se carga la página (y al pasarle el ratón por encima en la cabecera).
 
 ---
 
@@ -75,7 +77,7 @@ demasiado, sube `HOVER_CRF`; si se ve feo, bájalo.
   "visible": true,
   "vimeo": ["930328854"],
   "stills": 12,
-  "creditos": ""
+  "loop": true
 }
 ```
 
@@ -87,9 +89,59 @@ demasiado, sube `HOVER_CRF`; si se ve feo, bájalo.
 | `visible` | `false` = no sale en la home, pero `/<slug>` sigue funcionando (para pasar el link antes de publicar) |
 | `vimeo` | ids de Vimeo, solo el número, en orden |
 | `stills` | cuántas fotos hay (`1.webp … n.webp`). Lo dice el script al terminar |
-| `creditos` | texto libre de la ficha técnica. Vacío = no aparece |
+| `loop` | `false` si ese proyecto no tiene loop de hover (tampoco sale en el welcome) |
 
 El **orden de la home** es el orden del array `projects`.
+
+---
+
+---
+
+## La portada de bienvenida (welcome)
+
+Se configura en `data.json`, dentro de `meta`:
+
+```json
+"welcome": { "activo": false, "modo": "loop" }
+```
+
+- `activo`: `true` = al entrar en la web sale primero el welcome (una vez por visita; luego ya no molesta). `false` = no sale, pero se puede ver entrando a mano en `/welcome`.
+- `modo`: `"loop"` o `"stills"`.
+
+Se sale clicando en cualquier sitio (o con enter / espacio / esc).
+
+> Los loops son los mismos de la home, de 960 px de ancho. Si nos quedamos con el modo
+> `loop`, conviene generarlos más grandes para pantalla completa (subir `HOVER_W` en
+> `tools/build-assets.sh`, o hacer unos aparte solo para el welcome).
+
+---
+
+## Estructura del código
+
+```
+index.html / 404.html   ← el mismo cascarón (404 para las urls profundas)
+css/
+  base.css      tokens, tipografías, cabecera, about
+  home.css      el grid
+  project.css   ficha, vimeo y galería
+  welcome.css   la portada de bienvenida
+js/
+  main.js       arranque y router
+  config.js     rutas base y detección de hover / ahorro de datos
+  dom.js        cuatro ayudas (crear elementos, barajar, elegir al azar)
+  data.js       carga y consultas de data.json
+  home.js       el grid
+  loops.js      los loops de las casillas (hover o centro de pantalla)
+  project.js    la página de proyecto
+  about.js      el about
+  welcome.js    las dos versiones del welcome
+  wordmark.js   el nombre con una tipo por letra
+fonts/          JetBrains Mono + seis góticas (recortadas a las mayúsculas)
+```
+
+Las rutas son siempre de **un solo tramo** (`/welcome-loop`, no `/welcome/loop`): el html
+enlaza css y js con rutas relativas para que la web funcione igual en un dominio propio
+que en `usuario.github.io/ladiegol/`.
 
 ---
 
@@ -108,11 +160,21 @@ Si cambias algo y sigues viendo lo viejo: caché. **Cmd+Shift+R**.
 
 ---
 
+## Tipografías
+
+- **JetBrains Mono** (texto) y seis góticas para el logo: UnifrakturMaguntia, Germania One,
+  Pirata One, New Rocker, Metal Mania y Grenze Gotisch. Todas libres (OFL), servidas desde
+  `fonts/` y recortadas a mayúsculas y números: pesan 74 KB entre las siete.
+- Si aparecen los archivos de **Akkurat** o **BKSMono**, se añaden a `fonts/`, se declara el
+  `@font-face` en `css/base.css` y se cambia `--font-mono` / `--font-sans`.
+- Para cambiar una gótica del logo: sustituir el `dN-*.woff2` correspondiente y su `@font-face`
+  (`"Diegol N"`). Si algún día son más o menos de seis, ajustar `FAMILIES` en `js/wordmark.js`.
+
+---
+
 ## Pendiente
 
-- [ ] **Tipografías**: faltan los `.woff2` (ver `fonts/LEEME.txt`). Ahora mismo tira de la mono del sistema.
-- [ ] **Logotipo**: la gótica de "LA DIEGOL" del Figma, en SVG o en fuente.
 - [ ] **Email / Instagram** del `meta` de `data.json`, que están vacíos.
-- [ ] **Créditos** de cada proyecto (fichas técnicas completas).
-- [ ] Faltan el **gif de hover de Yuyo Calm** y los stills/loop de la sección `welcome`.
-- [ ] Decidir si la home lleva **más casillas que proyectos** (en el Figma se ven ~18).
+- [ ] Falta el **gif de hover de Yuyo Calm** (ahora mismo `"loop": false`).
+- [ ] Decidir la versión del **welcome** (`/welcome-loop` vs `/welcome-stills`) y activarlo.
+- [ ] Con 10 proyectos habrá que revisar el ritmo de casillas grandes de la home.

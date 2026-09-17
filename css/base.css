@@ -1,0 +1,108 @@
+/* Tokens, tipografías, cabecera y about. */
+
+:root {
+  --bg: #0c0c0c;
+  --fg: #ededed;
+  --fg-dim: #8a8a8a;
+  --line: #262626;
+
+  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+  --font-sans: var(--font-mono);
+
+  --gap: 10px;
+  --pad: 16px;
+  --dur: .45s;
+}
+
+@font-face {
+  font-family: "JetBrains Mono";
+  src: url(../fonts/jetbrains-mono-400.woff2) format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* Las seis góticas del logo. El nombre reparte una por letra (js/wordmark.js). */
+@font-face { font-family: "Diegol 1"; src: url(../fonts/d1-unifraktur-maguntia.woff2) format("woff2"); font-display: swap; }
+@font-face { font-family: "Diegol 2"; src: url(../fonts/d2-germania-one.woff2) format("woff2"); font-display: swap; }
+@font-face { font-family: "Diegol 3"; src: url(../fonts/d3-pirata-one.woff2) format("woff2"); font-display: swap; }
+@font-face { font-family: "Diegol 4"; src: url(../fonts/d4-new-rocker.woff2) format("woff2"); font-display: swap; }
+@font-face { font-family: "Diegol 5"; src: url(../fonts/d5-metal-mania.woff2) format("woff2"); font-display: swap; }
+@font-face { font-family: "Diegol 6"; src: url(../fonts/d6-grenze-gotisch.woff2) format("woff2"); font-display: swap; }
+
+*, *::before, *::after { box-sizing: border-box; }
+
+html { background: var(--bg); }
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--fg);
+  font-family: var(--font-mono);
+  font-size: 13px;
+  line-height: 1.5;
+  letter-spacing: .01em;
+  -webkit-font-smoothing: antialiased;
+}
+
+a { color: inherit; text-decoration: none; }
+img, video { display: block; width: 100%; height: 100%; object-fit: cover; }
+
+/* ---------- cabecera ---------- */
+
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: var(--pad) var(--pad) calc(var(--pad) * .75);
+  background: linear-gradient(var(--bg) 70%, transparent);
+}
+
+.wordmark {
+  display: inline-flex;
+  align-items: baseline;
+  font-size: clamp(22px, 3.4vw, 34px);
+  line-height: 1;
+}
+
+.wordmark__dash { font-family: var(--font-mono); white-space: pre; }
+.wordmark__letter { display: inline-block; transition: font-family 0s; }
+.wordmark__space { width: .35em; display: inline-block; }
+
+.site-nav { display: flex; gap: 1rem; color: var(--fg-dim); }
+.site-nav a:hover, .site-nav a.is-active { color: var(--fg); }
+
+.app { padding: 0 var(--pad) calc(var(--pad) * 4); }
+.loading { color: var(--fg-dim); }
+
+/* la portada de bienvenida ocupa la pantalla entera: fuera cabecera y márgenes */
+body[data-vista="welcome"] .site-header { display: none; }
+body[data-vista="welcome"] .app { padding: 0; }
+
+/* ---------- about ---------- */
+
+.about { max-width: 62ch; padding-top: 1rem; }
+.about p { white-space: pre-wrap; }
+
+.about__clients {
+  margin-top: 2rem;
+  color: var(--fg-dim);
+  text-transform: uppercase;
+  letter-spacing: .06em;
+  font-size: 11px;
+}
+
+.back { display: inline-block; margin-top: 2rem; color: var(--fg-dim); }
+.back:hover { color: var(--fg); }
+
+@media (max-width: 720px) {
+  :root { --gap: 6px; --pad: 12px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * { transition: none !important; }
+}
