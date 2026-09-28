@@ -1,0 +1,5 @@
+{
+  // Live Server: si la url no es un archivo (/cerca, /about…), sirve index.html
+  // y la web se encarga, igual que en Cloudflare. Sin esto, recargar en un proyecto da 404.
+  "liveServer.settings.file": "index.html"
+}

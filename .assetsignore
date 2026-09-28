@@ -1,6 +1,7 @@
 # Lo que NO se sube a Cloudflare (mismo formato que .gitignore)
 .git
 .claude
+.vscode
 .DS_Store
 .gitignore
 .nojekyll

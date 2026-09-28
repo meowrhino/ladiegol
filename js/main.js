@@ -21,7 +21,8 @@ let limpiar = null;
 const ruta = () => {
   const p = decodeURIComponent(location.pathname);
   const rel = p.startsWith(BASE) ? p.slice(BASE.length) : p.replace(/^\//, "");
-  return rel.replace(/\/+$/, "");
+  // Live Server (y algún enlace viejo) abren /index.html: es la portada
+  return rel.replace(/\/+$/, "").replace(/^index\.html$/, "");
 };
 
 function go(url) {
@@ -137,6 +138,11 @@ load()
 
     render();
   })
-  .catch(() => {
-    app.replaceChildren(el("p", "loading", "no se ha podido cargar data.json"));
+  .catch((e) => {
+    // casi siempre es una coma de más o de menos en data.json: el mensaje del
+    // navegador dice en qué línea, así se encuentra rápido
+    app.replaceChildren(
+      el("p", "loading", "no se ha podido cargar data.json"),
+      el("p", "loading", e.message)
+    );
   });
