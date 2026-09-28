@@ -1,12 +1,15 @@
 {
   "_ayuda": {
-    "slug": "identificador interno: tiene que llamarse igual la carpeta dentro de _PROJECTS/",
+    "slug": "identificador interno: tiene que llamarse igual que la carpeta dentro de _PROJECTS/, y es la url (ladiegol.com/slug)",
+    "titulo / cliente / tipo": "lo que se ve en la casilla y en la ficha del proyecto",
     "destacado": "true = ocupa una casilla grande en el grid de la home",
     "visible": "false = no sale en la home, pero la url /<slug> sigue funcionando",
-    "stills": "cuántas fotos hay en la carpeta (1.webp … n.webp). Lo actualiza tools/build-assets.sh",
-    "vimeo": "ids de los videos de vimeo, en orden. Solo el número",
+    "vimeo": "ids de los videos de vimeo, en orden. Solo el número (de vimeo.com/930328854 → \"930328854\")",
+    "stills": "cuántas fotos hay en la carpeta stills/ del proyecto (1.webp … n.webp)",
+    "portada": "qué still sale en la home y de portada del video (el número del archivo)",
     "loop": "false = ese proyecto no tiene loop de hover (ni sale en el welcome)",
-    "welcome": "la portada de bienvenida: activo (si sale al entrar) y modo (loop o stills)"
+    "loops": "de dónde salen los loops: \"video\" (hover.webm) o \"gif\" (hover.webp)",
+    "welcome": "la portada de bienvenida: activo (si sale al entrar), modo (loop o stills) y stills (\"slug/número\" de las fotos que salen)"
   },
   "meta": {
     "nombre": "LA DIEGOL",
@@ -17,14 +20,38 @@
     "clientes": [
       "CUPRA",
       "FC BARCELONA",
+      "LOEWE",
+      "SAMSUNG",
+      "BURGER KING",
       "LEROY MERLIN",
+      "SOLGAR",
+      "VITALPROTEINS",
+      "PORT AVENTURA WORLD",
       "COCHES.NET",
       "GENERALITAT DE CATALUNYA",
       "YUYO CALM"
     ],
+    "loops": "video",
     "welcome": {
       "activo": false,
-      "modo": "loop"
+      "modo": "loop",
+      "stills": [
+        "stripper/1",
+        "are-you-one-of-us/1",
+        "are-you-one-of-us/10",
+        "are-you-one-of-us/11",
+        "aftermatch/4",
+        "aftermatch/8",
+        "aftermatch/13",
+        "no-te-hace-falta/3",
+        "llegir/6",
+        "llegir/8",
+        "llegir/10",
+        "made-to-remember/1",
+        "made-to-remember/3",
+        "stripper/14",
+        "cerca/6"
+      ]
     }
   },
   "projects": [
@@ -38,7 +65,8 @@
       "vimeo": [
         "930328854"
       ],
-      "stills": 12,
+      "stills": 11,
+      "portada": 1,
       "loop": true
     },
     {
@@ -52,34 +80,49 @@
         "1174739797"
       ],
       "stills": 16,
+      "portada": 5,
       "loop": true
     },
     {
-      "slug": "no-te-hace-falta",
-      "titulo": "No te hace falta… ¿o sí?",
-      "cliente": "LEROY MERLIN",
-      "tipo": "COMMERCIAL",
-      "destacado": true,
-      "visible": true,
-      "vimeo": [
-        "1103052790",
-        "1103049614"
-      ],
-      "stills": 12,
-      "loop": true
-    },
-    {
-      "slug": "coches-net",
-      "titulo": "Coches.NET",
-      "cliente": "COCHES.NET",
-      "tipo": "COMMERCIALS",
+      "slug": "stripper",
+      "titulo": "STRIPPER",
+      "cliente": "KYNE",
+      "tipo": "MUSIC VIDEO",
       "destacado": false,
       "visible": true,
       "vimeo": [
-        "1170052328",
-        "1170052216"
+        "482361533"
       ],
-      "stills": 9,
+      "stills": 14,
+      "portada": 1,
+      "loop": true
+    },
+    {
+      "slug": "ringtone",
+      "titulo": "RINGTONE",
+      "cliente": "R3HAB x FAFAQ x DNF",
+      "tipo": "MUSIC VIDEO",
+      "destacado": false,
+      "visible": true,
+      "vimeo": [
+        "529474950"
+      ],
+      "stills": 11,
+      "portada": 1,
+      "loop": true
+    },
+    {
+      "slug": "made-to-remember",
+      "titulo": "MADE TO REMEMBER",
+      "cliente": "PORT AVENTURA WORLD",
+      "tipo": "COMMERCIAL",
+      "destacado": false,
+      "visible": true,
+      "vimeo": [
+        "868348765"
+      ],
+      "stills": 4,
+      "portada": 1,
       "loop": true
     },
     {
@@ -93,6 +136,65 @@
         "1003647463"
       ],
       "stills": 11,
+      "portada": 1,
+      "loop": true
+    },
+    {
+      "slug": "no-te-hace-falta",
+      "titulo": "No te hace falta… ¿o sí?",
+      "cliente": "LEROY MERLIN",
+      "tipo": "COMMERCIAL",
+      "destacado": true,
+      "visible": true,
+      "vimeo": [
+        "1103052790",
+        "1103049614"
+      ],
+      "stills": 10,
+      "portada": 1,
+      "loop": true
+    },
+    {
+      "slug": "cerca",
+      "titulo": "CERCA",
+      "cliente": "CERCA",
+      "tipo": "COMMERCIAL",
+      "destacado": false,
+      "visible": true,
+      "vimeo": [
+        "839359914"
+      ],
+      "stills": 8,
+      "portada": 1,
+      "loop": true
+    },
+    {
+      "slug": "coches-net",
+      "titulo": "Coches.NET",
+      "cliente": "COCHES.NET",
+      "tipo": "COMMERCIAL",
+      "destacado": false,
+      "visible": true,
+      "vimeo": [
+        "1170052328",
+        "1170052216"
+      ],
+      "stills": 8,
+      "portada": 1,
+      "loop": true
+    },
+    {
+      "slug": "flooded",
+      "titulo": "FLOODED",
+      "cliente": "FRANSIE KLAAS",
+      "tipo": "MUSIC VIDEO",
+      "destacado": false,
+      "visible": true,
+      "vimeo": [
+        "334675479"
+      ],
+      "stills": 9,
+      "portada": 1,
       "loop": true
     },
     {
@@ -105,8 +207,23 @@
       "vimeo": [
         "673202952"
       ],
-      "stills": 7,
-      "loop": false
+      "stills": 8,
+      "portada": 1,
+      "loop": true
+    },
+    {
+      "slug": "por-culpa-del-amor",
+      "titulo": "POR CULPA DEL AMOR",
+      "cliente": "DOLLAR SELLMOUNI",
+      "tipo": "MUSIC VIDEO",
+      "destacado": false,
+      "visible": true,
+      "vimeo": [
+        "685499456"
+      ],
+      "stills": 9,
+      "portada": 1,
+      "loop": true
     }
   ]
 }
