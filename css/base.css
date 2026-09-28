@@ -12,6 +12,8 @@
   --gap: 10px;
   --pad: 16px;
   --dur: .45s;
+
+  --grain: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 .13 -.03'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23g)'/%3E%3C/svg%3E");
 }
 
 @font-face {
@@ -34,15 +36,26 @@
 
 html { background: var(--bg); }
 
+/* body sin fondo propio: así el grano (debajo de todo) se ve sobre el negro */
 body {
   margin: 0;
-  background: var(--bg);
   color: var(--fg);
   font-family: var(--font-mono);
   font-size: 13px;
   line-height: 1.5;
   letter-spacing: .01em;
   -webkit-font-smoothing: antialiased;
+}
+
+/* El grano del fondo, como en la referencia: ruido fino fijo detrás de todo.
+   Es un svg de 200 px repetido; la intensidad es el ".13" del feColorMatrix. */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background: var(--grain) fixed;
 }
 
 a { color: inherit; text-decoration: none; }
@@ -59,7 +72,19 @@ img, video { display: block; width: 100%; height: 100%; object-fit: cover; }
   justify-content: space-between;
   gap: 1rem;
   padding: var(--pad) var(--pad) calc(var(--pad) * .75);
-  background: linear-gradient(var(--bg) 70%, transparent);
+}
+
+/* El fondo de la cabecera tapa lo que pasa por debajo al hacer scroll. Lleva
+   el mismo grano que el fondo, fijo para que case, y se desvanece con una
+   máscara: así no queda ni franja lisa ni raya de grano doble. */
+.site-header::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: var(--grain) fixed, var(--bg);
+  -webkit-mask-image: linear-gradient(#000 70%, transparent);
+  mask-image: linear-gradient(#000 70%, transparent);
 }
 
 .wordmark {
@@ -73,7 +98,7 @@ img, video { display: block; width: 100%; height: 100%; object-fit: cover; }
 .wordmark__space { width: .28em; display: inline-block; }
 
 /* en la home el nombre manda: grande, con aire, y se va con el scroll */
-body[data-vista="home"] .site-header { position: static; }
+body[data-vista="home"] .site-header { position: relative; }
 
 body[data-vista="home"] .wordmark {
   font-size: clamp(44px, 9vw, 112px);
