@@ -1,6 +1,6 @@
 /* La home: un grid con un proyecto por casilla. */
 
-import { asset, href } from "./config.js";
+import { href, still as stillSrc } from "./config.js";
 import { el, link } from "./dom.js";
 import { visibles } from "./data.js";
 import { makeLoop, wireLoops } from "./loops.js";
@@ -21,7 +21,7 @@ export function home() {
     }
 
     const still = el("img", "tile__still");
-    still.src = asset(p.slug, "poster.webp");
+    still.src = stillSrc(p.slug, p.portada || 1);
     still.alt = `${p.cliente} — ${p.titulo}`;
     still.loading = "lazy";
     still.decoding = "async";

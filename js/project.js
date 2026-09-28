@@ -1,6 +1,6 @@
 /* La página de un proyecto: ficha, videos de vimeo y galería de stills. */
 
-import { asset, href } from "./config.js";
+import { href, still } from "./config.js";
 import { el, link } from "./dom.js";
 
 export function project(p) {
@@ -18,7 +18,7 @@ export function project(p) {
   const stills = el("div", "stills");
   for (let i = 1; i <= (p.stills || 0); i++) {
     const img = el("img", "still");
-    img.src = asset(p.slug, `${i}.webp`);
+    img.src = still(p.slug, i);
     img.alt = `${p.titulo} — still ${i}`;
     img.loading = "lazy";
     img.decoding = "async";
@@ -38,7 +38,8 @@ function player(id, p, i) {
   box.setAttribute("aria-label", `play ${p.titulo}`);
 
   const poster = el("img");
-  poster.src = asset(p.slug, i === 0 ? "poster.webp" : `${Math.min(i + 1, p.stills || 1)}.webp`);
+  // el primer video lleva la portada; los siguientes, los stills que vienen después
+  poster.src = still(p.slug, i === 0 ? p.portada || 1 : Math.min(i + 1, p.stills || 1));
   poster.alt = "";
   poster.loading = i === 0 ? "eager" : "lazy";
   box.append(poster, el("div", "player__play", "▶"));

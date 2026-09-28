@@ -13,3 +13,4 @@ export const loopsEnabled = !reducedMotion && !saveData;
 
 export const href = (path = "") => BASE + path;
 export const asset = (slug, file) => `${BASE}_PROJECTS/${slug}/${file}`;
+export const still = (slug, n) => asset(slug, `stills/${n}.webp`);

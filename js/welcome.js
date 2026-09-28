@@ -6,11 +6,12 @@
      stills → lo mismo pero con stills sueltos
 
    Se elige en data.json (meta.welcome.modo) y se pueden ver los dos en
-   /welcome-loop y /welcome-stills. */
+   /welcome-loop y /welcome-stills. Los stills son los de meta.welcome.stills
+   (o todos, si no hay lista); los loops, del formato que diga meta.loops. */
 
-import { asset, loopsEnabled, reducedMotion } from "./config.js";
+import { asset, still, loopsEnabled, reducedMotion } from "./config.js";
 import { el, shuffled } from "./dom.js";
-import { allStills, meta, withLoop } from "./data.js";
+import { loopFormat, meta, welcomeStills, withLoop } from "./data.js";
 import { wordmark, autoShuffle } from "./wordmark.js";
 
 /* El ritmo del pase de stills. Son los números a tocar si va rápido o lento:
@@ -18,6 +19,8 @@ import { wordmark, autoShuffle } from "./wordmark.js";
    (ese valor está también en css/welcome.css). */
 const STILL_MS = 2600;
 const FUNDIDO_MS = 1100;
+// los webp animados no avisan de cuándo acaban: cada uno se ve este rato
+const LOOP_GIF_MS = 4000;
 
 export function welcome(modo, salir) {
   // sin loops (ahorro de datos o reduced motion) el modo video no tiene sentido
@@ -41,7 +44,8 @@ export function welcome(modo, salir) {
       // con los stills todo va más calmado, también las letras
       const stopName =
         mode === "stills" ? autoShuffle(name, 900, 2800) : autoShuffle(name, 260, 1100);
-      const stopPase = mode === "loop" ? runLoops(layers) : runStills(layers);
+      const stopPase =
+        mode === "stills" ? runStills(layers) : loopFormat() === "gif" ? runGifs(layers) : runLoops(layers);
       const onKey = (e) => {
         if (e.key === "Enter" || e.key === " " || e.key === "Escape") salir();
       };
@@ -56,7 +60,7 @@ export function welcome(modo, salir) {
 }
 
 function slot(mode) {
-  if (mode === "stills") {
+  if (mode === "stills" || loopFormat() === "gif") {
     const img = el("img", "welcome__slot");
     img.alt = "";
     img.decoding = "async";
@@ -71,9 +75,7 @@ function slot(mode) {
   return v;
 }
 
-/* webm si el navegador puede; si no, mp4 (Safari viejo) */
-const soportaWebm = document.createElement("video").canPlayType('video/webm; codecs="vp9"') !== "";
-const loopSrc = (slug) => asset(slug, soportaWebm ? "hover.webm" : "hover.mp4");
+const loopSrc = (slug) => asset(slug, "hover.webm");
 
 /* Pase de loops: cada clip se ve entero y encadena con el siguiente.
    Mientras uno suena, el otro ya se está cargando, así no hay parón.
@@ -150,11 +152,48 @@ function runLoops(layers) {
   };
 }
 
+/* Pase de loops en webp animado: como el de stills, pero sin zoom (ya se
+   mueven solos) y cada uno se queda LOOP_GIF_MS. */
+function runGifs(layers) {
+  const cola = shuffled(withLoop());
+  if (!cola.length) return () => {};
+
+  let i = 0;
+  let front = 1;
+  let vivo = true;
+  let timer = null;
+
+  const siguiente = () => {
+    if (!vivo) return;
+    const img = layers[1 - front];
+    img.onload = () => {
+      if (!vivo) return;
+      layers[front].classList.remove("is-front");
+      img.classList.add("is-front");
+      front = 1 - front;
+      timer = setTimeout(siguiente, LOOP_GIF_MS);
+    };
+    img.onerror = () => {
+      if (vivo) timer = setTimeout(siguiente, 100);
+    };
+    img.src = asset(cola[i++ % cola.length].slug, "hover.webp");
+  };
+
+  siguiente();
+  return () => {
+    vivo = false;
+    clearTimeout(timer);
+    layers.forEach((img) => {
+      img.onload = img.onerror = null;
+    });
+  };
+}
+
 /* Pase de stills: uno cada STILL_MS, encadenados con un fundido largo y sin
    poner nunca dos fotos seguidas del mismo proyecto (eran casi el mismo plano
    y parecía que la web parpadeaba). */
 function runStills(layers) {
-  const todos = allStills();
+  const todos = welcomeStills();
   if (!todos.length) return () => {};
 
   let cola = shuffled(todos);
@@ -203,7 +242,7 @@ function runStills(layers) {
     img.onerror = () => {
       if (vivo) timer = setTimeout(siguiente, 100);
     };
-    img.src = asset(slug, `${n}.webp`);
+    img.src = still(slug, n);
   };
 
   siguiente();
