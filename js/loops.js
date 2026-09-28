@@ -1,56 +1,18 @@
-/* Los loops de las casillas de la home.
-   Nacen sin fuente: solo se la damos cuando toca reproducirlos, así la home no
-   descarga nada de loops hasta que hay hover (o centro, en móvil).
-
-   Dos formatos (ver loopFormat en data.js):
-     video → <video> con hover.webm (sacado del vídeo con videoToWeb)
-     gif   → <img> con hover.webp animado (sacado del gif con imgToWeb) */
+/* Los loops de las casillas de la home: el gif de cada proyecto, pasado a
+   webp animado (hover.webp) con imgToWeb.
+   El <img> nace sin fuente: solo se la damos cuando toca, así la home no
+   descarga nada de loops hasta que hay hover (o centro, en móvil). */
 
 import { asset, canHover, loopsEnabled } from "./config.js";
 import { el } from "./dom.js";
-import { loopFormat } from "./data.js";
 
 export function makeLoop(slug) {
-  if (loopFormat() === "gif") {
-    const img = el("img", "tile__loop");
-    img.alt = "";
-    img.decoding = "async";
-    img.setAttribute("aria-hidden", "true");
-    img.dataset.src = asset(slug, "hover.webp");
-    return img;
-  }
-
-  const v = el("video", "tile__loop");
-  v.muted = true;
-  v.loop = true;
-  v.playsInline = true;
-  v.preload = "none";
-  v.setAttribute("muted", "");
-  v.setAttribute("playsinline", "");
-  v.setAttribute("aria-hidden", "true");
-  v.dataset.webm = asset(slug, "hover.webm");
-  return v;
-}
-
-/* Solo webm: lo leen todos los navegadores actuales (Safari desde macOS 16 /
-   iOS 17.4). En uno más viejo no arranca y se queda la foto de portada. */
-function loadSources(v) {
-  if (!v || v.dataset.loaded || v.tagName !== "VIDEO") return;
-  v.dataset.loaded = "1";
-  const webm = el("source");
-  webm.src = v.dataset.webm;
-  webm.type = "video/webm";
-  v.append(webm);
-  v.load();
-}
-
-/* El webp animado arranca en cuanto tiene fuente. Al parar se la quitamos:
-   así deja de gastar y la próxima vez empieza desde el principio. */
-function playImg(tile, img) {
-  img.onload = () => {
-    if (tile.classList.contains("is-active")) tile.classList.add("is-playing");
-  };
-  img.src = img.dataset.src;
+  const img = el("img", "tile__loop");
+  img.alt = "";
+  img.decoding = "async";
+  img.setAttribute("aria-hidden", "true");
+  img.dataset.src = asset(slug, "hover.webp");
+  return img;
 }
 
 // "activo" = hover en escritorio, o casilla centrada en móvil.
@@ -58,36 +20,23 @@ function playImg(tile, img) {
 function play(tile) {
   tile.classList.add("is-active");
   if (!loopsEnabled) return;
-  const v = tile.querySelector(".tile__loop");
-  if (!v) return;
-  if (v.tagName === "IMG") return playImg(tile, v);
-  loadSources(v);
-
-  const start = () => {
-    // si mientras cargaba el ratón ya se ha ido, no arrancamos
-    if (!tile.classList.contains("is-active")) return;
-    v.play()
-      .then(() => tile.classList.add("is-playing"))
-      // si el navegador se niega (autoplay bloqueado), nos quedamos con el still
-      .catch(() => tile.classList.remove("is-playing"));
+  const img = tile.querySelector(".tile__loop");
+  if (!img) return;
+  // el webp animado arranca en cuanto carga; si el ratón ya se ha ido, no se enseña
+  img.onload = () => {
+    if (tile.classList.contains("is-active")) tile.classList.add("is-playing");
   };
-
-  // pedir play() antes de que haya datos aborta la reproducción: esperamos
-  if (v.readyState >= 2) start();
-  else v.addEventListener("canplay", start, { once: true });
+  img.src = img.dataset.src;
 }
 
+/* Al parar le quitamos la fuente: deja de gastar y la próxima vez empieza
+   desde el principio (la descarga ya queda en caché). */
 function stop(tile) {
   tile.classList.remove("is-active", "is-playing");
-  const v = tile.querySelector(".tile__loop");
-  if (!v) return;
-  if (v.tagName === "IMG") {
-    v.onload = null;
-    v.removeAttribute("src");
-    return;
-  }
-  v.pause();
-  v.currentTime = 0;
+  const img = tile.querySelector(".tile__loop");
+  if (!img) return;
+  img.onload = null;
+  img.removeAttribute("src");
 }
 
 /** Conecta el hover (escritorio) o el observador del centro (móvil).
@@ -105,7 +54,8 @@ export function wireLoops(grid) {
       tile.addEventListener("blur", leave);
     });
     // precargamos el primero: suele ser el que se toca antes
-    if (loopsEnabled && tiles[0]) loadSources(tiles[0].querySelector(".tile__loop"));
+    const first = tiles[0]?.querySelector(".tile__loop");
+    if (loopsEnabled && first) new Image().src = first.dataset.src;
     return () => {};
   }
 

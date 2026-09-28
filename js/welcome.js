@@ -2,16 +2,15 @@
    encima de un pase de imágenes de los proyectos.
 
    Dos modos, para poder compararlos:
-     loop   → los loops de los proyectos, uno tras otro, en orden aleatorio
-     stills → lo mismo pero con stills sueltos
+     loop   → los loops (hover.webp) de los proyectos, en orden aleatorio
+     stills → los stills de meta.welcome.stills (o todos, si no hay lista)
 
    Se elige en data.json (meta.welcome.modo) y se pueden ver los dos en
-   /welcome-loop y /welcome-stills. Los stills son los de meta.welcome.stills
-   (o todos, si no hay lista); los loops, del formato que diga meta.loops. */
+   /welcome-loop y /welcome-stills. */
 
 import { asset, still, loopsEnabled, reducedMotion } from "./config.js";
 import { el, shuffled } from "./dom.js";
-import { loopFormat, meta, welcomeStills, withLoop } from "./data.js";
+import { meta, welcomeStills, withLoop } from "./data.js";
 import { wordmark, autoShuffle } from "./wordmark.js";
 
 /* El ritmo del pase de stills. Son los números a tocar si va rápido o lento:
@@ -19,16 +18,16 @@ import { wordmark, autoShuffle } from "./wordmark.js";
    (ese valor está también en css/welcome.css). */
 const STILL_MS = 2600;
 const FUNDIDO_MS = 1100;
-// los webp animados no avisan de cuándo acaban: cada uno se ve este rato
-const LOOP_GIF_MS = 4000;
+// los webp animados no avisan de cuándo acaban: cada loop se ve este rato
+const LOOP_MS = 4000;
 
 export function welcome(modo, salir) {
-  // sin loops (ahorro de datos o reduced motion) el modo video no tiene sentido
+  // sin loops (ahorro de datos o reduced motion) el modo loop no tiene sentido
   const mode = modo === "loop" && loopsEnabled ? "loop" : "stills";
 
   const wrap = el("section", `welcome welcome--${mode}`);
   const media = el("div", "welcome__media");
-  const layers = [slot(mode), slot(mode)];
+  const layers = [slot(), slot()];
   media.append(...layers);
 
   const name = el("h1", "welcome__name");
@@ -45,7 +44,7 @@ export function welcome(modo, salir) {
       const stopName =
         mode === "stills" ? autoShuffle(name, 900, 2800) : autoShuffle(name, 260, 1100);
       const stopPase =
-        mode === "stills" ? runStills(layers) : loopFormat() === "gif" ? runGifs(layers) : runLoops(layers);
+        mode === "stills" ? runStills(layers) : runLoops(layers);
       const onKey = (e) => {
         if (e.key === "Enter" || e.key === " " || e.key === "Escape") salir();
       };
@@ -59,102 +58,16 @@ export function welcome(modo, salir) {
   };
 }
 
-function slot(mode) {
-  if (mode === "stills" || loopFormat() === "gif") {
-    const img = el("img", "welcome__slot");
-    img.alt = "";
-    img.decoding = "async";
-    return img;
-  }
-  const v = el("video", "welcome__slot");
-  v.muted = true;
-  v.playsInline = true;
-  v.preload = "auto";
-  v.setAttribute("muted", "");
-  v.setAttribute("playsinline", "");
-  return v;
+function slot() {
+  const img = el("img", "welcome__slot");
+  img.alt = "";
+  img.decoding = "async";
+  return img;
 }
 
-const loopSrc = (slug) => asset(slug, "hover.webm");
-
-/* Pase de loops: cada clip se ve entero y encadena con el siguiente.
-   Mientras uno suena, el otro ya se está cargando, así no hay parón.
-
-   Ojo con los handlers: un <video> reutilizado dispara 'canplay' cada vez que
-   se le cambia la fuente. Si no se limpian, cada uno arranca una cadena nueva
-   y el pase se vuelve loco. Por eso aquí se anulan siempre antes de usarlos. */
+/* Pase de loops: como el de stills, pero sin zoom (ya se mueven solos) y
+   cada uno se queda LOOP_MS. */
 function runLoops(layers) {
-  const cola = shuffled(withLoop());
-  if (!cola.length) return () => {};
-
-  let i = 0;
-  let front = 1;
-  let vivo = true;
-  let timer = null;
-
-  const limpia = (v) => {
-    v.oncanplay = null;
-    v.onended = null;
-  };
-
-  // prepara el siguiente clip en la capa de atrás
-  const carga = () => {
-    const p = cola[i++ % cola.length];
-    const v = layers[1 - front];
-    limpia(v);
-    v.pause();
-    v.src = loopSrc(p.slug);
-    v.load();
-    return v;
-  };
-
-  // lo pone delante, lo arranca y deja el siguiente cargando
-  const pasa = (v) => {
-    if (!vivo) return;
-    limpia(v);
-    v.currentTime = 0;
-    v.play().catch(() => {});
-    layers[front].classList.remove("is-front");
-    v.classList.add("is-front");
-    front = 1 - front;
-
-    const siguiente = carga();
-    let hecho = false;
-    const avanza = () => {
-      if (hecho) return; // 'ended' y el temporizador de reserva, solo uno manda
-      hecho = true;
-      v.onended = null;
-      clearTimeout(timer);
-      arranca(siguiente);
-    };
-    v.onended = avanza;
-    // por si el 'ended' no llega (pestaña en segundo plano, formato raro)
-    timer = setTimeout(avanza, Math.max(1500, (v.duration || 3) * 1000 + 400));
-  };
-
-  const arranca = (v) => {
-    if (!vivo) return;
-    if (v.readyState >= 3) pasa(v);
-    else v.oncanplay = () => pasa(v);
-  };
-
-  arranca(carga());
-
-  return () => {
-    vivo = false;
-    clearTimeout(timer);
-    layers.forEach((v) => {
-      limpia(v);
-      v.pause();
-      v.removeAttribute("src");
-      v.load();
-    });
-  };
-}
-
-/* Pase de loops en webp animado: como el de stills, pero sin zoom (ya se
-   mueven solos) y cada uno se queda LOOP_GIF_MS. */
-function runGifs(layers) {
   const cola = shuffled(withLoop());
   if (!cola.length) return () => {};
 
@@ -171,7 +84,7 @@ function runGifs(layers) {
       layers[front].classList.remove("is-front");
       img.classList.add("is-front");
       front = 1 - front;
-      timer = setTimeout(siguiente, LOOP_GIF_MS);
+      timer = setTimeout(siguiente, LOOP_MS);
     };
     img.onerror = () => {
       if (vivo) timer = setTimeout(siguiente, 100);

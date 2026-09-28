@@ -20,7 +20,7 @@ Portfolio de LA DIEGOL. Web estática: un `index.html`, un `data.json` y una car
 
 ## Añadir un proyecto (paso a paso)
 
-Todo se hace con dos herramientas web y tocando solo carpetas y `data.json`.
+Todo se hace con una herramienta web y tocando solo carpetas y `data.json`.
 Hace falta **Chrome** (Safari no sabe crear WebP) y **VS Code** con la extensión **Live Server**
 (VS Code la propone sola al abrir la carpeta).
 
@@ -31,10 +31,10 @@ Hace falta **Chrome** (Safari no sabe crear WebP) y **VS Code** con la extensió
    el orden de la web es ese.
 3. **Descargar todo (zip)** y descomprime.
 
-### 2. El loop → [videoToWeb](https://meowrhino.github.io/videoToWeb/)
+### 2. El loop → [imgToWeb](https://meowrhino.github.io/imgToWeb/) otra vez
 
-1. Elige el modo **loop** (sin audio, 960 px, 12 fps).
-2. Arrastra el **vídeo** del hover (el .mov o el .mp4, no el gif) y descarga el `.webm`.
+Arrastra el **gif** del hover (calidad 85 %) y descarga el `.webp`: sale un WebP animado, con el
+mismo ritmo entrecortado del gif y bastante menos peso.
 
 ### 3. La carpeta
 
@@ -47,7 +47,7 @@ _PROJECTS/por-culpa-del-amor/
     1.webp
     2.webp
     …
-  hover.webm     ← el loop, renombrado así
+  hover.webp     ← el loop, renombrado así
 ```
 
 ### 4. El `data.json`
@@ -91,28 +91,15 @@ guardas `data.json`. Mira la home (la portada y el loop) y entra en el proyecto.
 
 ---
 
-## Los loops: ¿del vídeo o del gif?
+## Los loops
 
-Ahora mismo cada proyecto tiene **los dos** para poder comparar:
+Son los **gifs** del cliente pasados a **WebP animado** (`hover.webp`) con imgToWeb: mismo ritmo
+entrecortado (10 fps) y entre 4 y 25 veces menos peso que el gif (los 12 suman ~35 MB, de 0,8 a 7 MB
+cada uno). No se descarga ninguno hasta que hay hover, o hasta que la casilla llega al centro en
+móvil, y al quitar el ratón vuelve a empezar desde el principio.
 
-- `hover.webm`: sacado del **vídeo** con videoToWeb (modo loop).
-- `hover.webp`: sacado del **gif** con imgToWeb (WebP animado).
-
-Cuál se usa lo decide `"loops"` en el `meta` de `data.json` (`"video"` o `"gif"`). Para comparar
-sin tocar nada, añade **`?loops=gif`** o **`?loops=video`** a la dirección: `…/index.html?loops=gif`,
-`…/welcome-loop?loops=gif`.
-
-| | del vídeo (webm) | del gif (webp animado) |
-|---|---|---|
-| peso de los 12 | ~3,7 MB | ~35 MB |
-| por loop | 180–470 KB | 0,8–7 MB |
-| color | completo | 256 colores con trama |
-| ritmo | velocidad real, 12 fps | como el gif: más rápido y a saltos (10 fps) |
-
-Cuando se elija uno, se borra el otro de todas las carpetas.
-
-WebM lo leen todos los navegadores actuales (Safari desde macOS 16 / iOS 17.4). En uno más viejo el
-loop no arranca y se queda la foto de portada.
+Probamos también sacarlos del vídeo (`.webm`, ~3,7 MB los 12, pero fluidos a velocidad real) y
+gustó más el ritmo del gif. Esos webm están fuera del repo, en `~/Desktop/ladiegol-loops-video/`.
 
 ---
 
@@ -129,23 +116,20 @@ Se configura en `data.json`, dentro de `meta`:
 ```
 
 - `activo`: `true` = al entrar en la web sale primero el welcome (una vez por visita). `false` = no sale, pero se puede ver entrando a mano en `/welcome`.
-- `modo`: `"loop"` (los loops de los proyectos) o `"stills"`.
+- `modo`: `"loop"` (los `hover.webp` de los proyectos, 4 s cada uno) o `"stills"`.
 - `stills`: las fotos del pase, como `"slug/número"`. Si la lista está vacía salen todas.
 
 Se sale clicando en cualquier sitio (o con enter / espacio / esc).
 
 El ritmo está arriba de `js/welcome.js`: `STILL_MS` (2,6 s por foto), `FUNDIDO_MS` (1,1 s de
-fundido, que va también en `css/welcome.css`) y `LOOP_GIF_MS` (lo que dura cada loop si son gifs).
-
-> Los loops son de 960 px. A pantalla completa se ven algo blandos: si nos quedamos con el welcome
-> en modo `loop`, conviene sacarlos con el modo **720p** de videoToWeb.
+fundido, que va también en `css/welcome.css`) y `LOOP_MS` (4 s por loop).
 
 ---
 
 ## Convertir en bloque (para nosotros)
 
-`tools/build-assets.sh` convierte los originales de golpe con **los mismos ajustes** que imgToWeb
-y videoToWeb, para que salga igual que lo que suba el cliente:
+`tools/build-assets.sh` convierte los originales de golpe con **los mismos ajustes** que imgToWeb,
+para que salga igual que lo que suba el cliente:
 
 ```bash
 ./tools/build-assets.sh          # todos los proyectos
@@ -154,7 +138,8 @@ y videoToWeb, para que salga igual que lo que suba el cliente:
 
 Lee de `~/Desktop/ladiegol/projects/N - NOMBRE/{stills,gifs hover}` (se cambia con
 `SRC=/otra/ruta`). Los stills se numeran en el orden de los nombres de archivo (las capturas van
-por fecha). Necesita `brew install ffmpeg webp`.
+por fecha). Necesita `brew install ffmpeg webp`. Los originales de esta tanda ya no están en el
+escritorio: para volver a convertirlos habría que pedírselos otra vez al cliente.
 
 ---
 
@@ -163,7 +148,7 @@ por fecha). Necesita `brew install ffmpeg webp`.
 ```
 index.html / 404.html   ← el mismo cascarón (el 404 solo lo usa GitHub Pages)
 data.json               ← todo el contenido
-_PROJECTS/<slug>/       ← stills/1.webp…, hover.webm (y hover.webp mientras comparamos)
+_PROJECTS/<slug>/       ← stills/1.webp…n.webp y hover.webp
 css/
   base.css      tokens, grano, tipografías, cabecera, about
   home.css      el grid
@@ -253,6 +238,4 @@ Probar exactamente lo que servirá Cloudflare: `npx wrangler dev` → http://loc
 ## Pendiente
 
 - [ ] **Email / Instagram** del `meta` de `data.json`, que están vacíos.
-- [ ] Elegir **loops del vídeo o del gif** y borrar los otros.
 - [ ] Decidir la versión del **welcome** (`/welcome-loop` vs `/welcome-stills`) y activarlo.
-- [ ] Borrar los archivos viejos de `_PROJECTS/` (`poster.webp`, `hover.mp4`, `1.webp`… sueltos en la raíz de cada carpeta).

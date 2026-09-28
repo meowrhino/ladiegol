@@ -7,8 +7,7 @@
     "vimeo": "ids de los videos de vimeo, en orden. Solo el número (de vimeo.com/930328854 → \"930328854\")",
     "stills": "cuántas fotos hay en la carpeta stills/ del proyecto (1.webp … n.webp)",
     "portada": "qué still sale en la home y de portada del video (el número del archivo)",
-    "loop": "false = ese proyecto no tiene loop de hover (ni sale en el welcome)",
-    "loops": "de dónde salen los loops: \"video\" (hover.webm) o \"gif\" (hover.webp)",
+    "loop": "false = ese proyecto no tiene loop de hover, hover.webp (ni sale en el welcome)",
     "welcome": "la portada de bienvenida: activo (si sale al entrar), modo (loop o stills) y stills (\"slug/número\" de las fotos que salen)"
   },
   "meta": {
@@ -31,7 +30,6 @@
       "GENERALITAT DE CATALUNYA",
       "YUYO CALM"
     ],
-    "loops": "video",
     "welcome": {
       "activo": false,
       "modo": "loop",
