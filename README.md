@@ -95,8 +95,8 @@ guardas `data.json`. Mira la home (la portada y el loop) y entra en el proyecto.
 
 Son los **gifs** del cliente pasados a **webm** (`hover.webm`) con videoToWeb en modo loop: el
 mismo ritmo entrecortado del gif (sus fps, normalmente 10) a 960 px. Los 12 suman **~7 MB** (de
-0,3 a 1 MB cada uno). No se descarga ninguno hasta que hay hover, o hasta que la casilla llega al
-centro en móvil.
+0,3 a 1 MB cada uno). Cada loop se descarga cuando su casilla está en pantalla o le falta media
+pantalla para entrar: así el hover arranca al momento y no se baja nada de lo que queda lejos.
 
 Lo que probamos antes de elegir (los 12 loops):
 

@@ -1,7 +1,9 @@
 /* Los loops de las casillas de la home: el gif de cada proyecto pasado a
    webm (hover.webm) con videoToWeb, que le deja su ritmo entrecortado.
-   El <video> nace sin fuentes: solo se las damos cuando toca reproducirlo, así
-   la home no descarga nada de video hasta que hay hover (o centro, en móvil). */
+   El <video> nace sin fuentes y se las damos cuando su casilla está en
+   pantalla o a punto de entrar: así, cuando llega el hover (o el centro, en
+   móvil), el loop ya está descargado y arranca al momento, pero no se baja
+   nada de lo que queda lejos. */
 
 import { asset, canHover, loopsEnabled } from "./config.js";
 import { el } from "./dom.js";
@@ -24,6 +26,7 @@ export function makeLoop(slug) {
 function loadSources(v) {
   if (!v || v.dataset.loaded) return;
   v.dataset.loaded = "1";
+  v.preload = "auto"; // con "none", load() no descargaría nada hasta el play
   const webm = el("source");
   webm.src = v.dataset.webm;
   webm.type = "video/webm";
@@ -66,6 +69,7 @@ function stop(tile) {
     Devuelve la función de limpieza. */
 export function wireLoops(grid) {
   const tiles = [...grid.querySelectorAll(".tile")];
+  const stopPrecarga = precarga(tiles);
 
   if (canHover) {
     tiles.forEach((tile) => {
@@ -76,15 +80,33 @@ export function wireLoops(grid) {
       tile.addEventListener("focus", enter);
       tile.addEventListener("blur", leave);
     });
-    // precargamos el primero: suele ser el que se toca antes
-    if (loopsEnabled && tiles[0]) loadSources(tiles[0].querySelector(".tile__loop"));
-    return () => {};
+    return stopPrecarga;
   }
 
   // Móvil: se activa lo que queda en la franja central de la pantalla.
   const io = new IntersectionObserver(
     (entries) => entries.forEach((e) => (e.isIntersecting ? play(e.target) : stop(e.target))),
     { rootMargin: "-42% 0px -42% 0px", threshold: 0 }
+  );
+  tiles.forEach((t) => io.observe(t));
+  return () => {
+    io.disconnect();
+    stopPrecarga();
+  };
+}
+
+/* Descarga el loop de cada casilla cuando entra en pantalla o le falta
+   media pantalla para entrar. Devuelve la función de limpieza. */
+function precarga(tiles) {
+  if (!loopsEnabled) return () => {};
+  const io = new IntersectionObserver(
+    (entries) =>
+      entries.forEach((e) => {
+        if (!e.isIntersecting) return;
+        loadSources(e.target.querySelector(".tile__loop"));
+        io.unobserve(e.target);
+      }),
+    { rootMargin: "50% 0px 50% 0px", threshold: 0 }
   );
   tiles.forEach((t) => io.observe(t));
   return () => io.disconnect();
