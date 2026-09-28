@@ -20,7 +20,7 @@ Portfolio de LA DIEGOL. Web estática: un `index.html`, un `data.json` y una car
 
 ## Añadir un proyecto (paso a paso)
 
-Todo se hace con una herramienta web y tocando solo carpetas y `data.json`.
+Todo se hace con dos herramientas web y tocando solo carpetas y `data.json`.
 Hace falta **Chrome** (Safari no sabe crear WebP) y **VS Code** con la extensión **Live Server**
 (VS Code la propone sola al abrir la carpeta).
 
@@ -31,10 +31,10 @@ Hace falta **Chrome** (Safari no sabe crear WebP) y **VS Code** con la extensió
    el orden de la web es ese.
 3. **Descargar todo (zip)** y descomprime.
 
-### 2. El loop → [imgToWeb](https://meowrhino.github.io/imgToWeb/) otra vez
+### 2. El loop → [videoToWeb](https://meowrhino.github.io/videoToWeb/)
 
-Arrastra el **gif** del hover (calidad 85 %) y descarga el `.webp`: sale un WebP animado, con el
-mismo ritmo entrecortado del gif y bastante menos peso.
+Elige el modo **loop**, arrastra el **gif** del hover y descarga el `.webm`. Mantiene el ritmo
+entrecortado del gif y pesa muchísimo menos.
 
 ### 3. La carpeta
 
@@ -47,7 +47,7 @@ _PROJECTS/por-culpa-del-amor/
     1.webp
     2.webp
     …
-  hover.webp     ← el loop, renombrado así
+  hover.webm     ← el loop, renombrado así
 ```
 
 ### 4. El `data.json`
@@ -93,13 +93,24 @@ guardas `data.json`. Mira la home (la portada y el loop) y entra en el proyecto.
 
 ## Los loops
 
-Son los **gifs** del cliente pasados a **WebP animado** (`hover.webp`) con imgToWeb: mismo ritmo
-entrecortado (10 fps) y entre 4 y 25 veces menos peso que el gif (los 12 suman ~35 MB, de 0,8 a 7 MB
-cada uno). No se descarga ninguno hasta que hay hover, o hasta que la casilla llega al centro en
-móvil, y al quitar el ratón vuelve a empezar desde el principio.
+Son los **gifs** del cliente pasados a **webm** (`hover.webm`) con videoToWeb en modo loop: el
+mismo ritmo entrecortado del gif (sus fps, normalmente 10) a 960 px. Los 12 suman **~7 MB** (de
+0,3 a 1 MB cada uno). No se descarga ninguno hasta que hay hover, o hasta que la casilla llega al
+centro en móvil.
 
-Probamos también sacarlos del vídeo (`.webm`, ~3,7 MB los 12, pero fluidos a velocidad real) y
-gustó más el ritmo del gif. Esos webm están fuera del repo, en `~/Desktop/ladiegol-loops-video/`.
+Lo que probamos antes de elegir (los 12 loops):
+
+| | peso | |
+|---|---|---|
+| **gif → webm** (el elegido) | ~7 MB | ritmo del gif, misma calidad que el webp a 960 px |
+| gif → webp animado (imgToWeb) | ~36 MB | ritmo del gif, 2000 px |
+| vídeo → webm | ~3,7 MB | fluido, a velocidad real |
+
+Los descartados están fuera del repo, en `~/Desktop/ladiegol-loops-webp/` y
+`~/Desktop/ladiegol-loops-video/`.
+
+WebM lo leen todos los navegadores actuales (Safari desde macOS 16 / iOS 17.4). En uno más viejo el
+loop no arranca y se queda la foto de portada.
 
 ---
 
@@ -116,20 +127,20 @@ Se configura en `data.json`, dentro de `meta`:
 ```
 
 - `activo`: `true` = al entrar en la web sale primero el welcome (una vez por visita). `false` = no sale, pero se puede ver entrando a mano en `/welcome`.
-- `modo`: `"loop"` (los `hover.webp` de los proyectos, 4 s cada uno) o `"stills"`.
+- `modo`: `"loop"` (los loops de los proyectos, uno tras otro) o `"stills"`.
 - `stills`: las fotos del pase, como `"slug/número"`. Si la lista está vacía salen todas.
 
 Se sale clicando en cualquier sitio (o con enter / espacio / esc).
 
-El ritmo está arriba de `js/welcome.js`: `STILL_MS` (2,6 s por foto), `FUNDIDO_MS` (1,1 s de
-fundido, que va también en `css/welcome.css`) y `LOOP_MS` (4 s por loop).
+El ritmo del pase de stills está arriba de `js/welcome.js`: `STILL_MS` (2,6 s por foto) y
+`FUNDIDO_MS` (1,1 s de fundido, que va también en `css/welcome.css`). Los loops se ven enteros.
 
 ---
 
 ## Convertir en bloque (para nosotros)
 
-`tools/build-assets.sh` convierte los originales de golpe con **los mismos ajustes** que imgToWeb,
-para que salga igual que lo que suba el cliente:
+`tools/build-assets.sh` convierte los originales de golpe con **los mismos ajustes** que imgToWeb
+(stills) y videoToWeb (gif → loop), para que salga igual que lo que suba el cliente:
 
 ```bash
 ./tools/build-assets.sh          # todos los proyectos
@@ -148,7 +159,7 @@ escritorio: para volver a convertirlos habría que pedírselos otra vez al clien
 ```
 index.html / 404.html   ← el mismo cascarón (el 404 solo lo usa GitHub Pages)
 data.json               ← todo el contenido
-_PROJECTS/<slug>/       ← stills/1.webp…n.webp y hover.webp
+_PROJECTS/<slug>/       ← stills/1.webp…n.webp y hover.webm
 css/
   base.css      tokens, grano, tipografías, cabecera, about
   home.css      el grid

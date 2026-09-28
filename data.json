@@ -7,7 +7,7 @@
     "vimeo": "ids de los videos de vimeo, en orden. Solo el número (de vimeo.com/930328854 → \"930328854\")",
     "stills": "cuántas fotos hay en la carpeta stills/ del proyecto (1.webp … n.webp)",
     "portada": "qué still sale en la home y de portada del video (el número del archivo)",
-    "loop": "false = ese proyecto no tiene loop de hover, hover.webp (ni sale en el welcome)",
+    "loop": "false = ese proyecto no tiene loop de hover, hover.webm (ni sale en el welcome)",
     "welcome": "la portada de bienvenida: activo (si sale al entrar), modo (loop o stills) y stills (\"slug/número\" de las fotos que salen)"
   },
   "meta": {

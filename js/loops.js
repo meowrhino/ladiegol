@@ -1,18 +1,34 @@
-/* Los loops de las casillas de la home: el gif de cada proyecto, pasado a
-   webp animado (hover.webp) con imgToWeb.
-   El <img> nace sin fuente: solo se la damos cuando toca, así la home no
-   descarga nada de loops hasta que hay hover (o centro, en móvil). */
+/* Los loops de las casillas de la home: el gif de cada proyecto pasado a
+   webm (hover.webm) con videoToWeb, que le deja su ritmo entrecortado.
+   El <video> nace sin fuentes: solo se las damos cuando toca reproducirlo, así
+   la home no descarga nada de video hasta que hay hover (o centro, en móvil). */
 
 import { asset, canHover, loopsEnabled } from "./config.js";
 import { el } from "./dom.js";
 
 export function makeLoop(slug) {
-  const img = el("img", "tile__loop");
-  img.alt = "";
-  img.decoding = "async";
-  img.setAttribute("aria-hidden", "true");
-  img.dataset.src = asset(slug, "hover.webp");
-  return img;
+  const v = el("video", "tile__loop");
+  v.muted = true;
+  v.loop = true;
+  v.playsInline = true;
+  v.preload = "none";
+  v.setAttribute("muted", "");
+  v.setAttribute("playsinline", "");
+  v.setAttribute("aria-hidden", "true");
+  v.dataset.webm = asset(slug, "hover.webm");
+  return v;
+}
+
+/* Solo webm: lo leen todos los navegadores actuales (Safari desde macOS 16 /
+   iOS 17.4). En uno más viejo no arranca y se queda la foto de portada. */
+function loadSources(v) {
+  if (!v || v.dataset.loaded) return;
+  v.dataset.loaded = "1";
+  const webm = el("source");
+  webm.src = v.dataset.webm;
+  webm.type = "video/webm";
+  v.append(webm);
+  v.load();
 }
 
 // "activo" = hover en escritorio, o casilla centrada en móvil.
@@ -20,23 +36,30 @@ export function makeLoop(slug) {
 function play(tile) {
   tile.classList.add("is-active");
   if (!loopsEnabled) return;
-  const img = tile.querySelector(".tile__loop");
-  if (!img) return;
-  // el webp animado arranca en cuanto carga; si el ratón ya se ha ido, no se enseña
-  img.onload = () => {
-    if (tile.classList.contains("is-active")) tile.classList.add("is-playing");
+  const v = tile.querySelector(".tile__loop");
+  if (!v) return;
+  loadSources(v);
+
+  const start = () => {
+    // si mientras cargaba el ratón ya se ha ido, no arrancamos
+    if (!tile.classList.contains("is-active")) return;
+    v.play()
+      .then(() => tile.classList.add("is-playing"))
+      // si el navegador se niega (autoplay bloqueado), nos quedamos con el still
+      .catch(() => tile.classList.remove("is-playing"));
   };
-  img.src = img.dataset.src;
+
+  // pedir play() antes de que haya datos aborta la reproducción: esperamos
+  if (v.readyState >= 2) start();
+  else v.addEventListener("canplay", start, { once: true });
 }
 
-/* Al parar le quitamos la fuente: deja de gastar y la próxima vez empieza
-   desde el principio (la descarga ya queda en caché). */
 function stop(tile) {
   tile.classList.remove("is-active", "is-playing");
-  const img = tile.querySelector(".tile__loop");
-  if (!img) return;
-  img.onload = null;
-  img.removeAttribute("src");
+  const v = tile.querySelector(".tile__loop");
+  if (!v) return;
+  v.pause();
+  v.currentTime = 0;
 }
 
 /** Conecta el hover (escritorio) o el observador del centro (móvil).
@@ -54,8 +77,7 @@ export function wireLoops(grid) {
       tile.addEventListener("blur", leave);
     });
     // precargamos el primero: suele ser el que se toca antes
-    const first = tiles[0]?.querySelector(".tile__loop");
-    if (loopsEnabled && first) new Image().src = first.dataset.src;
+    if (loopsEnabled && tiles[0]) loadSources(tiles[0].querySelector(".tile__loop"));
     return () => {};
   }
 
