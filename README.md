@@ -1,6 +1,6 @@
 # ladiegol.com
 
-Portfolio de LA DIEGOL. Web estática (JAMstack): un `index.html`, un `data.json` y una carpeta de archivos por proyecto. Sin build, sin dependencias.
+Portfolio de LA DIEGOL. Web estática: un `index.html`, un `data.json` y una carpeta por proyecto. Sin build, sin dependencias.
 
 **Regla de oro:** el contenido se toca en **`data.json`** y en **`_PROJECTS/`**. El código (`index.html`, `css/`, `js/`) no hace falta tocarlo.
 
@@ -8,90 +8,111 @@ Portfolio de LA DIEGOL. Web estática (JAMstack): un `index.html`, un `data.json
 
 ## Cómo funciona en 30 segundos
 
-- **Home** (`/`): un grid con un proyecto por casilla. Se ve el **primer still**; al pasar el ratón por encima arranca el **loop** de ese proyecto (el gif, ya convertido a video). En **móvil no hay hover**, así que se activa solo lo que queda en la **franja central** de la pantalla mientras haces scroll.
+- **Home** (`/`): un grid con un proyecto por casilla. Se ve un **still de portada**; al pasar el ratón por encima arranca el **loop** del proyecto. En **móvil no hay hover**, así que se activa lo que queda en la **franja central** de la pantalla mientras haces scroll.
 - Los proyectos con `"destacado": true` ocupan una **casilla doble**, alternando lado.
-- **Proyecto** (`/<slug>`): primero el/los videos de Vimeo (no cargan hasta que los clicas), debajo la ficha (título · cliente · tipo) y después la galería de stills, todos del mismo ancho.
+- **Proyecto** (`/<slug>`): primero el/los videos de Vimeo (no cargan hasta que los clicas), debajo la ficha (título · cliente · tipo) y después la galería de stills.
 - **About** (`/about`): la bio y la lista de clientes, de `data.json`. Se entra **clicando el nombre** de la cabecera; para volver, el "index" de arriba a la derecha.
-- **Welcome** (`/welcome`): la portada de bienvenida, con el nombre cambiando de tipografía letra a letra sobre un pase de los proyectos. Hay dos versiones para comparar: **`/welcome-loop`** (los loops, uno tras otro) y **`/welcome-stills`** (stills sueltos).
-- El **logo** reparte seis góticas entre las letras, una distinta cada vez que se carga la página (y al pasarle el ratón por encima en la cabecera). En la home va grande y se va con el scroll; en el resto se queda pequeño y fijo arriba.
+- **Welcome** (`/welcome`): la portada de bienvenida, con el nombre cambiando de tipografía letra a letra sobre un pase de imágenes. Dos versiones para comparar: **`/welcome-loop`** y **`/welcome-stills`**.
+- El **logo** reparte seis góticas entre las letras, una distinta cada vez que se carga la página. En la home va grande y se va con el scroll; en el resto se queda pequeño y fijo arriba.
+- El **fondo** es negro con grano fino de película.
 
 ---
 
-## Los GIFs: por qué no hay GIFs
+## Añadir un proyecto (paso a paso)
 
-Los gifs de hover originales pesan entre 11 MB y 98 MB cada uno. Puestos tal cual en la home,
-abrir la página serían ~190 MB. Convertidos a video ocupan esto:
+Todo se hace con dos herramientas web y tocando solo carpetas y `data.json`.
+Hace falta **Chrome** (Safari no sabe crear WebP) y **VS Code** con la extensión **Live Server**
+(VS Code la propone sola al abrir la carpeta).
 
-| proyecto | gif original | .webm | .mp4 |
-|---|---|---|---|
-| CUPRA | 41 MB | 112 KB | 188 KB |
+### 1. Los stills → [imgToWeb](https://meowrhino.github.io/imgToWeb/)
 
-Es decir, unas **300–400 veces menos**, y en pantalla se ve igual porque en el grid van a 960 px de ancho.
+1. Arrastra la carpeta de stills del proyecto. Calidad: **85 %** (la que viene).
+2. Deja activado el **renombrado secuencial** (1, 2, 3…) y **arrastra las fotos para ordenarlas**:
+   el orden de la web es ese.
+3. **Descargar todo (zip)** y descomprime.
 
-El truco es el de siempre: **un gif es un video malo**. Se convierten a `.webm` (VP9) con `.mp4` de
-repuesto para Safari viejo, se cargan con `preload="none"` y el navegador no descarga **nada** de
-video hasta que hay hover (o hasta que la casilla llega al centro, en móvil).
+### 2. El loop → [videoToWeb](https://meowrhino.github.io/videoToWeb/)
 
-Lo hace todo el script:
+1. Elige el modo **loop** (sin audio, 960 px, 12 fps).
+2. Arrastra el **vídeo** del hover (el .mov o el .mp4, no el gif) y descarga el `.webm`.
 
-```bash
-./tools/build-assets.sh              # todos los proyectos
-./tools/build-assets.sh yuyo-calm    # solo uno
-```
+### 3. La carpeta
 
-Lee los originales de `~/Desktop/ladiegol` (se cambia con `SRC=/otra/ruta ./tools/build-assets.sh`)
-y deja en `_PROJECTS/<slug>/`:
+Crea `_PROJECTS/<slug>/` (el slug es el nombre corto del proyecto, en minúsculas y con guiones:
+`por-culpa-del-amor`) y deja dentro:
 
 ```
-poster.webp    ← el primer still, para el grid de la home
-hover.webm     ← el loop
-hover.mp4      ← el mismo loop para Safari viejo
-1.webp … n.webp ← los stills de la página del proyecto (recortados: les quita las barras negras)
+_PROJECTS/por-culpa-del-amor/
+  stills/
+    1.webp
+    2.webp
+    …
+  hover.webm     ← el loop, renombrado así
 ```
 
-Necesita `ffmpeg` y `cwebp`:
+### 4. El `data.json`
 
-```bash
-brew install ffmpeg webp
-```
-
-Los ajustes (calidad, tamaños, fps) están arriba del todo del script, comentados. Si algo pesa
-demasiado, sube `HOVER_CRF`; si se ve feo, bájalo.
-
----
-
-## Añadir un proyecto
-
-1. Mete los originales en `~/Desktop/ladiegol/projects/N - NOMBRE/` con sus carpetas `stills/` y `gifs hover/`.
-2. Añade la línea del proyecto al array `MAP` de `tools/build-assets.sh` (`slug|nombre de la carpeta`).
-3. `./tools/build-assets.sh <slug>`
-4. Añade el proyecto a `data.json`:
+Copia un proyecto del array `projects`, pégalo donde quieras que salga (el **orden de la home** es
+el orden del array) y cambia los datos:
 
 ```json
 {
-  "slug": "mi-proyecto",
-  "titulo": "TÍTULO",
-  "cliente": "CLIENTE",
-  "tipo": "COMMERCIAL",
+  "slug": "por-culpa-del-amor",
+  "titulo": "POR CULPA DEL AMOR",
+  "cliente": "DOLLAR SELLMOUNI",
+  "tipo": "MUSIC VIDEO",
   "destacado": false,
   "visible": true,
-  "vimeo": ["930328854"],
-  "stills": 12,
+  "vimeo": ["685499456"],
+  "stills": 9,
+  "portada": 1,
   "loop": true
-}
+},
 ```
 
 | campo | qué hace |
 |---|---|
-| `slug` | identificador. **Tiene que llamarse igual que la carpeta** en `_PROJECTS/` |
-| `titulo` / `cliente` / `tipo` | lo que se ve en la casilla y en la ficha |
-| `destacado` | `true` = casilla doble en la home |
-| `visible` | `false` = no sale en la home, pero `/<slug>` sigue funcionando (para pasar el link antes de publicar) |
-| `vimeo` | ids de Vimeo, solo el número, en orden |
-| `stills` | cuántas fotos hay (`1.webp … n.webp`). Lo dice el script al terminar |
-| `loop` | `false` si ese proyecto no tiene loop de hover (tampoco sale en el welcome) |
+| `slug` | **igual que la carpeta** de `_PROJECTS/`. Es también la url: `ladiegol.com/por-culpa-del-amor` |
+| `titulo` / `cliente` / `tipo` | lo que se ve en la casilla y en la ficha (sale todo en mayúsculas, da igual cómo lo escribas) |
+| `destacado` | `true` = casilla doble en la home. Mejor 2 o 3 como mucho |
+| `visible` | `false` = no sale en la home, pero `/<slug>` funciona (para pasar el link antes de publicar) |
+| `vimeo` | ids de Vimeo, solo el número (`vimeo.com/685499456` → `"685499456"`), en orden |
+| `stills` | cuántas fotos hay en `stills/` |
+| `portada` | el número del still que sale en la home y de portada del vídeo |
+| `loop` | `false` si el proyecto no tiene loop |
 
-El **orden de la home** es el orden del array `projects`.
+Ojo con las **comas**: entre proyecto y proyecto va una coma, y después del último no.
+Si la web se queda en blanco después de tocar el json, casi siempre es una coma.
+
+### 5. Comprobarlo
+
+En VS Code, **Go Live** (abajo a la derecha). Se abre la web y se recarga sola cada vez que
+guardas `data.json`. Mira la home (la portada y el loop) y entra en el proyecto.
+
+---
+
+## Los loops: ¿del vídeo o del gif?
+
+Ahora mismo cada proyecto tiene **los dos** para poder comparar:
+
+- `hover.webm`: sacado del **vídeo** con videoToWeb (modo loop).
+- `hover.webp`: sacado del **gif** con imgToWeb (WebP animado).
+
+Cuál se usa lo decide `"loops"` en el `meta` de `data.json` (`"video"` o `"gif"`). Para comparar
+sin tocar nada, añade **`?loops=gif`** o **`?loops=video`** a la dirección: `…/index.html?loops=gif`,
+`…/welcome-loop?loops=gif`.
+
+| | del vídeo (webm) | del gif (webp animado) |
+|---|---|---|
+| peso de los 12 | ~3,7 MB | ~35 MB |
+| por loop | 180–470 KB | 0,8–7 MB |
+| color | completo | 256 colores con trama |
+| ritmo | velocidad real, 12 fps | como el gif: más rápido y a saltos (10 fps) |
+
+Cuando se elija uno, se borra el otro de todas las carpetas.
+
+WebM lo leen todos los navegadores actuales (Safari desde macOS 16 / iOS 17.4). En uno más viejo el
+loop no arranca y se queda la foto de portada.
 
 ---
 
@@ -100,22 +121,40 @@ El **orden de la home** es el orden del array `projects`.
 Se configura en `data.json`, dentro de `meta`:
 
 ```json
-"welcome": { "activo": false, "modo": "loop" }
+"welcome": {
+  "activo": false,
+  "modo": "loop",
+  "stills": ["stripper/1", "are-you-one-of-us/10", "cerca/6"]
+}
 ```
 
-- `activo`: `true` = al entrar en la web sale primero el welcome (una vez por visita; luego ya no molesta). `false` = no sale, pero se puede ver entrando a mano en `/welcome`.
-- `modo`: `"loop"` o `"stills"`.
+- `activo`: `true` = al entrar en la web sale primero el welcome (una vez por visita). `false` = no sale, pero se puede ver entrando a mano en `/welcome`.
+- `modo`: `"loop"` (los loops de los proyectos) o `"stills"`.
+- `stills`: las fotos del pase, como `"slug/número"`. Si la lista está vacía salen todas.
 
 Se sale clicando en cualquier sitio (o con enter / espacio / esc).
 
-El ritmo del pase de stills está arriba de `js/welcome.js`: `STILL_MS` (2,6 s por foto) y
-`FUNDIDO_MS` (1,1 s de fundido, que va también en `css/welcome.css`). Nunca salen dos fotos
-seguidas del mismo proyecto, y cada una lleva un zoom lentísimo para que no parezca un
-pase de diapositivas.
+El ritmo está arriba de `js/welcome.js`: `STILL_MS` (2,6 s por foto), `FUNDIDO_MS` (1,1 s de
+fundido, que va también en `css/welcome.css`) y `LOOP_GIF_MS` (lo que dura cada loop si son gifs).
 
-> Los loops son los mismos de la home, de 960 px de ancho. Si nos quedamos con el modo
-> `loop`, conviene generarlos más grandes para pantalla completa (subir `HOVER_W` en
-> `tools/build-assets.sh`, o hacer unos aparte solo para el welcome).
+> Los loops son de 960 px. A pantalla completa se ven algo blandos: si nos quedamos con el welcome
+> en modo `loop`, conviene sacarlos con el modo **720p** de videoToWeb.
+
+---
+
+## Convertir en bloque (para nosotros)
+
+`tools/build-assets.sh` convierte los originales de golpe con **los mismos ajustes** que imgToWeb
+y videoToWeb, para que salga igual que lo que suba el cliente:
+
+```bash
+./tools/build-assets.sh          # todos los proyectos
+./tools/build-assets.sh cerca    # solo uno
+```
+
+Lee de `~/Desktop/ladiegol/projects/N - NOMBRE/{stills,gifs hover}` (se cambia con
+`SRC=/otra/ruta`). Los stills se numeran en el orden de los nombres de archivo (las capturas van
+por fecha). Necesita `brew install ffmpeg webp`.
 
 ---
 
@@ -123,8 +162,10 @@ pase de diapositivas.
 
 ```
 index.html / 404.html   ← el mismo cascarón (el 404 solo lo usa GitHub Pages)
+data.json               ← todo el contenido
+_PROJECTS/<slug>/       ← stills/1.webp…, hover.webm (y hover.webp mientras comparamos)
 css/
-  base.css      tokens, tipografías, cabecera, about
+  base.css      tokens, grano, tipografías, cabecera, about
   home.css      el grid
   project.css   ficha, vimeo y galería
   welcome.css   la portada de bienvenida
@@ -140,24 +181,22 @@ js/
   welcome.js    las dos versiones del welcome
   wordmark.js   el nombre con una tipo por letra
 fonts/          JetBrains Mono + seis góticas (recortadas a las mayúsculas)
+.vscode/        ajustes de Live Server
+tools/          conversión en bloque y servidor local
 ```
 
 Las rutas son siempre de **un solo tramo** (`/welcome-loop`, no `/welcome/loop`): el html
-enlaza css y js con rutas relativas para que la web funcione igual en un dominio propio
-que en `usuario.github.io/ladiegol/`.
+enlaza css y js con rutas relativas.
 
 ---
 
 ## Probar en local
 
-No vale abrir `index.html` con doble clic (hay rutas absolutas y un `fetch`). Hay que servirlo:
+No vale abrir `index.html` con doble clic (hay un `fetch`). Hay que servirlo:
 
-```bash
-python3 tools/serve.py
-```
-
-y abrir http://localhost:8080. Ese servidorcillo imita a Cloudflare: si recargas en
-`/aftermatch` te devuelve la web en vez de un 404.
+- **VS Code → Go Live** (Live Server). Está configurado en `.vscode/settings.json` para que al
+  recargar en `/cerca` salga la web y no un 404, igual que en Cloudflare.
+- O sin VS Code: `python3 tools/serve.py` → http://localhost:8080
 
 Si cambias algo y sigues viendo lo viejo: caché. **Cmd+Shift+R**.
 
@@ -214,6 +253,6 @@ Probar exactamente lo que servirá Cloudflare: `npx wrangler dev` → http://loc
 ## Pendiente
 
 - [ ] **Email / Instagram** del `meta` de `data.json`, que están vacíos.
-- [ ] Falta el **gif de hover de Yuyo Calm** (ahora mismo `"loop": false`).
+- [ ] Elegir **loops del vídeo o del gif** y borrar los otros.
 - [ ] Decidir la versión del **welcome** (`/welcome-loop` vs `/welcome-stills`) y activarlo.
-- [ ] Con 10 proyectos habrá que revisar el ritmo de casillas grandes de la home.
+- [ ] Borrar los archivos viejos de `_PROJECTS/` (`poster.webp`, `hover.mp4`, `1.webp`… sueltos en la raíz de cada carpeta).
