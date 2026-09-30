@@ -39,7 +39,7 @@
   position: relative;
   margin: 0;
   padding: 0 var(--pad);
-  font-size: clamp(42px, 13vw, 190px);
+  font-size: clamp(42px, 13vw, 14.6rem);
   line-height: .95;
   font-weight: 400;
   text-align: center;
@@ -58,7 +58,7 @@
   color: rgba(255, 255, 255, .7);
   text-transform: uppercase;
   letter-spacing: .3em;
-  font-size: 10px;
+  font-size: .77rem;
   animation: welcome-latido 2.4s ease-in-out infinite;
 }
 

@@ -22,6 +22,8 @@ export function project(p) {
     img.alt = `${p.titulo} — still ${i}`;
     img.loading = "lazy";
     img.decoding = "async";
+    // si "stills" dice más fotos de las que hay, las que faltan desaparecen
+    img.onerror = () => img.remove();
     stills.append(img);
   }
   wrap.append(stills, link("back", href(), "← index"));

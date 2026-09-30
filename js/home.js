@@ -25,7 +25,8 @@ export function home() {
     still.alt = `${p.cliente} — ${p.titulo}`;
     still.loading = "lazy";
     still.decoding = "async";
-    tile.append(still, makeLoop(p.slug));
+    tile.append(still);
+    if (p.loop !== false) tile.append(makeLoop(p.slug));
 
     const meta = el("div", "tile__meta");
     meta.append(el("span", null, p.cliente));

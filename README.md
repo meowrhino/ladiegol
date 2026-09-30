@@ -89,6 +89,17 @@ Si la web se queda en blanco después de tocar el json, casi siempre es una coma
 En VS Code, **Go Live** (abajo a la derecha). Se abre la web y se recarga sola cada vez que
 guardas `data.json`. Mira la home (la portada y el loop) y entra en el proyecto.
 
+### 6. Publicarlo
+
+Con **[GitHub Desktop](https://desktop.github.com)** y el repo **`ladiegol/web`** abierto
+(es el único que publica en ladiegol.com):
+
+1. Abajo a la izquierda, escribe qué has hecho (`añado por culpa del amor`) → **Commit to main**.
+2. Arriba, **Push origin**.
+
+En un minuto está en ladiegol.com. Si ves lo de antes, **Cmd+Shift+R**: el navegador guarda
+las fotos y los loops una hora.
+
 ---
 
 ## Los loops
@@ -227,8 +238,8 @@ git push --force-with-lease web main:main
 - `wrangler.jsonc`: la config. Publica la raíz del repo y, si la url no es un archivo
   (`/aftermatch`, `/about`…), devuelve `index.html` con 200.
 - `.assetsignore`: lo que **no** se publica (`tools/`, este README, `.git`…).
-- `_headers`: la caché de cada carpeta. Los `_PROJECTS/` se guardan un año: si se cambia un
-  archivo, mejor darle **otro nombre** que machacar el mismo.
+- `_headers`: la caché de cada carpeta. Fotos, loops, css y js, una hora: si se cambia una foto
+  (aunque se llame igual), quien ya había entrado la ve nueva como mucho una hora después.
 
 Probar exactamente lo que servirá Cloudflare: `npx wrangler dev` → http://localhost:8787
 

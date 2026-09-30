@@ -9,8 +9,8 @@
   --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
   --font-sans: var(--font-mono);
 
-  --gap: 10px;
-  --pad: 16px;
+  --gap: .75rem;
+  --pad: 1.25rem;
   --dur: .45s;
 
   --grain: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 .13 -.03'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23g)'/%3E%3C/svg%3E");
@@ -34,14 +34,20 @@
 
 *, *::before, *::after { box-sizing: border-box; }
 
-html { background: var(--bg); }
+/* Todo va en rem sobre esta raíz: 13 px hasta ~1440 px de ancho y luego
+   crece con la pantalla (≈19 px en 2560, ≈25 px en 4K), para que en una
+   pantalla grande no salga todo diminuto. */
+html {
+  background: var(--bg);
+  font-size: clamp(13px, 5.8px + .5vw, 28px);
+}
 
 /* body sin fondo propio: así el grano (debajo de todo) se ve sobre el negro */
 body {
   margin: 0;
   color: var(--fg);
   font-family: var(--font-mono);
-  font-size: 13px;
+  font-size: 1rem;
   line-height: 1.5;
   letter-spacing: .01em;
   -webkit-font-smoothing: antialiased;
@@ -90,7 +96,7 @@ img, video { display: block; width: 100%; height: 100%; object-fit: cover; }
 .wordmark {
   display: inline-flex;
   align-items: baseline;
-  font-size: clamp(22px, 3.4vw, 34px);
+  font-size: clamp(22px, 3.4vw, 2.6rem);
   line-height: 1;
 }
 
@@ -101,7 +107,7 @@ img, video { display: block; width: 100%; height: 100%; object-fit: cover; }
 body[data-vista="home"] .site-header { position: relative; }
 
 body[data-vista="home"] .wordmark {
-  font-size: clamp(44px, 9vw, 112px);
+  font-size: clamp(44px, 9vw, 8.6rem);
 }
 
 body[data-vista="home"] .site-header {
@@ -129,7 +135,7 @@ body[data-vista="welcome"] .app { padding: 0; }
   color: var(--fg-dim);
   text-transform: uppercase;
   letter-spacing: .06em;
-  font-size: 11px;
+  font-size: .85rem;
 }
 
 .back { display: inline-block; margin-top: 2rem; color: var(--fg-dim); }
