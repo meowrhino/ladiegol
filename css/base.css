@@ -69,28 +69,13 @@ img, video { display: block; width: 100%; height: 100%; object-fit: cover; }
 
 /* ---------- cabecera ---------- */
 
+/* la cabecera se va con el scroll, como el resto de la página */
 .site-header {
-  position: sticky;
-  top: 0;
-  z-index: 10;
   display: flex;
   align-items: baseline;
   justify-content: space-between;
   gap: 1rem;
   padding: var(--pad) var(--pad) calc(var(--pad) * .75);
-}
-
-/* El fondo de la cabecera tapa lo que pasa por debajo al hacer scroll. Lleva
-   el mismo grano que el fondo, fijo para que case, y se desvanece con una
-   máscara: así no queda ni franja lisa ni raya de grano doble. */
-.site-header::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  z-index: -1;
-  background: var(--grain) fixed, var(--bg);
-  -webkit-mask-image: linear-gradient(#000 70%, transparent);
-  mask-image: linear-gradient(#000 70%, transparent);
 }
 
 .wordmark {
@@ -103,9 +88,7 @@ img, video { display: block; width: 100%; height: 100%; object-fit: cover; }
 .wordmark__letter { display: inline-block; }
 .wordmark__space { width: .28em; display: inline-block; }
 
-/* en la home el nombre manda: grande, con aire, y se va con el scroll */
-body[data-vista="home"] .site-header { position: relative; }
-
+/* en la home el nombre manda: grande y con aire */
 body[data-vista="home"] .wordmark {
   font-size: clamp(44px, 9vw, 8.6rem);
 }
@@ -140,12 +123,24 @@ body[data-vista="welcome"] .app { padding: 0; }
 
 /* ---------- about ---------- */
 
-.about { max-width: 62ch; padding-top: 1rem; }
+.about {
+  max-width: 62ch;
+  padding-top: 1rem;
+  font-size: 1.25rem;
+  color: #fff;
+  text-shadow: 0 0 30px rgba(0, 0, 0, .6);
+}
 .about p { white-space: pre-wrap; }
+
+/* el pase de stills del welcome, fijo detrás de todo. El scale recorta las
+   bandas negras que traen algunos stills (hasta un 10 % por lado); va en el
+   contenedor porque el zoom lento del pase ya usa el transform de cada foto */
+.about__media { position: fixed; inset: 0; z-index: -1; background: #000; transform: scale(1.25); }
+.about__veil { background: rgba(0, 0, 0, .55); }
 
 .about__clients {
   margin-top: 2rem;
-  color: var(--fg-dim);
+  color: rgba(255, 255, 255, .7);
   text-transform: uppercase;
   letter-spacing: .06em;
   font-size: .85rem;

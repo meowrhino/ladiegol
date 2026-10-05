@@ -151,10 +151,10 @@ function runLoops(layers) {
   };
 }
 
-/* Pase de stills: uno cada STILL_MS, encadenados con un fundido largo y sin
+/* Pase de stills (también el fondo del about): uno cada STILL_MS, encadenados con un fundido largo y sin
    poner nunca dos fotos seguidas del mismo proyecto (eran casi el mismo plano
    y parecía que la web parpadeaba). */
-function runStills(layers) {
+export function runStills(layers) {
   const todos = welcomeStills();
   if (!todos.length) return () => {};
 
