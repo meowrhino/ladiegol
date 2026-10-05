@@ -110,8 +110,9 @@ function render() {
   app.replaceChildren(view.node);
   if (view.mounted) limpiar = view.mounted();
 
-  // desde la home no hay a dónde volver; desde el resto, un "index"
-  nav.replaceChildren(...(path === "" ? [] : [link("site-nav__index", href(), "index")]));
+  // desde la home no hay a dónde volver; desde un proyecto, "back"; desde el resto, "index"
+  const volver = vistaNombre(path) === "project" ? "back" : "index";
+  nav.replaceChildren(...(path === "" ? [] : [link("site-nav__index", href(), volver)]));
   window.scrollTo(0, 0);
 }
 

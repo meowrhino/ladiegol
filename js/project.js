@@ -26,7 +26,7 @@ export function project(p) {
     img.onerror = () => img.remove();
     stills.append(img);
   }
-  wrap.append(stills, link("back", href(), "← index"));
+  wrap.append(stills, link("back", href(), "← back"));
 
   return { node: wrap };
 }
