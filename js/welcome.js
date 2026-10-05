@@ -10,7 +10,7 @@
 
 import { asset, still, loopsEnabled, reducedMotion } from "./config.js";
 import { el, shuffled } from "./dom.js";
-import { meta, welcomeStills, withLoop } from "./data.js";
+import { meta, welcomeStills, withLoop, velocidadLoops } from "./data.js";
 import { wordmark, autoShuffle } from "./wordmark.js";
 
 /* El ritmo del pase de stills. Son los números a tocar si va rápido o lento:
@@ -66,6 +66,8 @@ function slot(mode) {
   const v = el("video", "welcome__slot");
   v.muted = true;
   v.playsInline = true;
+  // la "default" es la que sobrevive a cada cambio de src
+  v.defaultPlaybackRate = v.playbackRate = velocidadLoops();
   v.preload = "auto";
   v.setAttribute("muted", "");
   v.setAttribute("playsinline", "");
@@ -126,7 +128,7 @@ function runLoops(layers) {
     };
     v.onended = avanza;
     // por si el 'ended' no llega (pestaña en segundo plano, formato raro)
-    timer = setTimeout(avanza, Math.max(1500, (v.duration || 3) * 1000 + 400));
+    timer = setTimeout(avanza, Math.max(1500, ((v.duration || 3) * 1000) / v.playbackRate + 400));
   };
 
   const arranca = (v) => {

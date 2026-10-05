@@ -7,12 +7,15 @@
 
 import { asset, canHover, loopsEnabled } from "./config.js";
 import { el } from "./dom.js";
+import { velocidadLoops } from "./data.js";
 
 export function makeLoop(slug) {
   const v = el("video", "tile__loop");
   v.muted = true;
   v.loop = true;
   v.playsInline = true;
+  // la "default" es la que sobrevive al load(); la otra, la de ahora
+  v.defaultPlaybackRate = v.playbackRate = velocidadLoops();
   v.preload = "none";
   v.setAttribute("muted", "");
   v.setAttribute("playsinline", "");

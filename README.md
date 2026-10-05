@@ -102,10 +102,25 @@ las fotos y los loops una hora.
 
 ---
 
+## Los ajustes generales (`meta` en `data.json`)
+
+| campo | qué hace |
+|---|---|
+| `nombre` | el logo de la cabecera y el título del about |
+| `titulo` | el título de la pestaña del navegador en la home |
+| `ralentizar_loops` | velocidad de los loops: `1` = la del gif, `1.5` = un 50 % más lentos, `2` = el doble de lentos |
+| `email` / `instagram` | salen al final del about. Vacíos (`""`) = no salen. El instagram, con o sin `@` |
+| `bio` | el texto del about. Cada `\n\n` es un párrafo nuevo |
+| `clientes` | la lista de clientes del about, en orden |
+| `welcome` | la portada de bienvenida (ver más abajo) |
+
+---
+
 ## Los loops
 
 Son los **gifs** del cliente pasados a **webm** (`hover.webm`) con videoToWeb en modo loop: el
-mismo ritmo entrecortado del gif (sus fps, normalmente 10) a 960 px. Los 12 suman **~7 MB** (de
+mismo ritmo entrecortado del gif (sus fps, normalmente 10) a 960 px. Duran lo mismo que los gifs
+originales (comprobado uno a uno, ±0,1 s). Para que vayan más lentos, `ralentizar_loops` en `meta`. Los 12 suman **~7 MB** (de
 0,3 a 1 MB cada uno). Cada loop se descarga cuando su casilla está en pantalla o le falta media
 pantalla para entrar: así el hover arranca al momento y no se baja nada de lo que queda lejos.
 

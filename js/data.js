@@ -13,6 +13,13 @@ export const meta = () => data.meta;
 export const visibles = () => data.projects.filter((p) => p.visible !== false);
 export const bySlug = (slug) => data.projects.find((p) => p.slug === slug);
 
+/* velocidad de los loops: meta.ralentizar_loops = 1 es la del gif,
+   2 el doble de lento. Si falta o no es un número, la del gif. */
+export const velocidadLoops = () => {
+  const r = Number(data.meta.ralentizar_loops);
+  return r > 0 ? 1 / r : 1;
+};
+
 // todos los loops disponibles, para el welcome
 export const withLoop = () => visibles().filter((p) => p.loop !== false);
 

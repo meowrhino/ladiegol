@@ -1,18 +1,8 @@
 {
-  "_ayuda": {
-    "slug": "identificador interno: tiene que llamarse igual que la carpeta dentro de _PROJECTS/, y es la url (ladiegol.com/slug)",
-    "titulo / cliente / tipo": "lo que se ve en la casilla y en la ficha del proyecto",
-    "destacado": "true = ocupa una casilla grande en el grid de la home",
-    "visible": "false = no sale en la home, pero la url /<slug> sigue funcionando",
-    "vimeo": "ids de los videos de vimeo, en orden. Solo el número (de vimeo.com/930328854 → \"930328854\")",
-    "stills": "cuántas fotos hay en la carpeta stills/ del proyecto (1.webp … n.webp)",
-    "portada": "qué still sale en la home y de portada del video (el número del archivo)",
-    "loop": "false = ese proyecto no tiene loop de hover, hover.webm (ni sale en el welcome)",
-    "welcome": "la portada de bienvenida: activo (si sale al entrar), modo (loop o stills) y stills (\"slug/número\" de las fotos que salen)"
-  },
   "meta": {
     "nombre": "LA DIEGOL",
     "titulo": "LA DIEGOL — director",
+    "ralentizar_loops": 1,
     "email": "",
     "instagram": "",
     "bio": "Marta aka LA DIEGOL is a director born and raised in Barcelona. Her work explores everyday life through a contemporary, urban and human lens, with a strong focus on performance, rhythm and visual storytelling.\n\nWith a background in dance and performing arts, movement is central to the way she builds a scene, from the body and camera to the edit. She works closely and collaboratively with actors, creating an environment of trust where performances feel spontaneous and full of personality. Across advertising and music, LA DIEGOL combines cinematic imagery with a strong sense of narrative, always looking for emotion in the details.",
