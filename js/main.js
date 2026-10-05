@@ -91,7 +91,7 @@ const vistaNombre = (path) => {
 function noEncontrado() {
   const wrap = el("section", "about");
   wrap.append(el("h1", "project__title", "404"));
-  const a = el("a", "back", "← index");
+  const a = el("a", "back", "← home");
   a.href = href();
   a.dataset.link = "";
   wrap.append(a);
@@ -110,8 +110,8 @@ function render() {
   app.replaceChildren(view.node);
   if (view.mounted) limpiar = view.mounted();
 
-  // desde la home no hay a dónde volver; desde un proyecto, "back"; desde el resto, "index"
-  const volver = vistaNombre(path) === "project" ? "back" : "index";
+  // desde la home no hay a dónde volver; desde un proyecto, "back"; desde el resto, "home"
+  const volver = vistaNombre(path) === "project" ? "back" : "home";
   nav.replaceChildren(...(path === "" ? [] : [link("site-nav__index", href(), volver)]));
   window.scrollTo(0, 0);
 }

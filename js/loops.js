@@ -38,7 +38,7 @@ function loadSources(v) {
 }
 
 // "activo" = hover en escritorio, o casilla centrada en móvil.
-// Enciende el rótulo siempre; el loop, solo si toca.
+// Esconde el rótulo siempre; el loop lo enciende solo si toca.
 function play(tile) {
   tile.classList.add("is-active");
   if (!loopsEnabled) return;

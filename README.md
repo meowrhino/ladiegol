@@ -8,10 +8,10 @@ Portfolio de LA DIEGOL. Web estática: un `index.html`, un `data.json` y una car
 
 ## Cómo funciona en 30 segundos
 
-- **Home** (`/`): un grid con un proyecto por casilla. Se ve un **still de portada**; al pasar el ratón por encima arranca el **loop** del proyecto. En **móvil no hay hover**, así que se activa lo que queda en la **franja central** de la pantalla mientras haces scroll.
+- **Home** (`/`): un grid con un proyecto por casilla. Se ve un **still de portada**; al pasar el ratón por encima arranca el **loop** del proyecto. El cliente y el título se ven siempre, menos durante el hover. En móvil, **una columna**. En **móvil no hay hover**, así que se activa lo que queda en la **franja central** de la pantalla mientras haces scroll.
 - Los proyectos con `"destacado": true` ocupan una **casilla doble**, alternando lado.
 - **Proyecto** (`/<slug>`): primero el/los videos de Vimeo (no cargan hasta que los clicas), debajo la ficha (título · cliente · tipo) y después la galería de stills.
-- **About** (`/about`): la bio y la lista de clientes, de `data.json`. Se entra **clicando el nombre** de la cabecera; para volver, el "index" de arriba a la derecha.
+- **About** (`/about`): la bio y la lista de clientes, de `data.json`. Se entra **clicando el nombre** de la cabecera; para volver, el "home" de arriba a la derecha.
 - **Welcome** (`/welcome`): la portada de bienvenida, con el nombre cambiando de tipografía letra a letra sobre un pase de imágenes. Dos versiones para comparar: **`/welcome-loop`** y **`/welcome-stills`**.
 - El **logo** reparte seis góticas entre las letras, una distinta cada vez que se carga la página. En la home va grande y se va con el scroll; en el resto se queda pequeño y fijo arriba.
 - El **fondo** es negro con grano fino de película.

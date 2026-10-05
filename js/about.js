@@ -31,6 +31,6 @@ export function about() {
     wrap.append(p);
   }
 
-  wrap.append(link("back", href(), "← index"));
+  wrap.append(link("back", href(), "← home"));
   return { node: wrap };
 }
