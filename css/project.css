@@ -7,13 +7,13 @@
   flex-direction: column;
   align-items: center;
   text-align: center;
-  gap: .75rem;
-  padding: 6rem 0;
+  gap: 1.1rem;
+  padding: 8rem 0;
 }
 
 .project__title {
   margin: 0;
-  font-size: 1.15rem;
+  font-size: 1.7rem;
   font-weight: 400;
   text-transform: uppercase;
   letter-spacing: .06em;
@@ -23,8 +23,19 @@
   margin: 0;
   color: var(--fg-dim);
   text-transform: uppercase;
-  letter-spacing: .06em;
-  font-size: .85rem;
+  letter-spacing: .08em;
+  font-size: 1.05rem;
+}
+
+/* el back del final: centrado, grande y con aire */
+.project > .back {
+  display: block;
+  width: fit-content;
+  margin: 7rem auto 3rem;
+  padding: 1rem 2rem;
+  font-size: 1.3rem;
+  text-transform: uppercase;
+  letter-spacing: .12em;
 }
 
 /* vimeo: portada estática hasta que se clica */

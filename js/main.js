@@ -110,10 +110,18 @@ function render() {
   app.replaceChildren(view.node);
   if (view.mounted) limpiar = view.mounted();
 
-  // desde la home no hay a dónde volver; desde un proyecto, "back"; desde el resto, "home"
-  const volver = vistaNombre(path) === "project" ? "back" : "home";
-  nav.replaceChildren(...(path === "" ? [] : [link("site-nav__index", href(), volver)]));
+  nav.replaceChildren(...(path === "" ? [] : [volver(path)]));
   window.scrollTo(0, 0);
+}
+
+/* desde un proyecto, su título (que en hover pasa a "back"); desde el resto, "home" */
+function volver(path) {
+  const p = bySlug(path);
+  if (!p) return link("site-nav__index", href(), "home");
+  const a = link("site-nav__index site-nav__index--titulo", href());
+  a.setAttribute("aria-label", "back");
+  a.append(el("span", "site-nav__titulo", p.titulo), el("span", "site-nav__back", "back"));
+  return a;
 }
 
 /* ---------- enlaces internos ---------- */

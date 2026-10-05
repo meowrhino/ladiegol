@@ -118,6 +118,19 @@ body[data-vista="home"] .site-header {
 .site-nav { display: flex; gap: 1rem; color: var(--fg-dim); }
 .site-nav a:hover { color: var(--fg); }
 
+/* en un proyecto, el nav enseña su título y en hover pasa a "back" */
+.site-nav__index--titulo { text-transform: uppercase; letter-spacing: .06em; }
+.site-nav__titulo {
+  display: block;
+  max-width: 45vw;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.site-nav__back,
+.site-nav__index--titulo:hover .site-nav__titulo { display: none; }
+.site-nav__index--titulo:hover .site-nav__back { display: block; }
+
 .app { padding: 0 var(--pad) calc(var(--pad) * 4); }
 .loading { color: var(--fg-dim); }
 
