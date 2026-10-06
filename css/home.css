@@ -62,11 +62,21 @@
 .tile__meta span:last-child { flex: 1 1 auto; text-align: right; color: var(--fg-dim); }
 .tile__meta span:only-child { flex: 1 1 auto; }
 
+/* en las casillas sencillas no caben cliente y título en una línea (se
+   cortaban con "…"): van uno encima del otro */
+.tile:not(.tile--big) .tile__meta { flex-direction: column; gap: .15rem; }
+.tile:not(.tile--big) .tile__meta span:last-child { text-align: left; }
+
+/* en las dobles, el rótulo crece con la casilla */
+.tile--big .tile__meta { font-size: 1.05rem; padding: .8rem 1rem; }
+
 @media (max-width: 720px) {
   .grid {
     grid-template-columns: 1fr;
     grid-auto-rows: calc(100cqw * 0.5625);
   }
   .tile--big, .tile--big.tile--right { grid-column: auto; grid-row: auto; }
-  .tile__meta { font-size: .7rem; padding: .35rem .4rem; letter-spacing: .04em; }
+  /* en móvil todas miden igual: una línea y el mismo tamaño */
+  .grid .tile .tile__meta { flex-direction: row; gap: .75rem; font-size: .7rem; padding: .35rem .4rem; letter-spacing: .04em; }
+  .grid .tile .tile__meta span:last-child { text-align: right; }
 }
