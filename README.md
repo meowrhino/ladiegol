@@ -132,8 +132,8 @@ Lo que probamos antes de elegir (los 12 loops):
 | gif → webp animado (imgToWeb) | ~36 MB | ritmo del gif, 2000 px |
 | vídeo → webm | ~3,7 MB | fluido, a velocidad real |
 
-Los descartados están fuera del repo, en `~/Desktop/ladiegol-loops-webp/` y
-`~/Desktop/ladiegol-loops-video/`.
+Los descartados se guardan en cada proyecto, en `_PROJECTS/<slug>/descartados/` (`gif.webp` y
+`video.webm`), por si algún día hacen falta. No se publican: están en `.assetsignore`.
 
 WebM lo leen todos los navegadores actuales (Safari desde macOS 16 / iOS 17.4). En uno más viejo el
 loop no arranca y se queda la foto de portada.
