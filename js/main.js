@@ -135,11 +135,12 @@ function pintar() {
   app.replaceChildren(view.node);
   if (view.mounted) limpiar = view.mounted();
 
-  nav.replaceChildren(...(path === "" ? [] : [volver(path)]));
+  nav.replaceChildren(path === "" ? link("site-nav__index", href("about"), "about") : volver(path));
   window.scrollTo(0, 0);
 }
 
-/* desde un proyecto, su título (que en hover pasa a "back"); desde el resto, "home" */
+/* en la home, "about"; desde un proyecto, su título (que en hover pasa a
+   "back"); desde el resto, "home" */
 function volver(path) {
   const p = bySlug(path);
   if (!p) return link("site-nav__index", href(), "home");

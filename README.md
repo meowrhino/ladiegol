@@ -10,12 +10,12 @@ Portfolio de LA DIEGOL. Web estática: un `index.html`, un `data.json` y una car
 
 ## Cómo funciona en 30 segundos
 
-- **Home** (`/`): un grid con un proyecto por casilla. Cuatro columnas con mucho negro entre casillas (dos en tablet, **una en móvil**). Encima de cada casilla, en pequeño y en minúsculas, el **número**, el cliente y el título. Se ve un **still de portada**; al pasar el ratón por encima arranca el **loop** del proyecto. En **móvil no hay hover**, así que se activa lo que queda en la **franja central** de la pantalla mientras haces scroll.
+- **Home** (`/`): arriba a la izquierda, el **filtro** (all y un botón por cada `tipo` de `data.json`: commercial, music video); arriba a la derecha, **about**. Debajo, un grid con un proyecto por casilla. Tres columnas con mucho negro entre casillas (dos en tablet, **una en móvil**). Encima de cada casilla, en pequeño y en minúsculas, el cliente y el título. Se ve un **still de portada**; al pasar el ratón por encima arranca el **loop** del proyecto. En **móvil no hay hover**, así que se activa lo que queda en la **franja central** de la pantalla mientras haces scroll.
 - Los proyectos con `"destacado": true` ocupan una **casilla doble**, alternando lado.
 - **Proyecto** (`/<slug>`): arriba el/los videos de Vimeo (no cargan hasta que los clicas), debajo la ficha (título · cliente · tipo) y después la galería de stills, para ir bajando.
-- **About** (`/about`): la bio y la lista de clientes, de `data.json`. Se entra **clicando el nombre** de la cabecera; para volver, el "home" de arriba a la derecha.
+- **About** (`/about`): la bio y la lista de clientes, de `data.json`, encima de una foto fija: **`img/about.webp`** (para cambiarla, se sustituye ese archivo con el mismo nombre; ahora hay un still de cupra de provisional). Se entra desde el **about** de arriba a la derecha de la home o **clicando el nombre** de la cabecera; para volver, el "home" de arriba a la derecha.
 - **Welcome** (`/welcome`): la portada de bienvenida, con el nombre en grande sobre un pase de imágenes. Dos versiones para comparar: **`/welcome-loop`** y **`/welcome-stills`**.
-- El **logo** va en **Asset**; el resto del texto, en **Arya**. La cabecera se queda fija arriba y se invierte sobre lo que pasa por debajo (blanco sobre negro, oscuro sobre fotos claras). En la home el nombre va más grande.
+- El **logo**, los títulos de la home y de los proyectos y el texto del about van en **Wild Trave Rounded**; el resto, en **Arya**. El nombre va centrado arriba, con el mismo tamaño y aire en todas las páginas, y se va con el scroll.
 - El **fondo** es negro puro, sin grano.
 
 ---
@@ -110,7 +110,6 @@ las fotos y los loops una hora.
 |---|---|
 | `nombre` | el logo de la cabecera y el título del about |
 | `titulo` | el título de la pestaña del navegador en la home |
-| `frase` | la línea de presentación que sale en pequeño en la home, justo antes del grid (con un "→ see about" debajo). Vacía (`""`) = no sale |
 | `ralentizar_loops` | velocidad de los loops: `1` = la del gif, `1.5` = un 50 % más lentos, `2` = el doble de lentos |
 | `email` / `instagram` | salen al final del about. Vacíos (`""`) = no salen. El instagram, con o sin `@` |
 | `bio` | el texto del about. Cada `\n\n` es un párrafo nuevo |
@@ -150,14 +149,14 @@ Se configura en `data.json`, dentro de `meta`:
 ```json
 "welcome": {
   "activo": true,
-  "modo": "loop",
+  "modo": "stills",
   "stills": ["stripper/1", "are-you-one-of-us/10", "cerca/6"]
 }
 ```
 
 - `activo`: `true` = al entrar en la web sale primero el welcome (una vez por visita). `false` = no sale, pero se puede ver entrando a mano en `/welcome`.
 - `modo`: `"loop"` (los loops de los proyectos, uno tras otro) o `"stills"`.
-- `stills`: las fotos del pase, como `"slug/número"`. Si la lista está vacía salen todas.
+- `stills`: **las fotos que enseña el loader**, como `"slug/número"` (`"cerca/6"` = la foto 6 de cerca). Solo cuenta en el modo `"stills"`. Si la lista está vacía salen todas.
 
 Hace de **loader**: mientras se ve, se descargan las portadas de la home y las fuentes, con el
 porcentaje abajo. Cuando ya está todo entra solo en la home (como mínimo se ve 2,4 s y como
@@ -210,7 +209,8 @@ js/
   project.js    la página de proyecto
   about.js      el about
   welcome.js    las dos versiones del welcome
-fonts/          Asset (títulos) y Arya (texto)
+fonts/          Wild Trave (logo y títulos) y Arya (texto)
+img/            about.webp, la foto del about
 .vscode/        ajustes de Live Server
 tools/          conversión en bloque y servidor local
 ```
@@ -270,12 +270,13 @@ Probar exactamente lo que servirá Cloudflare: `npx wrangler dev` → http://loc
 
 ## Tipografías
 
-- **Asset** para los títulos (el nombre, el welcome y el título de cada proyecto) y **Arya** para
-  todo lo demás. Las dos libres (OFL), sacadas de [fonts.bunny.net](https://fonts.bunny.net/)
-  (solo el juego latino) y servidas desde `fonts/`.
+- **Wild Trave Rounded** (Letterhend Studio, gratis) para el nombre, el welcome, los títulos de
+  la home y de cada proyecto y el texto del about. No trae el espacio: sale de la siguiente
+  fuente de la lista (`--font-title`).
+- **Arya** (libre, OFL) para todo lo demás. Las dos servidas desde `fonts/`.
 - Para cambiarlas: dejar el `.woff2` nuevo en `fonts/`, cambiar su `@font-face` en
-  `css/base.css` y, si cambia el nombre, `--font-title` / `--font-body`. Ojo: Asset es muy ancha,
-  y los tamaños del nombre (`.wordmark`, `.welcome__name`) están pensados para ella.
+  `css/base.css` y, si cambia el nombre, `--font-title` / `--font-body`. Ojo: los tamaños del nombre
+  (`.wordmark`, `.welcome__name`) están pensados para Wild Trave ("LA DIEGOL" mide ~8,8 veces el cuerpo).
 
 ---
 

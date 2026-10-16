@@ -1,23 +1,21 @@
-/* El about: bio y clientes, tal cual salen de data.json, encima del mismo
-   pase de stills del welcome, oscurecido. */
+/* El about: bio y clientes, tal cual salen de data.json, encima de una foto
+   fija oscurecida. La foto es img/about.webp: para cambiarla, se sustituye
+   el archivo con el mismo nombre. */
 
 import { el, link } from "./dom.js";
 import { meta } from "./data.js";
 import { href } from "./config.js";
-import { runStills } from "./welcome.js";
 
 export function about() {
   const m = meta();
   const wrap = el("section", "about");
 
   const media = el("div", "about__media");
-  const layers = [0, 1].map(() => {
-    const img = el("img", "welcome__slot");
-    img.alt = "";
-    img.decoding = "async";
-    return img;
-  });
-  media.append(...layers, el("div", "welcome__veil about__veil"));
+  const foto = el("img");
+  foto.src = href("img/about.webp");
+  foto.alt = "";
+  foto.decoding = "async";
+  media.append(foto, el("div", "welcome__veil about__veil"));
   // el nombre ya está en la cabecera: aquí no se repite
   wrap.append(media);
 
@@ -44,5 +42,5 @@ export function about() {
   }
 
   wrap.append(link("back", href(), "← home"));
-  return { node: wrap, mounted: () => runStills(layers) };
+  return { node: wrap };
 }

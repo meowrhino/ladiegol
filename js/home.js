@@ -1,8 +1,8 @@
-/* La home: un grid con un proyecto por casilla. */
+/* La home: el filtro por tipo y un grid con un proyecto por casilla. */
 
-import { href, still as stillSrc } from "./config.js";
+import { href, still as stillSrc, reducedMotion } from "./config.js";
 import { el, link } from "./dom.js";
-import { meta, visibles } from "./data.js";
+import { visibles } from "./data.js";
 import { makeLoop, wireLoops } from "./loops.js";
 
 export function home() {
@@ -11,6 +11,7 @@ export function home() {
 
   visibles().forEach((p) => {
     const tile = link("tile", href(p.slug));
+    tile.dataset.tipo = p.tipo || "";
     tile.setAttribute("aria-label", `${p.cliente} — ${p.titulo}`);
 
     if (p.destacado) {
@@ -43,13 +44,70 @@ export function home() {
     grid.append(tile);
   });
 
-  // la frase de presentación (meta.frase) y el enlace al about, justo antes
-  // del grid y scrolleando con él
   const wrap = el("div", "home");
-  const intro = el("div", "home__intro");
-  if (meta().frase) intro.append(el("p", "home__frase", meta().frase));
-  intro.append(link("home__about", href("about"), "→ see about"));
-  wrap.append(intro, grid);
+  wrap.append(filtro(grid), grid);
 
   return { node: wrap, mounted: () => wireLoops(grid) };
+}
+
+/* all + un botón por cada "tipo" que haya en data.json (commercial, music
+   video…): enseña solo las casillas de ese tipo */
+function filtro(grid) {
+  const nav = el("nav", "filtro");
+  nav.setAttribute("aria-label", "filter");
+  const tipos = [...new Set(visibles().map((p) => p.tipo).filter(Boolean))];
+
+  ["", ...tipos].forEach((tipo) => {
+    const b = el("button", "filtro__op", tipo || "all");
+    b.type = "button";
+    b.setAttribute("aria-pressed", String(!tipo));
+    b.addEventListener("click", () => {
+      if (b.getAttribute("aria-pressed") === "true") return;
+      nav.querySelectorAll("button").forEach((o) => o.setAttribute("aria-pressed", String(o === b)));
+      filtrar(grid, tipo);
+    });
+    nav.append(b);
+  });
+  return nav;
+}
+
+/* Al filtrar, las casillas se cortan hacia arriba una tras otra y las que
+   quedan entran de golpe desde abajo, también en cascada. Un clic a mitad
+   deja sin efecto el anterior (turno). */
+const CORTE = "cubic-bezier(.77, 0, .18, 1)";
+let turno = 0;
+
+async function filtrar(grid, tipo) {
+  const mio = ++turno;
+  const tiles = [...grid.querySelectorAll(".tile")];
+
+  if (!reducedMotion) {
+    const salen = tiles.filter((t) => !t.hidden).map((t, i) =>
+      t.animate([{ clipPath: "inset(0 0 0 0)" }, { clipPath: "inset(0 0 100% 0)" }], {
+        duration: 260,
+        delay: i * 20,
+        easing: CORTE,
+        fill: "forwards",
+      }).finished.catch(() => {})
+    );
+    await Promise.all(salen);
+    if (mio !== turno) return;
+  }
+
+  tiles.forEach((t) => {
+    t.getAnimations().forEach((a) => a.cancel());
+    t.hidden = !!tipo && t.dataset.tipo !== tipo;
+  });
+  if (reducedMotion) return;
+
+  tiles
+    .filter((t) => !t.hidden)
+    .forEach((t, i) =>
+      t.animate([{ clipPath: "inset(100% 0 0 0)" }, { clipPath: "inset(0 0 0 0)" }], {
+        duration: 520,
+        delay: i * 45,
+        easing: CORTE,
+        fill: "backwards",
+      })
+    );
 }

@@ -1,25 +1,37 @@
-/* La home: la frase de presentación, el enlace al about y el grid de casillas. */
+/* La home: el filtro (arriba a la izquierda) y el grid de casillas. */
 
-/* también con difference, como la cabecera */
-.home__intro {
-  margin: 0 0 2.5rem;
-  font-size: .85rem;
-  text-transform: lowercase;
-  mix-blend-mode: difference;
+/* en la esquina de la página, a la altura del "about" de la derecha */
+.filtro {
+  position: absolute;
+  top: var(--pad);
+  left: var(--pad);
+  z-index: 11;
+  display: flex;
+  flex-wrap: wrap;
+  gap: .4rem 1rem;
 }
-.home__frase { max-width: 40ch; margin: 0 0 .4rem; color: var(--fg-dim); }
-.home__about { color: var(--fg); }
-.home__about:hover { color: var(--fg-dim); }
+.filtro__op {
+  padding: 0;
+  border: 0;
+  background: none;
+  font: inherit;
+  text-transform: lowercase;
+  color: var(--fg-dim);
+  cursor: pointer;
+}
+.filtro__op:hover,
+.filtro__op[aria-pressed="true"] { color: var(--fg); }
+
+.tile[hidden] { display: none; }
 
 /* mucho negro entre casillas: las filas se separan más que las columnas,
    porque cada casilla lleva su rótulo encima */
 .grid {
   display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   column-gap: 1.25rem;
   row-gap: 2.5rem;
   grid-auto-flow: row dense;
-  counter-reset: casilla;
 }
 
 .tile {
@@ -54,21 +66,16 @@
 .tile.is-playing .tile__loop { opacity: 1; }
 .tile.is-playing .tile__still { opacity: 0; }
 
-/* el rótulo, pequeño y encima de la imagen: 01   CLIENTE   TÍTULO */
+/* el rótulo, pequeño y encima de la imagen: CLIENTE   TÍTULO, en Wild Trave */
 .tile__meta {
   display: flex;
   gap: 1.6em;
-  font-size: .8rem; /* Arya es más fina que la mono: un punto más para que se lea */
+  font-family: var(--font-title);
+  font-size: .8rem;
   line-height: 1.2;
-  text-transform: lowercase;
+  text-transform: uppercase;
   letter-spacing: .02em;
   white-space: nowrap;
-}
-
-.tile__meta::before {
-  counter-increment: casilla;
-  content: counter(casilla, decimal-leading-zero);
-  color: var(--fg-dim);
 }
 
 .tile__meta span { overflow: hidden; text-overflow: ellipsis; }

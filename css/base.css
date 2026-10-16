@@ -6,7 +6,7 @@
   --fg-dim: #8a8a8a;
   --line: #262626;
 
-  --font-title: "Asset", Georgia, serif;
+  --font-title: "Wild Trave", "Arial Black", sans-serif;
   --font-body: "Arya", system-ui, sans-serif;
 
   --gap: .75rem;
@@ -15,10 +15,10 @@
 
 }
 
-/* Asset para los títulos (el nombre, el welcome, el título de cada proyecto)
-   y Arya para todo lo demás. Las dos de fonts.bunny.net (libres, OFL),
-   servidas desde fonts/ y solo con el juego latino. */
-@font-face { font-family: "Asset"; src: url(../fonts/asset-400.woff2) format("woff2"); font-display: swap; }
+/* Wild Trave Rounded (gratis) para el nombre, el welcome, los títulos de los
+   proyectos y el texto del about; Arya para todo lo demás. Servidas desde
+   fonts/. Wild Trave no trae el espacio: sale de la siguiente de la lista. */
+@font-face { font-family: "Wild Trave"; src: url(../fonts/wild-trave-rounded.woff2) format("woff2"); font-display: swap; }
 @font-face { font-family: "Arya"; src: url(../fonts/arya-400.woff2) format("woff2"); font-display: swap; }
 
 *, *::before, *::after { box-sizing: border-box; }
@@ -46,45 +46,41 @@ img, video { display: block; width: 100%; height: 100%; object-fit: cover; }
 
 /* ---------- cabecera ---------- */
 
-/* la cabecera se queda arriba y, sin fondo, se invierte sobre lo que pasa
-   por debajo (blanco sobre negro, negro sobre las fotos claras) */
+/* la cabecera se va con el scroll; el nombre va centrado y con aire, igual
+   en todas las páginas. El nav va en la esquina de arriba a la derecha (y el
+   filtro de la home, en la de la izquierda) */
 .site-header {
-  position: sticky;
-  top: 0;
+  position: relative;
   z-index: 10;
   mix-blend-mode: difference;
   display: flex;
   align-items: baseline;
-  justify-content: space-between;
+  justify-content: center;
   gap: 1rem;
-  padding: var(--pad) var(--pad) calc(var(--pad) * .75);
+  padding: calc(var(--pad) * 5) var(--pad);
 }
 
 
-/* Asset es muy ancha: "LA DIEGOL" mide casi 12 veces el tamaño de letra,
-   así que los tamaños van bajos para que quepa */
+/* con Wild Trave "LA DIEGOL" mide unas 8,8 veces el tamaño de letra */
 .wordmark {
   font-family: var(--font-title);
-  font-size: clamp(16px, 2.2vw, 4.5rem);
+  font-size: clamp(24px, 3.6vw, 7.2rem);
   line-height: 1;
   white-space: nowrap;
 }
 
-/* en la home el nombre manda, pero sin tapar el grid al quedarse fijo */
-body[data-vista="home"] .wordmark {
-  font-size: clamp(24px, 4.4vw, 9rem);
+.site-nav {
+  position: absolute;
+  right: var(--pad);
+  top: var(--pad);
+  display: flex;
+  gap: 1rem;
+  color: var(--fg-dim);
 }
-
-body[data-vista="home"] .site-header {
-  align-items: flex-end;
-  padding: calc(var(--pad) * 1.5) var(--pad) calc(var(--pad) * 1.5);
-}
-
-.site-nav { display: flex; gap: 1rem; color: var(--fg-dim); }
 .site-nav a:hover { color: var(--fg); }
 
 /* en un proyecto, el nav enseña su título y en hover pasa a "back" */
-.site-nav__index--titulo { text-transform: lowercase; }
+.site-nav__index--titulo { text-transform: uppercase; }
 .site-nav__titulo {
   display: block;
   max-width: 45vw;
@@ -113,11 +109,10 @@ body[data-vista="welcome"] .app { padding: 0; }
   text-shadow: 0 0 30px rgba(0, 0, 0, .6);
 }
 .about p { white-space: pre-wrap; }
+.about > p:not([class]) { font-family: var(--font-title); line-height: 1.35; }
 
-/* el pase de stills del welcome, fijo detrás de todo. El scale recorta las
-   bandas negras que traen algunos stills (hasta un 10 % por lado); va en el
-   contenedor porque el zoom lento del pase ya usa el transform de cada foto */
-.about__media { position: fixed; inset: 0; z-index: -1; background: #000; transform: scale(1.25); }
+/* la foto del about (img/about.webp), fija detrás de todo */
+.about__media { position: fixed; inset: 0; z-index: -1; background: #000; }
 .about__veil { background: rgba(0, 0, 0, .55); }
 
 .about__clients {
