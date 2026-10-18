@@ -98,8 +98,7 @@ si pasas el ratón por encima de un campo, te dice qué es.
 
 ## Preparar fotos y loop
 
-- **Las fotos → [imgToWeb](https://meowrhino.github.io/imgToWeb/)** (o la copia
-  que hay en `tools/imgToWeb/index.html`, que funciona sin internet). **Ábrelo con
+- **Las fotos → [imgToWeb](https://meowrhino.github.io/imgToWeb/)**. **Ábrelo con
   Chrome o Firefox**, no con Safari: Safari no sabe hacer `.webp`. Arrastra las
   fotos, **ordénalas arrastrando** (el orden de la web es ese), deja la calidad
   en 85 % y el renombrado 1, 2, 3…, descarga el zip y mete las fotos en `img/`

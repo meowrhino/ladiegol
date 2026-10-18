@@ -23,7 +23,6 @@ build/preview.mjs              la misma plantilla en el navegador, para Live Ser
 css/, js/                      lo que se ve; el JS solo añade (filtro, loops, welcome, Vimeo)
 css/transicion.css, js/transicion.js   la transición de la casa, copiada de almarbra tal cual
 _headers, _redirects           caché y direcciones viejas, en Cloudflare
-tools/imgToWeb/                copia de imgToWeb, por si un día no está la nuestra
 tools/build-assets.sh          los originales del cliente en bloque (ffmpeg + cwebp), para nosotros
 ```
 
