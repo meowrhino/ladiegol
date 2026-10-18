@@ -1,12 +1,9 @@
-// Cloudflare Workers (solo archivos estáticos, sin código de servidor).
-// Cada push a main del repo ladiegol/web se despliega solo (Workers Builds).
+// La copia de LA DIEGOL, en Cloudflare: Workers Builds conectado a su repo
+// (ladiegol/web). Cada push a main construye dist/ y lo publica en ladiegol.com.
+// Con el dominio en data/site.json → "url", se indexa.
 {
   "name": "ladiegol",
-  "compatibility_date": "2026-08-01",
-  "assets": {
-    // la web es la raíz del repo; lo que no se publica está en .assetsignore
-    "directory": ".",
-    // /aftermatch, /about… no son archivos: devuelve index.html con 200 y la web se encarga
-    "not_found_handling": "single-page-application"
-  }
+  "compatibility_date": "2026-10-01",
+  "build": { "command": "node build/build.mjs" },
+  "assets": { "directory": "./dist", "not_found_handling": "404-page" }
 }

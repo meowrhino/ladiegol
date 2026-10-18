@@ -1,72 +1,33 @@
-/* La página de un proyecto: ficha, videos de vimeo y galería de stills. */
+/* La página de un proyecto: el HTML viene del build; aquí, el reproductor. */
 
-import { href, still } from "./config.js";
-import { el, link } from "./dom.js";
-
-export function project(p) {
-  const wrap = el("article", "project");
-
-  // primero el video, que es lo importante; luego la ficha; luego las fotos
-  (p.vimeo || []).forEach((id, i) => wrap.append(player(id, p, i)));
-
-  const head = el("div", "project__head");
-  head.append(el("h1", "project__title", p.titulo));
-  const ficha = [p.cliente, p.tipo].filter(Boolean).join(" · ");
-  if (ficha) head.append(el("p", "project__meta", ficha));
-  wrap.append(head);
-
-  const stills = el("div", "stills");
-  for (let i = 1; i <= (p.stills || 0); i++) {
-    const img = el("img", "still");
-    img.onload = () => img.classList.add("is-loaded"); // entra con fundido
-    img.src = still(p.slug, i);
-    img.alt = `${p.titulo} — still ${i}`;
-    img.loading = "lazy";
-    img.decoding = "async";
-    // si "stills" dice más fotos de las que hay, las que faltan desaparecen
-    img.onerror = () => img.remove();
-    stills.append(img);
-  }
-  wrap.append(stills, link("back", href(), "← back"));
-
-  return { node: wrap };
-}
+import { el } from "./dom.js";
 
 /* Portada + play: el iframe de vimeo solo se crea al clicar, así la página
    no carga el reproductor (ni sus cookies) sin que nadie lo pida. */
-function player(id, p, i) {
-  const box = el("div", "player");
-  box.setAttribute("role", "button");
-  box.tabIndex = 0;
-  box.setAttribute("aria-label", `play ${p.titulo}`);
+export function project() {
+  const titulo = document.querySelector(".project__title")?.textContent || "";
+  document.querySelectorAll(".player[data-vimeo]").forEach((box) => {
+    const id = box.dataset.vimeo;
+    const open = () => {
+      const iframe = el("iframe");
+      iframe.src = `https://player.vimeo.com/video/${id}?autoplay=1&title=0&byline=0&portrait=0&dnt=1`;
+      iframe.allow = "autoplay; fullscreen; picture-in-picture";
+      iframe.allowFullscreen = true;
+      iframe.title = titulo;
+      box.replaceChildren(iframe);
+      // la caja es 16:9 de reserva; con la proporción real del video no quedan bandas
+      fetch(`https://vimeo.com/api/oembed.json?url=https://vimeo.com/${id}&width=1920`)
+        .then((r) => r.json())
+        .then((v) => (box.style.aspectRatio = `${v.width} / ${v.height}`))
+        .catch(() => {});
+    };
 
-  const poster = el("img");
-  // el primer video lleva la portada; los siguientes, los stills que vienen después
-  poster.src = still(p.slug, i === 0 ? p.portada || 1 : Math.min(i + 1, p.stills || 1));
-  poster.alt = "";
-  poster.loading = i === 0 ? "eager" : "lazy";
-  box.append(poster, el("div", "player__play", "▶"));
-
-  const open = () => {
-    const iframe = el("iframe");
-    iframe.src = `https://player.vimeo.com/video/${id}?autoplay=1&title=0&byline=0&portrait=0&dnt=1`;
-    iframe.allow = "autoplay; fullscreen; picture-in-picture";
-    iframe.allowFullscreen = true;
-    iframe.title = p.titulo;
-    box.replaceChildren(iframe);
-    // la caja es 16:9 de reserva; con la proporción real del video no quedan bandas
-    fetch(`https://vimeo.com/api/oembed.json?url=https://vimeo.com/${id}&width=1920`)
-      .then((r) => r.json())
-      .then((v) => (box.style.aspectRatio = `${v.width} / ${v.height}`))
-      .catch(() => {});
-  };
-
-  box.addEventListener("click", open);
-  box.addEventListener("keydown", (e) => {
-    if (e.key === "Enter" || e.key === " ") {
-      e.preventDefault();
-      open();
-    }
+    box.addEventListener("click", open);
+    box.addEventListener("keydown", (e) => {
+      if (e.key === "Enter" || e.key === " ") {
+        e.preventDefault();
+        open();
+      }
+    });
   });
-  return box;
 }

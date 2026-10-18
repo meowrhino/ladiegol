@@ -59,10 +59,11 @@
   transition: opacity var(--dur) ease;
 }
 
-/* el still entra con fundido al cargar; el loop, al arrancar el hover */
-.tile__still,
+/* el still entra con fundido al cargar (.ok, de js/transicion.js; sin JS se
+   ve sin más); el loop, al arrancar el hover */
+.js .tile__still,
 .tile__loop { opacity: 0; }
-.tile__still.is-loaded { opacity: 1; }
+.tile__still.ok { opacity: 1; }
 .tile.is-playing .tile__loop { opacity: 1; }
 .tile.is-playing .tile__still { opacity: 0; }
 

@@ -1,0 +1,23 @@
+{
+  "$schema": "../../schema/project.json",
+  "title": "RINGTONE",
+  "client": "R3HAB x FAFAQ x DNF",
+  "type": "MUSIC VIDEO",
+  "vimeo": [
+    "529474950"
+  ],
+  "cover": "1",
+  "photos": [
+    "1",
+    "2",
+    "3",
+    "4",
+    "5",
+    "6",
+    "7",
+    "8",
+    "9",
+    "10",
+    "11"
+  ]
+}

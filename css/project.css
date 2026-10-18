@@ -65,9 +65,11 @@
 .player:hover .player__play { transform: scale(1.12); }
 
 .stills { display: flex; flex-direction: column; gap: var(--gap); }
-/* sin medidas, antes de cargar miden 0 px y el lazy-load las baja todas:
-   16:9 de reserva hasta que llega la foto, y luego su proporción real */
+/* el build les pone width y height (su proporción de verdad); sin ellos (la
+   vista previa), 16:9 de reserva hasta que llega la foto */
 .stills img { height: auto; aspect-ratio: auto 16 / 9; }
-/* cada foto entra con un fundido cuando termina de cargar, en vez de aparecer de golpe */
-.still { opacity: 0; transition: opacity .8s ease; }
-.still.is-loaded { opacity: 1; }
+/* cada foto entra con un fundido cuando termina de cargar (.ok, de
+   js/transicion.js), en vez de aparecer de golpe; sin JS se ve sin más */
+.still { transition: opacity .8s ease; }
+.js .still { opacity: 0; }
+.still.ok { opacity: 1; }

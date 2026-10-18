@@ -81,10 +81,11 @@ img, video { display: block; width: 100%; height: 100%; object-fit: cover; }
 body[data-vista="home"] .site-nav { left: auto; right: var(--pad); }
 
 .app { padding: 0 var(--pad) calc(var(--pad) * 4); }
-.loading { color: var(--fg-dim); }
 
-/* la portada de bienvenida ocupa la pantalla entera: fuera cabecera y márgenes */
-body[data-vista="welcome"] .site-header { display: none; }
+/* la portada de bienvenida ocupa la pantalla entera: fuera cabecera, márgenes
+   y, en la home, el grid de debajo hasta que se sale */
+body[data-vista="welcome"] .site-header,
+body[data-vista="welcome"] .home { display: none; }
 body[data-vista="welcome"] .app { padding: 0; }
 
 /* ---------- about ---------- */
@@ -101,7 +102,7 @@ body[data-vista="welcome"] .app { padding: 0; }
 .about p { white-space: pre-wrap; }
 .about > p:not([class]) { font-weight: 900; line-height: 1.35; }
 
-/* la foto del about (img/about.webp), fija detrás de todo */
+/* la foto del about (data/about/1.webp), fija detrás de todo */
 .about__media { position: fixed; inset: 0; z-index: -1; background: #000; }
 .about__veil { background: rgba(0, 0, 0, .55); }
 
@@ -118,16 +119,13 @@ body[data-vista="welcome"] .app { padding: 0; }
 
 /* ---------- transiciones entre páginas ---------- */
 
-/* fundido entre una página y otra (js/main.js, render) */
-::view-transition-old(root),
-::view-transition-new(root) { animation-duration: .45s; }
-
-/* al salir del welcome el fundido va más despacio */
-html[data-paso="welcome"]::view-transition-old(root),
-html[data-paso="welcome"]::view-transition-new(root) {
-  animation-duration: 1.2s;
-  animation-timing-function: cubic-bezier(.65, 0, .25, 1);
-}
+/* entre una página y otra, la de la casa (css/transicion.css y
+   js/transicion.js). Aquí solo la salida del welcome a la home, que es en la
+   misma página (js/welcome.js): un fundido lento */
+html[data-paso="welcome"]::view-transition-old(root) { animation: welcome-fuera 1.2s cubic-bezier(.65, 0, .25, 1) both; }
+html[data-paso="welcome"]::view-transition-new(root) { animation: welcome-dentro 1.2s cubic-bezier(.65, 0, .25, 1) both; }
+@keyframes welcome-fuera { to { opacity: 0; } }
+@keyframes welcome-dentro { from { opacity: 0; } }
 
 @media (max-width: 720px) {
   :root { --gap: 6px; --pad: 12px; }

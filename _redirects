@@ -1,0 +1,5 @@
+# Las direcciones de antes de octubre de 2026 (Cloudflare las lee de aquí; GitHub Pages no)
+/_PROJECTS/:slug/stills/:n /projects/:slug/img/:n 301
+/_PROJECTS/:slug/hover.webm /projects/:slug/img/loop.webm 301
+/img/about.webp /data/about/1.webp 301
+/data.json / 301

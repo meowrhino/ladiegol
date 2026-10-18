@@ -9,7 +9,7 @@
 #   ./tools/build-assets.sh cerca        → solo ese slug
 #
 # Origen  : $SRC/projects/N - NOMBRE/{stills,gifs hover}
-# Destino : _PROJECTS/<slug>/stills/1.webp…n.webp y hover.webm
+# Destino : projects/<slug>/img/1.webp…n.webp y loop.webm (el project.json, a mano)
 #
 # Requiere ffmpeg y webp (brew install ffmpeg webp).
 
@@ -17,7 +17,7 @@ set -euo pipefail
 
 SRC="${SRC:-$HOME/Desktop/ladiegol}"
 REPO="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
-OUT="$REPO/_PROJECTS"
+OUT="$REPO/projects"
 
 # imgToWeb (js/convert-view.js y el selector de calidad)
 IMG_MAX=2000
@@ -70,26 +70,26 @@ for entry in "${MAP[@]}"; do
 
   # no borra nada: si un proyecto tiene ahora menos stills que antes, quita a mano los que sobren
   dst="$OUT/$slug"
-  mkdir -p "$dst/stills"
+  mkdir -p "$dst/img"
   echo "▶ $slug"
 
-  # ---- stills → stills/1.webp, 2.webp, … ----
+  # ---- stills → img/1.webp, 2.webp, … ----
   n=0
   while IFS= read -r still; do
     n=$((n + 1))
     ffmpeg -nostdin -v error -i "$still" -vf "$(fit $IMG_MAX)" -y "$TMP/still.png"
-    cwebp -quiet -q $IMG_Q "$TMP/still.png" -o "$dst/stills/$n.webp"
+    cwebp -quiet -q $IMG_Q "$TMP/still.png" -o "$dst/img/$n.webp"
   done < <(images_in "$src_dir/stills")
-  echo "    $n stills · $(du -sh "$dst/stills" | cut -f1)"
+  echo "    $n stills · $(du -sh "$dst/img" | cut -f1)"
 
-  # ---- gif → hover.webm (con sus fps: el ritmo entrecortado del gif se queda) ----
+  # ---- gif → img/loop.webm (con sus fps: el ritmo entrecortado del gif se queda) ----
   gif="$(find "$src_dir/gifs hover" -maxdepth 1 -type f -iname '*.gif' | sort | head -1)"
   if [ -n "$gif" ]; then
     ffmpeg -nostdin -v error -i "$gif" -c:v libvpx -crf $LOOP_CRF -b:v $LOOP_BITRATE -cpu-used 5 \
       -lag-in-frames 16 -auto-alt-ref 1 -an -threads 4 \
       -vf "scale='min($LOOP_MAX,iw)':'min($LOOP_MAX,ih)':force_original_aspect_ratio=decrease:force_divisible_by=2" \
-      -pix_fmt yuv420p -y "$dst/hover.webm"
-    echo "    hover.webm: $(du -h "$dst/hover.webm" | cut -f1)"
+      -pix_fmt yuv420p -y "$dst/img/loop.webm"
+    echo "    loop.webm: $(du -h "$dst/img/loop.webm" | cut -f1)"
   else
     echo "    ⚠️  sin gif de hover"
   fi
@@ -98,5 +98,5 @@ for entry in "${MAP[@]}"; do
 done
 
 echo
-echo "✅ listo. Peso total de _PROJECTS: $(du -sh "$OUT" | cut -f1)"
+echo "✅ listo. Peso total de projects: $(du -sh "$OUT" | cut -f1)"
 echo "   Recuerda poner en data.json cuántos stills tiene cada proyecto."

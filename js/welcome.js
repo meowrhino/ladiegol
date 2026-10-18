@@ -2,20 +2,21 @@
    proyectos.
 
    Dos modos, para poder compararlos:
-     loop   → los loops (hover.webm) de los proyectos, en orden aleatorio
-     stills → los stills de meta.welcome.stills (o todos, si no hay lista)
+     loop   → los loops (loop.webm) de los proyectos, en orden aleatorio
+     stills → las fotos de site.json → welcome → photos (o todas, si no hay lista)
 
-   Se elige en data.json (meta.welcome.modo) y se pueden ver los dos en
-   /welcome-loop y /welcome-stills.
+   Se elige en data/site.json (welcome → mode) y se pueden ver los dos en
+   /welcome-loop/ y /welcome-stills/. Lo que necesita (las fotos, los loops,
+   las portadas de la home) lo deja el build en <script id="welcome">.
 
-   Es también el loader: mientras se ve, se descargan las portadas de la home
-   y las fuentes, con el porcentaje abajo. Cuando está todo (y ha pasado
-   MIN_MS, para que dé tiempo a verlo) entra solo en la home. Si algo tarda
-   más de MAX_MS entra igual, y con un clic se entra antes. */
+   En la home sale la primera vez de cada visita, encima del grid: es también
+   el loader. Mientras se ve, se descargan las portadas de la home y las
+   fuentes, con el porcentaje abajo. Cuando está todo (y ha pasado MIN_MS,
+   para que dé tiempo a verlo) entra solo en la home, con un fundido lento.
+   Si algo tarda más de MAX_MS entra igual, y con un clic se entra antes. */
 
-import { asset, still, loopsEnabled, reducedMotion } from "./config.js";
+import { loopsEnabled, reducedMotion, velocidadLoops } from "./config.js";
 import { el, shuffled } from "./dom.js";
-import { meta, visibles, welcomeStills, withLoop, velocidadLoops } from "./data.js";
 
 /* El ritmo del pase de stills. Son los números a tocar si va rápido o lento:
    cada foto está STILL_MS en pantalla y el fundido entre dos dura FUNDIDO_MS
@@ -30,7 +31,44 @@ const MAX_MS = 8000;
    se verían borrosos, así que ahí el welcome usa los stills (2000 px). */
 const PANTALLA_ENORME = 2200;
 
-export function welcome(modo, salir) {
+/* en navegación privada sessionStorage puede petar: que no tumbe la web */
+const visto = () => {
+  try {
+    sessionStorage.setItem("welcome-visto", "1");
+  } catch {
+    /* nada */
+  }
+};
+
+/* Salir: en la home se quita el welcome y asoma el grid, con el fundido
+   lento de css/base.css (data-paso); en /welcome… se va a la home. */
+function salir(wrap, home, parar) {
+  if (!document.querySelector(".home")) {
+    const a = el("a");
+    a.href = home;
+    document.body.append(a);
+    a.click(); // por el mismo camino que un clic: con la transición de la casa
+    return;
+  }
+  const html = document.documentElement;
+  // el pase se para dentro: la foto de la página de antes lo lleva aún en marcha
+  const quitar = () => {
+    parar();
+    wrap.remove();
+    document.body.dataset.vista = "home";
+    window.scrollTo(0, 0);
+  };
+  if (reducedMotion || !document.startViewTransition) return quitar();
+  html.dataset.paso = "welcome";
+  const t = document.startViewTransition(quitar);
+  // si la pestaña está en segundo plano el navegador se salta la animación
+  // (pinta igual): que no salga como error en la consola
+  t.ready.catch(() => {});
+  t.finished.finally(() => delete html.dataset.paso);
+}
+
+export function welcome({ name: nombre, mode: modo, home, stills, loops, covers }) {
+  visto();
   // sin loops (ahorro de datos o reduced motion) el modo loop no tiene sentido
   const mode =
     modo === "loop" && loopsEnabled && innerWidth <= PANTALLA_ENORME ? "loop" : "stills";
@@ -38,52 +76,42 @@ export function welcome(modo, salir) {
   const wrap = el("section", `welcome welcome--${mode}`);
   const media = el("div", "welcome__media");
   const layers = [slot(mode), slot(mode)];
+  const cola = mode === "stills" ? stills : loops;
   media.append(...layers);
 
-  const name = el("h1", "welcome__name", meta().nombre);
+  const name = el("h1", "welcome__name", nombre);
 
   const hint = el("p", "welcome__hint", "0%");
   wrap.append(media, el("div", "welcome__veil"), name, hint);
+  document.getElementById("app").prepend(wrap);
 
-  return {
-    node: wrap,
-    mounted: () => {
-      // se sale una sola vez: el clic y la entrada automática pueden coincidir
-      let fuera = false;
-      const entrar = () => {
-        if (fuera) return;
-        fuera = true;
-        salir();
-      };
-
-      const stopPase =
-        mode === "stills" ? runStills(layers) : runLoops(layers);
-      const onKey = (e) => {
-        if (e.key === "Enter" || e.key === " " || e.key === "Escape") entrar();
-      };
-      addEventListener("keydown", onKey);
-      wrap.addEventListener("click", entrar);
-
-      const t0 = performance.now();
-      const timers = [setTimeout(entrar, MAX_MS)];
-      precargar((f) => (hint.textContent = `${Math.round(f * 100)}%`)).then(() => {
-        timers.push(setTimeout(entrar, Math.max(0, MIN_MS - (performance.now() - t0))));
-      });
-
-      return () => {
-        fuera = true;
-        timers.forEach(clearTimeout);
-        stopPase();
-        removeEventListener("keydown", onKey);
-      };
-    },
+  const stopPase = mode === "stills" ? runStills(layers, cola) : runLoops(layers, cola);
+  const onKey = (e) => {
+    if (e.key === "Enter" || e.key === " " || e.key === "Escape") entrar();
   };
+  addEventListener("keydown", onKey);
+  wrap.addEventListener("click", entrar);
+
+  const t0 = performance.now();
+  const timers = [setTimeout(entrar, MAX_MS)];
+  precargar(covers, (f) => (hint.textContent = `${Math.round(f * 100)}%`)).then(() => {
+    timers.push(setTimeout(entrar, Math.max(0, MIN_MS - (performance.now() - t0))));
+  });
+
+  // se sale una sola vez: el clic y la entrada automática pueden coincidir
+  let fuera = false;
+  function entrar() {
+    if (fuera) return;
+    fuera = true;
+    timers.forEach(clearTimeout);
+    removeEventListener("keydown", onKey);
+    salir(wrap, home, stopPase);
+  }
 }
 
 /* Descarga las portadas de la home y espera a las fuentes; avisa del avance
    (de 0 a 1). Las fotos que fallan cuentan igual: el loader no se atasca. */
-function precargar(avance) {
-  const urls = visibles().map((p) => still(p.slug, p.portada || 1));
+function precargar(urls, avance) {
   const total = urls.length + 1;
   let hechas = 0;
   const una = () => avance(++hechas / total);
@@ -120,16 +148,14 @@ function slot(mode) {
   return v;
 }
 
-const loopSrc = (slug) => asset(slug, "hover.webm");
-
 /* Pase de loops: cada clip se ve entero y encadena con el siguiente.
    Mientras uno suena, el otro ya se está cargando, así no hay parón.
 
    Ojo con los handlers: un <video> reutilizado dispara 'canplay' cada vez que
    se le cambia la fuente. Si no se limpian, cada uno arranca una cadena nueva
    y el pase se vuelve loco. Por eso aquí se anulan siempre antes de usarlos. */
-function runLoops(layers) {
-  const cola = shuffled(withLoop());
+function runLoops(layers, loops) {
+  const cola = shuffled(loops);
   if (!cola.length) return () => {};
 
   let i = 0;
@@ -144,11 +170,11 @@ function runLoops(layers) {
 
   // prepara el siguiente clip en la capa de atrás
   const carga = () => {
-    const p = cola[i++ % cola.length];
+    const src = cola[i++ % cola.length];
     const v = layers[1 - front];
     limpia(v);
     v.pause();
-    v.src = loopSrc(p.slug);
+    v.src = src;
     v.load();
     return v;
   };
@@ -200,8 +226,7 @@ function runLoops(layers) {
 /* Pase de stills: uno cada STILL_MS, encadenados con un fundido largo y sin
    poner nunca dos fotos seguidas del mismo proyecto (eran casi el mismo plano
    y parecía que la web parpadeaba). */
-function runStills(layers) {
-  const todos = welcomeStills();
+function runStills(layers, todos) {
   if (!todos.length) return () => {};
 
   let cola = shuffled(todos);
@@ -228,7 +253,7 @@ function runStills(layers) {
 
   const siguiente = () => {
     if (!vivo) return;
-    const { slug, n } = siguienteFoto();
+    const { src } = siguienteFoto();
     const back = 1 - front;
     const img = layers[back];
 
@@ -250,7 +275,7 @@ function runStills(layers) {
     img.onerror = () => {
       if (vivo) timer = setTimeout(siguiente, 100);
     };
-    img.src = still(slug, n);
+    img.src = src;
   };
 
   siguiente();

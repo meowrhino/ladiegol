@@ -1,0 +1,23 @@
+{
+  "$schema": "../../schema/project.json",
+  "title": "No te hace falta… ¿o sí?",
+  "client": "LEROY MERLIN",
+  "type": "COMMERCIAL",
+  "vimeo": [
+    "1103052790",
+    "1103049614"
+  ],
+  "cover": "1",
+  "photos": [
+    "1",
+    "2",
+    "3",
+    "4",
+    "5",
+    "6",
+    "7",
+    "8",
+    "9",
+    "10"
+  ]
+}

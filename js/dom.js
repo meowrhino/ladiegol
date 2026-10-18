@@ -1,17 +1,10 @@
-/* Cuatro ayudas para no escribir document.createElement mil veces. */
+/* Dos ayudas: crear un elemento y barajar una lista. */
 
 export function el(tag, cls, text) {
   const node = document.createElement(tag);
   if (cls) node.className = cls;
   if (text != null) node.textContent = text;
   return node;
-}
-
-export function link(cls, path, text) {
-  const a = el("a", cls, text);
-  a.href = path;
-  a.dataset.link = "";
-  return a;
 }
 
 export const shuffled = (arr) => {

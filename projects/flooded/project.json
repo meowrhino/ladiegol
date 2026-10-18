@@ -1,0 +1,21 @@
+{
+  "$schema": "../../schema/project.json",
+  "title": "FLOODED",
+  "client": "FRANSIE KLAAS",
+  "type": "MUSIC VIDEO",
+  "vimeo": [
+    "334675479"
+  ],
+  "cover": "1",
+  "photos": [
+    "1",
+    "2",
+    "3",
+    "4",
+    "5",
+    "6",
+    "7",
+    "8",
+    "9"
+  ]
+}

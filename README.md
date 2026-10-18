@@ -1,286 +1,63 @@
-# ladiegol v2
+# ladiegol
 
-Versión de pruebas de ladiegol.com: se publica en https://meowrhino.github.io/ladiegol/
+Portfolio de LA DIEGOL (directora, Barcelona), con la receta del estudio
+([meowrhino/JAMstack](https://github.com/meowrhino/JAMstack)). Para nosotros; lo
+que edita ella está en [GUIA.md](GUIA.md), el paso a su cuenta en
+[TRASPASO.md](TRASPASO.md) y qué hacer si el build falla en [CLAUDE.md](CLAUDE.md).
 
-Portfolio de LA DIEGOL. Web estática: un `index.html`, un `data.json` y una carpeta por proyecto. Sin build, sin dependencias.
+- **Nuestra copia** (`meowrhino/ladiegol`): la Action publica en
+  https://meowrhino.github.io/ladiegol/ (con `noindex`).
+- **La suya** (`ladiegol/web`): Workers Builds en su Cloudflare, en
+  https://ladiegol.com (`wrangler.jsonc`).
 
-**Regla de oro:** el contenido se toca en **`data.json`** y en **`_PROJECTS/`**. El código (`index.html`, `css/`, `js/`) no hace falta tocarlo.
-
----
-
-## Cómo funciona en 30 segundos
-
-- **Home** (`/`): arriba a la izquierda, el **filtro** (all y un botón por cada `tipo` de `data.json`: commercial, music video); arriba a la derecha, **about**. Debajo, un grid con un proyecto por casilla. Tres columnas con mucho negro entre casillas (dos en tablet, **una en móvil**). Encima de cada casilla, en pequeño y en minúsculas, el cliente y el título. Se ve un **still de portada**; al pasar el ratón por encima arranca el **loop** del proyecto. En **móvil no hay hover**, así que se activa lo que queda en la **franja central** de la pantalla mientras haces scroll.
-- Los proyectos con `"destacado": true` ocupan una **casilla doble**, alternando lado.
-- **Proyecto** (`/<slug>`): arriba el/los videos de Vimeo (no cargan hasta que los clicas), debajo la ficha (título · cliente · tipo) y después la galería de stills, para ir bajando.
-- **About** (`/about`): la bio y la lista de clientes, de `data.json`, encima de una foto fija: **`img/about.webp`** (para cambiarla, se sustituye ese archivo con el mismo nombre; ahora hay un still de cupra de provisional). Se entra desde el **about** de arriba a la derecha de la home o **clicando el nombre** de la cabecera; para volver, el "home" de arriba a la derecha.
-- **Welcome** (`/welcome`): la portada de bienvenida, con el nombre en grande sobre un pase de imágenes. Dos versiones para comparar: **`/welcome-loop`** y **`/welcome-stills`**.
-- El **logo**, los títulos de la home y de los proyectos van en **Wild Trave Rounded**; el resto, en **DM Sans** (el texto del about, en su peso más gordo, 900). El nombre va centrado arriba, con el mismo tamaño y aire en todas las páginas, y se va con el scroll.
-- El **fondo** es negro puro, sin grano.
-
----
-
-## Añadir un proyecto (paso a paso)
-
-Todo se hace con dos herramientas web y tocando solo carpetas y `data.json`.
-Hace falta **Chrome** (Safari no sabe crear WebP) y **VS Code** con la extensión **Live Server**
-(VS Code la propone sola al abrir la carpeta).
-
-### 1. Los stills → [imgToWeb](https://meowrhino.github.io/imgToWeb/)
-
-1. Arrastra la carpeta de stills del proyecto. Calidad: **85 %** (la que viene).
-2. Deja activado el **renombrado secuencial** (1, 2, 3…) y **arrastra las fotos para ordenarlas**:
-   el orden de la web es ese.
-3. **Descargar todo (zip)** y descomprime.
-
-### 2. El loop → [videoToWeb](https://meowrhino.github.io/videoToWeb/)
-
-Elige el modo **loop**, arrastra el **gif** del hover y descarga el `.webm`. Mantiene el ritmo
-entrecortado del gif y pesa muchísimo menos.
-
-### 3. La carpeta
-
-Crea `_PROJECTS/<slug>/` (el slug es el nombre corto del proyecto, en minúsculas y con guiones:
-`por-culpa-del-amor`) y deja dentro:
+## Cómo está hecha
 
 ```
-_PROJECTS/por-culpa-del-amor/
-  stills/
-    1.webp
-    2.webp
-    …
-  hover.webm     ← el loop, renombrado así
+data/site.json                 nombre, welcome, lista de la home (lists → work)
+data/about.json, data/about/   texto y clientes del about; su foto (1.webp)
+projects/<slug>/               project.json + img/1.webp… (imgToWeb) + img/loop.webm (videoToWeb)
+schema/                        un esquema por tipo de JSON: VS Code y el build validan con él
+build/paginas.mjs              la plantilla: datos → HTML. La usan los dos de abajo
+build/build.mjs                lee, valida, hace las og (sharp) y escribe dist/
+build/preview.mjs              la misma plantilla en el navegador, para Live Server (index.html)
+css/, js/                      lo que se ve; el JS solo añade (filtro, loops, welcome, Vimeo)
+css/transicion.css, js/transicion.js   la transición de la casa, copiada de almarbra tal cual
+_headers, _redirects           caché y direcciones viejas, en Cloudflare
+tools/imgToWeb/                copia de imgToWeb, por si un día no está la nuestra
+tools/build-assets.sh          los originales del cliente en bloque (ffmpeg + cwebp), para nosotros
 ```
 
-### 4. El `data.json`
+- **Páginas**: `/`, `/about/`, `/<slug>/` y, para comparar los dos welcomes,
+  `/welcome/`, `/welcome-loop/` y `/welcome-stills/` (con `noindex`). Un proyecto
+  va en `/<slug>/` sin prefijo porque solo hay una lista; el build para si un slug
+  choca con una página o una carpeta (`RESERVADAS` en `paginas.mjs`).
+- **Welcome**: sale en la home una vez por visita (`sessionStorage`), encima del
+  grid; un `<script>` justo después de `<body>` lo decide antes de pintar. Es el
+  loader: precarga las portadas y entra solo (2,4–8 s, `MIN_MS` / `MAX_MS` en
+  `js/welcome.js`), con un fundido lento (View Transition en la misma página,
+  `data-paso` en `css/base.css`). En pantallas de más de 2200 px, siempre stills.
+- **Loops**: los gifs del cliente en webm (videoToWeb, modo loop, 960 px, ~7 MB
+  los 12). Cada uno se baja cuando su casilla está cerca de la pantalla; en
+  móvil arranca el que queda en la franja central. `loopSlowdown` los ralentiza.
+- **Fuentes**: Wild Trave Rounded (Letterhend, gratis) para el nombre y los
+  títulos; DM Sans (OFL, 400 y 900) para lo demás. En `fonts/`. Los tamaños del
+  nombre están pensados para Wild Trave ("LA DIEGOL" mide ~8,8 veces el cuerpo).
+- **Direcciones viejas** (antes de octubre de 2026): `/_PROJECTS/<slug>/stills/N.webp`,
+  `hover.webm`, `img/about.webp` y `data.json`, en `_redirects`; y el build añade
+  `/<página>` → `/<página>/` con 301 (Cloudflare pondría 307).
 
-Copia un proyecto del array `projects`, pégalo donde quieras que salga (el **orden de la home** es
-el orden del array) y cambia los datos:
-
-```json
-{
-  "slug": "por-culpa-del-amor",
-  "titulo": "POR CULPA DEL AMOR",
-  "cliente": "DOLLAR SELLMOUNI",
-  "tipo": "MUSIC VIDEO",
-  "destacado": false,
-  "visible": true,
-  "vimeo": ["685499456"],
-  "stills": 9,
-  "portada": 1,
-  "loop": true
-},
-```
-
-| campo | qué hace |
-|---|---|
-| `slug` | **igual que la carpeta** de `_PROJECTS/`. Es también la url: `ladiegol.com/por-culpa-del-amor` |
-| `titulo` / `cliente` / `tipo` | lo que se ve en la casilla y en la ficha (sale todo en minúsculas, da igual cómo lo escribas) |
-| `destacado` | `true` = casilla doble en la home. Mejor 2 o 3 como mucho |
-| `visible` | `false` = no sale en la home, pero `/<slug>` funciona (para pasar el link antes de publicar) |
-| `vimeo` | ids de Vimeo, solo el número (`vimeo.com/685499456` → `"685499456"`), en orden |
-| `stills` | cuántas fotos hay en `stills/` |
-| `portada` | el número del still que sale en la home y de portada del vídeo |
-| `loop` | `false` si el proyecto no tiene loop |
-
-Ojo con las **comas**: entre proyecto y proyecto va una coma, y después del último no.
-Si la web se queda en blanco después de tocar el json, casi siempre es una coma.
-
-### 5. Comprobarlo
-
-En VS Code, **Go Live** (abajo a la derecha). Se abre la web y se recarga sola cada vez que
-guardas `data.json`. Mira la home (la portada y el loop) y entra en el proyecto.
-
-### 6. Publicarlo
-
-Con **[GitHub Desktop](https://desktop.github.com)** y el repo **`ladiegol/web`** abierto
-(es el único que publica en ladiegol.com):
-
-1. Abajo a la izquierda, escribe qué has hecho (`añado por culpa del amor`) → **Commit to main**.
-2. Arriba, **Push origin**.
-
-En un minuto está en ladiegol.com. Si ves lo de antes, **Cmd+Shift+R**: el navegador guarda
-las fotos y los loops una hora.
-
----
-
-## Los ajustes generales (`meta` en `data.json`)
-
-| campo | qué hace |
-|---|---|
-| `nombre` | el logo de la cabecera y el título del about |
-| `titulo` | el título de la pestaña del navegador en la home |
-| `ralentizar_loops` | velocidad de los loops: `1` = la del gif, `1.5` = un 50 % más lentos, `2` = el doble de lentos |
-| `email` / `instagram` | salen al final del about. Vacíos (`""`) = no salen. El instagram, con o sin `@` |
-| `bio` | el texto del about. Cada `\n\n` es un párrafo nuevo |
-| `clientes` | la lista de clientes del about, en orden |
-| `welcome` | la portada de bienvenida (ver más abajo) |
-
----
-
-## Los loops
-
-Son los **gifs** del cliente pasados a **webm** (`hover.webm`) con videoToWeb en modo loop: el
-mismo ritmo entrecortado del gif (sus fps, normalmente 10) a 960 px. Duran lo mismo que los gifs
-originales (comprobado uno a uno, ±0,1 s). Para que vayan más lentos, `ralentizar_loops` en `meta`. Los 12 suman **~7 MB** (de
-0,3 a 1 MB cada uno). Cada loop se descarga cuando su casilla está en pantalla o le falta media
-pantalla para entrar: así el hover arranca al momento y no se baja nada de lo que queda lejos.
-
-Lo que probamos antes de elegir (los 12 loops):
-
-| | peso | |
-|---|---|---|
-| **gif → webm** (el elegido) | ~7 MB | ritmo del gif, misma calidad que el webp a 960 px |
-| gif → webp animado (imgToWeb) | ~36 MB | ritmo del gif, 2000 px |
-| vídeo → webm | ~3,7 MB | fluido, a velocidad real |
-
-Los descartados están fuera del repo, en `~/Desktop/ladiegol-loops-webp/` y
-`~/Desktop/ladiegol-loops-video/`.
-
-WebM lo leen todos los navegadores actuales (Safari desde macOS 16 / iOS 17.4). En uno más viejo el
-loop no arranca y se queda la foto de portada.
-
----
-
-## La portada de bienvenida (welcome)
-
-Se configura en `data.json`, dentro de `meta`:
-
-```json
-"welcome": {
-  "activo": true,
-  "modo": "stills",
-  "stills": ["stripper/1", "are-you-one-of-us/10", "cerca/6"]
-}
-```
-
-- `activo`: `true` = al entrar en la web sale primero el welcome (una vez por visita). `false` = no sale, pero se puede ver entrando a mano en `/welcome`.
-- `modo`: `"loop"` (los loops de los proyectos, uno tras otro) o `"stills"`.
-- `stills`: **las fotos que enseña el loader**, como `"slug/número"` (`"cerca/6"` = la foto 6 de cerca). Solo cuenta en el modo `"stills"`. Si la lista está vacía salen todas.
-
-Hace de **loader**: mientras se ve, se descargan las portadas de la home y las fuentes, con el
-porcentaje abajo. Cuando ya está todo entra solo en la home (como mínimo se ve 2,4 s y como
-mucho 8 s, `MIN_MS` / `MAX_MS` arriba de `js/welcome.js`). Se puede entrar antes clicando en
-cualquier sitio (o con enter / espacio / esc).
-
-En pantallas de más de 2200 px de ancho usa siempre los stills: los loops miden 960 px y a
-pantalla completa se verían borrosos.
-
-El ritmo del pase de stills está arriba de `js/welcome.js`: `STILL_MS` (2,6 s por foto) y
-`FUNDIDO_MS` (1,1 s de fundido, que va también en `css/welcome.css`). Los loops se ven enteros.
-
----
-
-## Convertir en bloque (para nosotros)
-
-`tools/build-assets.sh` convierte los originales de golpe con **los mismos ajustes** que imgToWeb
-(stills) y videoToWeb (gif → loop), para que salga igual que lo que suba el cliente:
+## Probar
 
 ```bash
-./tools/build-assets.sh          # todos los proyectos
-./tools/build-assets.sh cerca    # solo uno
+npm ci
 ```
-
-Lee de `~/Desktop/ladiegol/projects/N - NOMBRE/{stills,gifs hover}` (se cambia con
-`SRC=/otra/ruta`). Los stills se numeran en el orden de los nombres de archivo (las capturas van
-por fecha). Necesita `brew install ffmpeg webp`. Los originales de esta tanda ya no están en el
-escritorio: para volver a convertirlos habría que pedírselos otra vez al cliente.
-
----
-
-## Estructura del código
-
-```
-index.html / 404.html   ← el mismo cascarón (el 404 solo lo usa GitHub Pages)
-data.json               ← todo el contenido
-_PROJECTS/<slug>/       ← stills/1.webp…n.webp y hover.webm
-css/
-  base.css      tokens, tipografías, cabecera, about
-  home.css      el grid
-  project.css   ficha, vimeo y galería
-  welcome.css   la portada de bienvenida
-js/
-  main.js       arranque y router
-  config.js     rutas base y detección de hover / ahorro de datos
-  dom.js        cuatro ayudas (crear elementos, barajar, elegir al azar)
-  data.js       carga y consultas de data.json
-  home.js       el grid
-  loops.js      los loops de las casillas (hover o centro de pantalla)
-  project.js    la página de proyecto
-  about.js      el about
-  welcome.js    las dos versiones del welcome
-fonts/          Wild Trave (logo y títulos) y DM Sans (texto)
-img/            about.webp, la foto del about
-.vscode/        ajustes de Live Server
-tools/          conversión en bloque y servidor local
-```
-
-Las rutas son siempre de **un solo tramo** (`/welcome-loop`, no `/welcome/loop`): el html
-enlaza css y js con rutas relativas.
-
----
-
-## Probar en local
-
-No vale abrir `index.html` con doble clic (hay un `fetch`). Hay que servirlo:
-
-- **VS Code → Go Live** (Live Server). Está configurado en `.vscode/settings.json` para que al
-  recargar en `/cerca` salga la web y no un 404, igual que en Cloudflare.
-- O sin VS Code: `python3 tools/serve.py` → http://localhost:8080
-
-Si cambias algo y sigues viendo lo viejo: caché. **Cmd+Shift+R**.
-
----
-
-## Publicar (ladiegol.com)
-
-La web vive en **Cloudflare Workers** (solo archivos estáticos) conectada al repo del cliente,
-**`github.com/ladiegol/web`**. Cada push a `main` de ese repo se publica solo en un minuto.
-
-Hay dos repos y **no llevan lo mismo**:
-
-- **`meowrhino/ladiegol`** (el nuestro, `origin`): aquí se trabaja. Su `main` es la web de
-  verdad. Un `git push` normal solo sube aquí.
-- **`ladiegol/web`** (el del cliente, remoto `web`): es lo que sale en ladiegol.com. Ahora mismo
-  tiene la página provisional de **work in progress**.
-
-La página provisional está en la rama **`wip`** de nuestro repo: es `main` más la carpeta `wip/`,
-y `wrangler.jsonc` apuntando a esa carpeta, así que no se publica nada más.
 
 ```bash
-# cambiar la página provisional
-git switch wip          # editar wip/index.html, commit
-git push origin wip     # copia en nuestro repo
-git push web wip:main   # ladiegol.com
-
-# lanzar la web de verdad (sustituye la provisional)
-git switch main
-git push --force-with-lease web main:main
+node build/build.mjs
 ```
 
-- `wrangler.jsonc`: la config. Publica la raíz del repo y, si la url no es un archivo
-  (`/aftermatch`, `/about`…), devuelve `index.html` con 200.
-- `.assetsignore`: lo que **no** se publica (`tools/`, este README, `.git`…).
-- `_headers`: la caché de cada carpeta. Fotos, loops, css y js, una hora: si se cambia una foto
-  (aunque se llame igual), quien ya había entrado la ve nueva como mucho una hora después.
-
-Probar exactamente lo que servirá Cloudflare: `npx wrangler dev` → http://localhost:8787
-
----
-
-## Tipografías
-
-- **Wild Trave Rounded** (Letterhend Studio, gratis) para el nombre, el welcome, los títulos de
-  la home y de cada proyecto y el texto del about. No trae el espacio: sale de la siguiente
-  fuente de la lista (`--font-title`).
-- **DM Sans** (libre, OFL) para todo lo demás. Las dos servidas desde `fonts/`.
-- Para cambiarlas: dejar el `.woff2` nuevo en `fonts/`, cambiar su `@font-face` en
-  `css/base.css` y, si cambia el nombre, `--font-title` / `--font-body`. Ojo: los tamaños del nombre
-  (`.wordmark`, `.welcome__name`) están pensados para Wild Trave ("LA DIEGOL" mide ~8,8 veces el cuerpo).
-
----
-
-## Pendiente
-
-- [ ] **Email / Instagram** del `meta` de `data.json`, que están vacíos.
-- [ ] Decidir la versión del **welcome** (`/welcome-loop` vs `/welcome-stills`) y activarlo.
+- **Vista previa** (lo que ve ella): Live Server en la raíz (`index.html`).
+- **Lo publicado**: `python3 -m http.server 8099 --directory dist`, o
+  `npx wrangler dev` para ver también `_headers`, `_redirects` y el 404.
+- En la Action el build sabe que está en GitHub (`GITHUB_ACTIONS`): base
+  `/ladiegol/` y `noindex`. Fuera, la raíz y el `url` de `site.json`.

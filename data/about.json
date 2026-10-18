@@ -1,0 +1,21 @@
+{
+  "$schema": "../schema/about.json",
+  "text": [
+    "Marta aka LA DIEGOL is a director born and raised in Barcelona. Her work explores everyday life through a contemporary, urban and human lens, with a strong focus on performance, rhythm and visual storytelling.",
+    "With a background in dance and performing arts, movement is central to the way she builds a scene, from the body and camera to the edit. She works closely and collaboratively with actors, creating an environment of trust where performances feel spontaneous and full of personality. Across advertising and music, LA DIEGOL combines cinematic imagery with a strong sense of narrative, always looking for emotion in the details."
+  ],
+  "clients": [
+    "CUPRA",
+    "FCBARCELONA",
+    "LOEWE",
+    "SAMSUNG",
+    "BURGER KING",
+    "LEROY MERLIN",
+    "SOLGAR",
+    "VITALPROTEINS",
+    "PORT AVENTURA WORLD",
+    "COCHES.NET",
+    "GENERALITAT DE CATALUNYA",
+    "YUYO CALM"
+  ]
+}

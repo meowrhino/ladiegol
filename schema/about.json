@@ -1,0 +1,29 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "data/about.json: el about",
+  "description": "data/about.json: el texto del about y los clientes. La foto de detrás es data/about/1.webp. Este fichero lo lee VS Code (por el \"$schema\" de arriba del JSON) para autocompletar, explicar cada campo y subrayar lo que está mal; el build valida con él mismo.",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "$schema": {
+      "type": "string"
+    },
+    "_": {
+      "type": "string"
+    },
+    "text": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Una lista de párrafos: [\"primero\", \"segundo\"]. El primero sale también en Google."
+    },
+    "clients": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Los clientes, en orden: [\"CUPRA\", \"LOEWE\"]. Salen al final, en una línea."
+    }
+  }
+}

@@ -1,0 +1,122 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "data/site.json: lo general de la web",
+  "description": "data/site.json: el nombre, lo que sale en Google, el welcome y la lista de proyectos (qué sale en la home y en qué orden). Este fichero lo lee VS Code (por el \"$schema\" de arriba del JSON) para autocompletar, explicar cada campo y subrayar lo que está mal; el build valida con él mismo.",
+  "type": "object",
+  "required": [
+    "name",
+    "lists"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "$schema": {
+      "type": "string"
+    },
+    "_": {
+      "type": "string"
+    },
+    "name": {
+      "type": "string",
+      "description": "El nombre: LA DIEGOL. Sale arriba en todas las páginas y en el welcome."
+    },
+    "title": {
+      "type": "string",
+      "description": "El título de la home en la pestaña y en Google."
+    },
+    "description": {
+      "type": "string",
+      "description": "Lo que sale debajo del título en Google y al compartir la web."
+    },
+    "url": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "El dominio, con https:// y sin barra al final. Con él, Google la indexa."
+    },
+    "email": {
+      "type": "string",
+      "description": "Sale en el about. Vacío, no sale."
+    },
+    "social": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "instagram": {
+          "type": "string",
+          "description": "El usuario, con o sin @. Vacío, no sale."
+        }
+      }
+    },
+    "loopSlowdown": {
+      "type": "number",
+      "minimum": 0.1,
+      "description": "La velocidad de los loops: 1 es la del gif, 1.3 un 30 % más lentos, 2 el doble de lentos."
+    },
+    "welcome": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "La portada de bienvenida, con el nombre en grande sobre un pase de imágenes.",
+      "properties": {
+        "on": {
+          "type": "boolean",
+          "description": "true: sale la primera vez que se entra a la web en cada visita."
+        },
+        "mode": {
+          "enum": [
+            "stills",
+            "loop"
+          ],
+          "description": "\"stills\" (las fotos de photos) o \"loop\" (los loops de los proyectos)."
+        },
+        "photos": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^[a-z0-9-]+/[0-9]+$"
+          },
+          "description": "Las fotos del pase, como \"proyecto/número\": \"aftermatch/4\". Vacío: todas."
+        }
+      }
+    },
+    "lists": {
+      "type": "object",
+      "description": "Qué proyectos salen en la home y en qué orden.",
+      "additionalProperties": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "projects": {
+            "type": "array",
+            "description": "Los proyectos, por el nombre de su carpeta. Uno oculto (con su página, pero fuera de la home): { \"project\": \"cerca\", \"visible\": false }.",
+            "items": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "object",
+                  "required": [
+                    "project"
+                  ],
+                  "additionalProperties": false,
+                  "properties": {
+                    "project": {
+                      "type": "string"
+                    },
+                    "visible": {
+                      "type": "boolean"
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        }
+      }
+    }
+  }
+}

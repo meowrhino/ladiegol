@@ -1,14 +1,19 @@
-/_PROJECTS/*
+# Fotos, loops, css y js, una hora: si se cambia una foto (aunque se llame igual),
+# quien ya había entrado la ve nueva como mucho una hora después.
+/projects/*
   Cache-Control: public, max-age=3600
+
+/data/*
+  Cache-Control: public, max-age=3600
+
+/og/*
+  Cache-Control: public, max-age=86400
 
 /css/*
   Cache-Control: public, max-age=3600
 
 /js/*
   Cache-Control: public, max-age=3600
-
-/data.json
-  Cache-Control: public, max-age=60
 
 /fonts/*
   Cache-Control: public, max-age=604800

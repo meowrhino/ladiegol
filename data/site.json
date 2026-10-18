@@ -1,0 +1,47 @@
+{
+  "$schema": "../schema/site.json",
+  "name": "LA DIEGOL",
+  "title": "LA DIEGOL — director",
+  "description": "LA DIEGOL — director based in Barcelona.",
+  "url": "https://ladiegol.com",
+  "email": "",
+  "social": {
+    "instagram": ""
+  },
+  "loopSlowdown": 1.3,
+  "welcome": {
+    "on": true,
+    "mode": "stills",
+    "photos": [
+      "stripper/1",
+      "are-you-one-of-us/1",
+      "are-you-one-of-us/10",
+      "are-you-one-of-us/11",
+      "aftermatch/4",
+      "aftermatch/8",
+      "aftermatch/13",
+      "no-te-hace-falta/3",
+      "stripper/14",
+      "cerca/6"
+    ]
+  },
+  "lists": {
+    "work": {
+      "name": "work",
+      "projects": [
+        "are-you-one-of-us",
+        "aftermatch",
+        "stripper",
+        "ringtone",
+        "made-to-remember",
+        "llegir",
+        "no-te-hace-falta",
+        "cerca",
+        "coches-net",
+        "flooded",
+        "yuyo-calm",
+        "por-culpa-del-amor"
+      ]
+    }
+  }
+}

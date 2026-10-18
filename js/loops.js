@@ -1,28 +1,12 @@
 /* Los loops de las casillas de la home: el gif de cada proyecto pasado a
-   webm (hover.webm) con videoToWeb, que le deja su ritmo entrecortado.
-   El <video> nace sin fuentes y se las damos cuando su casilla está en
-   pantalla o a punto de entrar: así, cuando llega el hover (o el centro, en
+   webm (img/loop.webm) con videoToWeb, que le deja su ritmo entrecortado.
+   El <video> viene del build sin fuentes (data-webm) y se las damos cuando
+   su casilla está en pantalla o a punto de entrar: así, cuando llega el hover (o el centro, en
    móvil), el loop ya está descargado y arranca al momento, pero no se baja
    nada de lo que queda lejos. */
 
-import { asset, canHover, loopsEnabled } from "./config.js";
+import { canHover, loopsEnabled, velocidadLoops } from "./config.js";
 import { el } from "./dom.js";
-import { velocidadLoops } from "./data.js";
-
-export function makeLoop(slug) {
-  const v = el("video", "tile__loop");
-  v.muted = true;
-  v.loop = true;
-  v.playsInline = true;
-  // la "default" es la que sobrevive al load(); la otra, la de ahora
-  v.defaultPlaybackRate = v.playbackRate = velocidadLoops();
-  v.preload = "none";
-  v.setAttribute("muted", "");
-  v.setAttribute("playsinline", "");
-  v.setAttribute("aria-hidden", "true");
-  v.dataset.webm = asset(slug, "hover.webm");
-  return v;
-}
 
 /* Solo webm: lo leen todos los navegadores actuales (Safari desde macOS 16 /
    iOS 17.4). En uno más viejo no arranca y se queda la foto de portada. */
@@ -72,6 +56,8 @@ function stop(tile) {
     Devuelve la función de limpieza. */
 export function wireLoops(grid) {
   const tiles = [...grid.querySelectorAll(".tile")];
+  // la "default" es la que sobrevive al load(); la otra, la de ahora
+  grid.querySelectorAll(".tile__loop").forEach((v) => (v.defaultPlaybackRate = v.playbackRate = velocidadLoops()));
   const stopPrecarga = precarga(tiles);
 
   if (canHover) {

@@ -1,0 +1,20 @@
+{
+  "$schema": "../../schema/project.json",
+  "title": "Tómatelo con calma",
+  "client": "YUYO CALM",
+  "type": "COMMERCIAL",
+  "vimeo": [
+    "673202952"
+  ],
+  "cover": "1",
+  "photos": [
+    "1",
+    "2",
+    "3",
+    "4",
+    "5",
+    "6",
+    "7",
+    "8"
+  ]
+}
