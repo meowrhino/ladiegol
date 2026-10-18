@@ -66,11 +66,12 @@
 .tile.is-playing .tile__loop { opacity: 1; }
 .tile.is-playing .tile__still { opacity: 0; }
 
-/* el rótulo, pequeño y encima de la imagen: CLIENTE   TÍTULO, en Wild Trave */
+/* el rótulo, pequeño y encima de la imagen: CLIENTE   TÍTULO, en DM Sans */
 .tile__meta {
   display: flex;
   gap: 1.6em;
-  font-family: var(--font-title);
+  font-family: var(--font-body);
+  font-weight: 900;
   font-size: .8rem;
   line-height: 1.2;
   text-transform: uppercase;
@@ -87,5 +88,8 @@
 
 @media (max-width: 720px) {
   .grid { grid-template-columns: minmax(0, 1fr); row-gap: 1.75rem; }
+  /* en una columna: cliente a la izquierda, proyecto a la derecha */
+  .tile__meta { justify-content: space-between; }
+  .tile__meta span:last-child:not(:first-child) { text-align: right; }
   .tile--big, .tile--big.tile--right { grid-column: auto; grid-row: auto; }
 }

@@ -2,7 +2,7 @@
    fija oscurecida. La foto es img/about.webp: para cambiarla, se sustituye
    el archivo con el mismo nombre. */
 
-import { el, link } from "./dom.js";
+import { el } from "./dom.js";
 import { meta } from "./data.js";
 import { href } from "./config.js";
 
@@ -41,6 +41,5 @@ export function about() {
     wrap.append(p);
   }
 
-  wrap.append(link("back", href(), "← home"));
   return { node: wrap };
 }

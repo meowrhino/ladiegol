@@ -7,7 +7,7 @@
   --line: #262626;
 
   --font-title: "Wild Trave", "Arial Black", sans-serif;
-  --font-body: "Arya", system-ui, sans-serif;
+  --font-body: "DM Sans", system-ui, sans-serif;
 
   --gap: .75rem;
   --pad: 1.25rem;
@@ -15,11 +15,12 @@
 
 }
 
-/* Wild Trave Rounded (gratis) para el nombre, el welcome, los títulos de los
-   proyectos y el texto del about; Arya para todo lo demás. Servidas desde
+/* Wild Trave Rounded (gratis) para el nombre, el welcome y los títulos de los
+   proyectos; DM Sans para todo lo demás (el texto del about, en 900). Servidas desde
    fonts/. Wild Trave no trae el espacio: sale de la siguiente de la lista. */
 @font-face { font-family: "Wild Trave"; src: url(../fonts/wild-trave-rounded.woff2) format("woff2"); font-display: swap; }
-@font-face { font-family: "Arya"; src: url(../fonts/arya-400.woff2) format("woff2"); font-display: swap; }
+@font-face { font-family: "DM Sans"; src: url(../fonts/dm-sans-400.woff2) format("woff2"); font-display: swap; }
+@font-face { font-family: "DM Sans"; src: url(../fonts/dm-sans-900.woff2) format("woff2"); font-weight: 900; font-display: swap; }
 
 *, *::before, *::after { box-sizing: border-box; }
 
@@ -47,17 +48,16 @@ img, video { display: block; width: 100%; height: 100%; object-fit: cover; }
 /* ---------- cabecera ---------- */
 
 /* la cabecera se va con el scroll; el nombre va centrado y con aire, igual
-   en todas las páginas. El nav va en la esquina de arriba a la derecha (y el
-   filtro de la home, en la de la izquierda) */
+   en todas las páginas. El nav va arriba a la izquierda; en la home, a la
+   derecha (la izquierda es del filtro) */
 .site-header {
   position: relative;
   z-index: 10;
-  mix-blend-mode: difference;
   display: flex;
   align-items: baseline;
   justify-content: center;
   gap: 1rem;
-  padding: calc(var(--pad) * 5) var(--pad);
+  padding: calc(var(--pad) * 6) var(--pad);
 }
 
 
@@ -71,26 +71,14 @@ img, video { display: block; width: 100%; height: 100%; object-fit: cover; }
 
 .site-nav {
   position: absolute;
-  right: var(--pad);
+  left: var(--pad);
   top: var(--pad);
   display: flex;
   gap: 1rem;
   color: var(--fg-dim);
 }
 .site-nav a:hover { color: var(--fg); }
-
-/* en un proyecto, el nav enseña su título y en hover pasa a "back" */
-.site-nav__index--titulo { text-transform: uppercase; }
-.site-nav__titulo {
-  display: block;
-  max-width: 45vw;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-.site-nav__back,
-.site-nav__index--titulo:hover .site-nav__titulo { display: none; }
-.site-nav__index--titulo:hover .site-nav__back { display: block; }
+body[data-vista="home"] .site-nav { left: auto; right: var(--pad); }
 
 .app { padding: 0 var(--pad) calc(var(--pad) * 4); }
 .loading { color: var(--fg-dim); }
@@ -102,14 +90,16 @@ body[data-vista="welcome"] .app { padding: 0; }
 /* ---------- about ---------- */
 
 .about {
-  max-width: 62ch;
-  padding-top: 1rem;
+  width: 50vw;
+  box-sizing: border-box;
+  text-align: justify;
+  padding: 1rem 2rem 0;
   font-size: 1.25rem;
   color: #fff;
   text-shadow: 0 0 30px rgba(0, 0, 0, .6);
 }
 .about p { white-space: pre-wrap; }
-.about > p:not([class]) { font-family: var(--font-title); line-height: 1.35; }
+.about > p:not([class]) { font-weight: 900; line-height: 1.35; }
 
 /* la foto del about (img/about.webp), fija detrás de todo */
 .about__media { position: fixed; inset: 0; z-index: -1; background: #000; }
@@ -132,23 +122,28 @@ body[data-vista="welcome"] .app { padding: 0; }
 ::view-transition-old(root),
 ::view-transition-new(root) { animation-duration: .45s; }
 
-/* el nombre viaja de un sitio a otro en vez de fundirse: del welcome a la
-   cabecera, y entre el tamaño de la home y el del resto */
-.site-header .wordmark,
-.welcome__name { view-transition-name: marca; }
-::view-transition-group(marca) { animation-duration: .45s; }
-
-/* al salir del welcome todo va más despacio: el pase se apaga y el nombre
-   grande baja a su sitio en la cabecera */
+/* al salir del welcome el fundido va más despacio */
 html[data-paso="welcome"]::view-transition-old(root),
-html[data-paso="welcome"]::view-transition-new(root),
-html[data-paso="welcome"]::view-transition-group(marca) {
+html[data-paso="welcome"]::view-transition-new(root) {
   animation-duration: 1.2s;
   animation-timing-function: cubic-bezier(.65, 0, .25, 1);
 }
 
 @media (max-width: 720px) {
   :root { --gap: 6px; --pad: 12px; }
+  .wordmark { font-size: 10vw; }
+  .about { width: auto; }
+  /* mismo aire sobre el nombre (bajo el nav) que debajo */
+  .site-header { padding: calc(var(--pad) + 2.2rem + var(--pad) * 4) var(--pad) calc(var(--pad) * 4); }
+}
+
+/* prueba: en ordenador el texto del about, más grande */
+@media (min-width: 721px) {
+  .about { font-size: 1.6rem; width: 66.667vw; }
+}
+
+@media (min-width: 1001px) {
+  .about { width: 50vw; }
 }
 
 @media (prefers-reduced-motion: reduce) {

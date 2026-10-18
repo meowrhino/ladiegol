@@ -40,8 +40,8 @@
   margin: 0;
   padding: 0 var(--pad);
   font-family: var(--font-title);
-  /* con Wild Trave el nombre mide ~8,8 veces esto: 10vw ≈ 88 % del ancho */
-  font-size: clamp(34px, 10vw, 20rem);
+  /* con Wild Trave el nombre mide ~8,8 veces esto: 8vw ≈ 70 % del ancho */
+  font-size: clamp(30px, 8vw, 16rem);
   white-space: nowrap;
   line-height: .95;
   font-weight: 400;

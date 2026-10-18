@@ -54,6 +54,11 @@ function player(id, p, i) {
     iframe.allowFullscreen = true;
     iframe.title = p.titulo;
     box.replaceChildren(iframe);
+    // la caja es 16:9 de reserva; con la proporción real del video no quedan bandas
+    fetch(`https://vimeo.com/api/oembed.json?url=https://vimeo.com/${id}&width=1920`)
+      .then((r) => r.json())
+      .then((v) => (box.style.aspectRatio = `${v.width} / ${v.height}`))
+      .catch(() => {});
   };
 
   box.addEventListener("click", open);

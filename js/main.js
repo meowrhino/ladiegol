@@ -139,15 +139,9 @@ function pintar() {
   window.scrollTo(0, 0);
 }
 
-/* en la home, "about"; desde un proyecto, su título (que en hover pasa a
-   "back"); desde el resto, "home" */
+/* en la home, "about"; desde un proyecto, "back"; desde el resto, "home" */
 function volver(path) {
-  const p = bySlug(path);
-  if (!p) return link("site-nav__index", href(), "home");
-  const a = link("site-nav__index site-nav__index--titulo", href());
-  a.setAttribute("aria-label", "back");
-  a.append(el("span", "site-nav__titulo", p.titulo), el("span", "site-nav__back", "back"));
-  return a;
+  return link("site-nav__index", href(), bySlug(path) ? "back" : "home");
 }
 
 /* ---------- enlaces internos ---------- */

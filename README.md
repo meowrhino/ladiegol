@@ -1,6 +1,6 @@
 # ladiegol v2
 
-Versión de pruebas de ladiegol.com: se publica en https://meowrhino.github.io/ladiegolv2/
+Versión de pruebas de ladiegol.com: se publica en https://meowrhino.github.io/ladiegol/
 
 Portfolio de LA DIEGOL. Web estática: un `index.html`, un `data.json` y una carpeta por proyecto. Sin build, sin dependencias.
 
@@ -15,7 +15,7 @@ Portfolio de LA DIEGOL. Web estática: un `index.html`, un `data.json` y una car
 - **Proyecto** (`/<slug>`): arriba el/los videos de Vimeo (no cargan hasta que los clicas), debajo la ficha (título · cliente · tipo) y después la galería de stills, para ir bajando.
 - **About** (`/about`): la bio y la lista de clientes, de `data.json`, encima de una foto fija: **`img/about.webp`** (para cambiarla, se sustituye ese archivo con el mismo nombre; ahora hay un still de cupra de provisional). Se entra desde el **about** de arriba a la derecha de la home o **clicando el nombre** de la cabecera; para volver, el "home" de arriba a la derecha.
 - **Welcome** (`/welcome`): la portada de bienvenida, con el nombre en grande sobre un pase de imágenes. Dos versiones para comparar: **`/welcome-loop`** y **`/welcome-stills`**.
-- El **logo**, los títulos de la home y de los proyectos y el texto del about van en **Wild Trave Rounded**; el resto, en **Arya**. El nombre va centrado arriba, con el mismo tamaño y aire en todas las páginas, y se va con el scroll.
+- El **logo**, los títulos de la home y de los proyectos van en **Wild Trave Rounded**; el resto, en **DM Sans** (el texto del about, en su peso más gordo, 900). El nombre va centrado arriba, con el mismo tamaño y aire en todas las páginas, y se va con el scroll.
 - El **fondo** es negro puro, sin grano.
 
 ---
@@ -209,7 +209,7 @@ js/
   project.js    la página de proyecto
   about.js      el about
   welcome.js    las dos versiones del welcome
-fonts/          Wild Trave (logo y títulos) y Arya (texto)
+fonts/          Wild Trave (logo y títulos) y DM Sans (texto)
 img/            about.webp, la foto del about
 .vscode/        ajustes de Live Server
 tools/          conversión en bloque y servidor local
@@ -273,7 +273,7 @@ Probar exactamente lo que servirá Cloudflare: `npx wrangler dev` → http://loc
 - **Wild Trave Rounded** (Letterhend Studio, gratis) para el nombre, el welcome, los títulos de
   la home y de cada proyecto y el texto del about. No trae el espacio: sale de la siguiente
   fuente de la lista (`--font-title`).
-- **Arya** (libre, OFL) para todo lo demás. Las dos servidas desde `fonts/`.
+- **DM Sans** (libre, OFL) para todo lo demás. Las dos servidas desde `fonts/`.
 - Para cambiarlas: dejar el `.woff2` nuevo en `fonts/`, cambiar su `@font-face` en
   `css/base.css` y, si cambia el nombre, `--font-title` / `--font-body`. Ojo: los tamaños del nombre
   (`.wordmark`, `.welcome__name`) están pensados para Wild Trave ("LA DIEGOL" mide ~8,8 veces el cuerpo).
