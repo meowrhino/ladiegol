@@ -267,6 +267,7 @@ window.revelada = ${preview ? 'false' : "'onpagereveal' in window"} ? new Promis
       + (about.clients?.length ? `<p class="about__clients">clients: ${esc(about.clients.join(', '))}</p>` : '')
       + (site.email ? `<p><a href="mailto:${esc(site.email)}">${esc(site.email)}</a></p>` : '')
       + (insta ? `<p><a href="https://instagram.com/${esc(insta.replace('@', ''))}" target="_blank" rel="noopener">${esc(insta)}</a></p>` : '')
+      + `<p class="about__credito">web: <a href="https://meowrhino.studio" target="_blank" rel="noopener">meowrhino.studio</a></p>`
       + `</section>`;
     const desc = parrafos(about.text)[0] || site.description;
     return pagina({ ruta: '/about/', titulo: `about — ${NOMBRE}`, desc: corto(desc), imagen: FOTO_ABOUT,

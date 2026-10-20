@@ -118,6 +118,15 @@ body[data-vista="welcome"] .app { padding: 0; }
   font-size: .85rem;
 }
 
+/* la firma del estudio, como en almarbra: pequeña, gris y al final */
+.about__credito {
+  margin: 5rem 0 0;
+  text-align: left;
+  font-size: .75rem;
+  color: var(--fg-dim);
+}
+.about__credito a:hover { color: var(--fg); }
+
 .back { display: inline-block; margin-top: 2rem; color: var(--fg-dim); }
 .back:hover { color: var(--fg); }
 
