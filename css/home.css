@@ -25,7 +25,7 @@
 .tile[hidden] { display: none; }
 
 /* mucho negro entre casillas: las filas se separan más que las columnas,
-   porque cada casilla lleva su rótulo encima */
+   porque cada casilla lleva su rótulo debajo */
 .grid {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -67,8 +67,10 @@
 .tile.is-playing .tile__loop { opacity: 1; }
 .tile.is-playing .tile__still { opacity: 0; }
 
-/* el rótulo, pequeño y encima de la imagen: CLIENTE   TÍTULO, en DM Sans */
+/* el rótulo, pequeño y (prueba) debajo de la imagen: CLIENTE   TÍTULO, en DM Sans.
+   Para volver a ponerlo encima, quitar el order */
 .tile__meta {
+  order: 1;
   display: flex;
   gap: 1.6em;
   font-family: var(--font-body);

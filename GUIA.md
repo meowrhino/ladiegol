@@ -84,7 +84,7 @@ El `project.json` de `projects/aftermatch/`:
 | campo | qué es |
 |---|---|
 | `title` | El título. Sale en la home, en la página y en Google. |
-| `client` | Para quién. Sale encima de la casilla de la home, al lado del título (si son iguales, como coches.net, solo una vez). |
+| `client` | Para quién. Sale debajo de la casilla de la home, al lado del título (si son iguales, como coches.net, solo una vez). |
 | `type` | `COMMERCIAL`, `MUSIC VIDEO`… Cada tipo distinto es un botón del filtro de la home: escríbelo siempre igual. |
 | `vimeo` | Los vídeos, por su número de Vimeo (`vimeo.com/1174739797` → `"1174739797"`), en orden. |
 | `cover` | La portada: el número de la foto que sale en la casilla de la home, delante del primer vídeo y al compartir el enlace. |

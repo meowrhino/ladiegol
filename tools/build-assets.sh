@@ -15,7 +15,7 @@
 
 set -euo pipefail
 
-SRC="${SRC:-$HOME/Desktop/ladiegol}"
+SRC="${SRC:-$HOME/Desktop/ladiegol v2}"
 REPO="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 OUT="$REPO/projects"
 
@@ -32,15 +32,15 @@ LOOP_BITRATE=2500k
 MAP=(
   "are-you-one-of-us|1- CUPRA - ARE YOU ONE OF US?"
   "aftermatch|2 - FC BARCELONA - AFTERMATCH"
-  "stripper|3 - KYNE"
-  "ringtone|4 - REHAB"
-  "made-to-remember|5 - PAW - MADE TO REMEMBER"
-  "llegir|6 - GENERALITAT"
-  "no-te-hace-falta|7 - LEROY MERLIN"
-  "cerca|8 - CERCA"
-  "coches-net|9 - COCHES.NET"
-  "flooded|10 - FRANSIE"
-  "yuyo-calm|11 - YUYO CALM"
+  "no-te-hace-falta|3 - LEROY MERLIN"
+  "stripper|4 - KYNE"
+  "ringtone|5 - REHAB"
+  "coches-net|6 - COCHES.NET"
+  "llegir|7 - GENCAT"
+  "made-to-remember|8 - PAW - MADE TO REMEMBER"
+  "cerca|9 - CERCA - ELS LIMITS NO EXISTEIXEN"
+  "yuyo-calm|10 - YUYO CALM"
+  "flooded|11 - FRANSIE"
   "por-culpa-del-amor|12 - DOLLAR"
 )
 
@@ -49,8 +49,9 @@ TMP="$(mktemp -d -t ladiegol)"
 trap 'rm -rf "$TMP"' EXIT
 
 # Imágenes de una carpeta en orden natural (2 antes que 10), como imgToWeb.
+# "0 PORTADA" es una copia de 1.png: la portada va en "cover" del project.json.
 images_in() {
-  find "$1" -maxdepth 1 -type f \( -iname '*.png' -o -iname '*.jpg' -o -iname '*.jpeg' \) | sort -V
+  find "$1" -maxdepth 1 -type f \( -iname '*.png' -o -iname '*.jpg' -o -iname '*.jpeg' \) ! -iname '*PORTADA*' | sort -V
 }
 
 # El filtro de escalado de imgToWeb: cabe en MAX×MAX sin ampliar nunca.
@@ -99,4 +100,4 @@ done
 
 echo
 echo "✅ listo. Peso total de projects: $(du -sh "$OUT" | cut -f1)"
-echo "   Recuerda poner en data.json cuántos stills tiene cada proyecto."
+echo "   Recuerda poner en cada project.json sus "photos"."

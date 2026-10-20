@@ -39,7 +39,7 @@ tools/build-assets.sh          los originales del cliente en bloque (ffmpeg + cw
   los 12). Cada uno se baja cuando su casilla está cerca de la pantalla; en
   móvil arranca el que queda en la franja central. `loopSlowdown` los ralentiza.
 - **Fuentes**: Wild Trave Rounded (Letterhend, gratis) para el nombre y los
-  títulos; DM Sans (OFL, 400 y 900) para lo demás. En `fonts/`. Los tamaños del
+  títulos; DM Sans (OFL, 300 para la bio, 400 y 900) para lo demás. En `fonts/`. Los tamaños del
   nombre están pensados para Wild Trave ("LA DIEGOL" mide ~8,8 veces el cuerpo).
 - **Direcciones viejas** (antes de octubre de 2026): `/_PROJECTS/<slug>/stills/N.webp`,
   `hover.webm`, `img/about.webp` y `data.json`, en `_redirects`; y el build añade
