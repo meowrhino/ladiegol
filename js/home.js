@@ -19,43 +19,23 @@ export function home() {
   });
 }
 
-/* Al filtrar, las casillas se cortan hacia arriba una tras otra y las que
-   quedan entran de golpe desde abajo, también en cascada. Un clic a mitad
-   deja sin efecto el anterior (turno). */
-const CORTE = "cubic-bezier(.77, 0, .18, 1)";
+/* Al filtrar, el grid se funde al negro, cambian las casillas y vuelve: el
+   mismo fundido (400 ms) que entre páginas (js/transicion.js). Un clic a
+   mitad deja sin efecto el anterior (turno). */
+const FUNDIDO = 400;
 let turno = 0;
 
 async function filtrar(grid, tipo) {
   const mio = ++turno;
-  const tiles = [...grid.querySelectorAll(".tile")];
+  const fundir = (de, a) => grid.animate({ opacity: [de, a] }, { duration: FUNDIDO, fill: "forwards" }).finished.catch(() => {});
 
   if (!reducedMotion) {
-    const salen = tiles.filter((t) => !t.hidden).map((t, i) =>
-      t.animate([{ clipPath: "inset(0 0 0 0)" }, { clipPath: "inset(0 0 100% 0)" }], {
-        duration: 260,
-        delay: i * 20,
-        easing: CORTE,
-        fill: "forwards",
-      }).finished.catch(() => {})
-    );
-    await Promise.all(salen);
+    await fundir(getComputedStyle(grid).opacity, 0);
     if (mio !== turno) return;
   }
 
-  tiles.forEach((t) => {
-    t.getAnimations().forEach((a) => a.cancel());
+  grid.querySelectorAll(".tile").forEach((t) => {
     t.hidden = !!tipo && t.dataset.tipo !== tipo;
   });
-  if (reducedMotion) return;
-
-  tiles
-    .filter((t) => !t.hidden)
-    .forEach((t, i) =>
-      t.animate([{ clipPath: "inset(100% 0 0 0)" }, { clipPath: "inset(0 0 0 0)" }], {
-        duration: 520,
-        delay: i * 45,
-        easing: CORTE,
-        fill: "backwards",
-      })
-    );
+  if (!reducedMotion) await fundir(0, 1);
 }

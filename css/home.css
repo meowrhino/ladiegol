@@ -5,7 +5,7 @@
   position: absolute;
   top: var(--pad);
   left: var(--pad);
-  z-index: 11;
+  z-index: 2;
   display: flex;
   flex-wrap: wrap;
   gap: .4rem 1rem;
