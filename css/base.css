@@ -97,13 +97,14 @@ body[data-vista="welcome"] .app { padding: 0; }
   width: 50vw;
   box-sizing: border-box;
   text-align: justify;
+  hyphens: auto;   /* justificado sin huecos grandes, sobre todo en móvil */
   padding: 1rem 2rem 0;
-  font-size: 1.25rem;
+  font-size: 1.1rem;
   color: #fff;
   text-shadow: 0 0 30px rgba(0, 0, 0, .6);
 }
 .about p { white-space: pre-wrap; }
-.about > p:not([class]) { font-weight: 300; line-height: 1.35; }
+.about > p:not([class]) { font-weight: 300; }
 
 /* la foto del about (data/about/1.webp), fija detrás de todo */
 .about__media { position: fixed; inset: 0; z-index: -1; background: #000; }
@@ -133,18 +134,14 @@ html[data-paso="welcome"]::view-transition-new(root) { animation: welcome-dentro
 @media (max-width: 720px) {
   :root { --gap: 6px; --pad: 12px; }
   .wordmark { font-size: 10vw; }
-  .about { width: auto; }
+  .about { width: auto; padding-inline: 0; }
   /* mismo aire sobre el nombre (bajo el nav) que debajo */
   .site-header { padding: calc(var(--pad) + 2.2rem + var(--pad) * 4) var(--pad) calc(var(--pad) * 4); }
 }
 
-/* prueba: en ordenador el texto del about, más grande */
+/* en ordenador, un poco más grande y con líneas de ~70 letras */
 @media (min-width: 721px) {
-  .about { font-size: 1.6rem; width: 66.667vw; }
-}
-
-@media (min-width: 1001px) {
-  .about { width: 50vw; }
+  .about { font-size: 1.2rem; width: min(66.667vw, 42rem); }
 }
 
 @media (prefers-reduced-motion: reduce) {
