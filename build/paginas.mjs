@@ -88,7 +88,17 @@ export function validar(dato, esquema, fichero) {
 
 /* Las direcciones que ya usa la web: un proyecto no se puede llamar así. */
 const RESERVADAS = ['about', 'welcome', 'welcome-loop', 'welcome-stills', 'projects', 'data',
-  'css', 'js', 'fonts', 'img', 'og', 'build', 'schema', 'tools'];
+  'css', 'js', 'fonts', 'img', 'og', 'vimeo', 'build', 'schema', 'tools'];
+
+/* Wild Trave (los títulos) no trae tildes, ¿ ni …: el título se pinta sin
+   ellas ("TÓMATELO" → "TOMATELO"); en la pestaña, Google y la home van bien. */
+const sinTildes = s => String(s).normalize('NFD').replace(/[\u0300-\u036f¿¡]/g, '').replace(/…/g, '...');
+
+/* Los iconos del about (Instagram y Vimeo), en línea para no pedir nada más. */
+const ICONO = {
+  instagram: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.2c3.2 0 3.6 0 4.8.1 3.3.1 4.8 1.7 4.9 4.9.1 1.3.1 1.6.1 4.8s0 3.6-.1 4.8c-.1 3.2-1.7 4.8-4.9 4.9-1.3.1-1.6.1-4.8.1s-3.6 0-4.8-.1c-3.3-.1-4.8-1.7-4.9-4.9C2.2 15.6 2.2 15.2 2.2 12s0-3.6.1-4.8C2.4 3.9 3.9 2.4 7.2 2.3 8.4 2.2 8.8 2.2 12 2.2zM12 0C8.7 0 8.3 0 7.1.1 2.7.3.3 2.7.1 7.1 0 8.3 0 8.7 0 12s0 3.7.1 4.9c.2 4.4 2.6 6.8 7 7 1.2.1 1.6.1 4.9.1s3.7 0 4.9-.1c4.4-.2 6.8-2.6 7-7 .1-1.2.1-1.6.1-4.9s0-3.7-.1-4.9c-.2-4.4-2.6-6.8-7-7C15.7 0 15.3 0 12 0zm0 5.8a6.2 6.2 0 1 0 0 12.4 6.2 6.2 0 0 0 0-12.4zM12 16a4 4 0 1 1 0-8 4 4 0 0 1 0 8zm6.4-11.8a1.4 1.4 0 1 0 0 2.9 1.4 1.4 0 0 0 0-2.9z"/></svg>',
+  vimeo: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M23.98 6.42c-.11 2.33-1.73 5.52-4.88 9.57-3.25 4.23-6 6.34-8.25 6.34-1.4 0-2.58-1.29-3.54-3.87L5.38 11.4C4.67 8.82 3.9 7.53 3.08 7.53c-.18 0-.81.38-1.88 1.13L.07 7.2c1.18-1.04 2.35-2.08 3.5-3.12C5.15 2.71 6.34 1.99 7.13 1.92c1.87-.18 3.02 1.1 3.45 3.84.47 2.96.79 4.8.97 5.52.54 2.45 1.13 3.67 1.78 3.67.5 0 1.26-.8 2.27-2.39 1-1.59 1.54-2.8 1.61-3.63.14-1.37-.4-2.06-1.61-2.06-.57 0-1.16.13-1.77.39 1.18-3.85 3.42-5.72 6.73-5.61 2.46.07 3.61 1.66 3.47 4.77z"/></svg>',
+};
 
 /* ============================================================
    crearSitio — todo lo que depende de los datos
@@ -102,10 +112,11 @@ const RESERVADAS = ['about', 'welcome', 'welcome-loop', 'welcome-stills', 'proje
      medida(rel)   { w, h } de una foto, o null
      existe(rel)   si un fichero está (el loop de cada proyecto)
      og(rel)       la imagen para compartir (1200×630) de esa foto, o null
+     poster(id)    { src, w, h }: la miniatura de Vimeo de ese video, o null
      preview       true en la vista previa: los enlaces van a ?p=/ruta/
    ============================================================ */
 export function crearSitio({ site, about = {}, projects, base = '', origen = '', indexar: INDEXAR = false,
-  medida = () => null, existe = () => true, og = () => null, preview = false }) {
+  medida = () => null, existe = () => true, og = () => null, poster: vimeoPoster = () => null, preview = false }) {
   const B = String(base).replace(/\/$/, '');
   const NOMBRE = site.name || '';
 
@@ -260,13 +271,17 @@ window.revelada = ${preview ? 'false' : "'onpagereveal' in window"} ? new Promis
   /* ---------- about ---------- */
   const parrafos = v => (Array.isArray(v) ? v : v ? [v] : []);
   function aboutPagina() {
-    const insta = String(site.social?.instagram || '');
+    const insta = String(site.social?.instagram || '').replace('@', '');
+    const vimeo = String(site.social?.vimeo || '');
+    const red = (url, nombre) => `<a href="${esc(url)}" target="_blank" rel="noopener" aria-label="${nombre}" title="${nombre}">${ICONO[nombre]}</a>`;
+    const redes = (insta ? red(`https://instagram.com/${insta}`, 'instagram') : '') + (vimeo ? red(`https://vimeo.com/${vimeo}`, 'vimeo') : '');
     const main = `<section class="about">`
       + `<div class="about__media"><img src="${raiz('/' + FOTO_ABOUT)}" alt=""${wh(FOTO_ABOUT)} decoding="async" /><div class="welcome__veil about__veil"></div></div>`
       + parrafos(about.text).map(p => `<p>${esc(p)}</p>`).join('')
       + (about.clients?.length ? `<p class="about__clients">clients: ${esc(about.clients.join(', '))}</p>` : '')
-      + (site.email ? `<p><a href="mailto:${esc(site.email)}">${esc(site.email)}</a></p>` : '')
-      + (insta ? `<p><a href="https://instagram.com/${esc(insta.replace('@', ''))}" target="_blank" rel="noopener">${esc(insta)}</a></p>` : '')
+      + (site.email || redes ? `<div class="about__contact"><h2>CONTACT</h2>`
+        + (site.email ? `<p><a href="mailto:${esc(site.email)}">${esc(site.email)}</a></p>` : '')
+        + (redes ? `<div class="about__social">${redes}</div>` : '') + `</div>` : '')
       + `<p class="about__credito">web: <a href="https://meowrhino.studio" target="_blank" rel="noopener">meowrhino.studio</a></p>`
       + `</section>`;
     const desc = parrafos(about.text)[0] || site.description;
@@ -279,12 +294,14 @@ window.revelada = ${preview ? 'false' : "'onpagereveal' in window"} ? new Promis
   /* ---------- proyecto ---------- */
   function proyecto(p) {
     const titulo = p.title || '';
-    // el reproductor: la portada + play; el iframe de Vimeo lo pone el JS al clicar
-    // (el primer video lleva la portada; los siguientes, las fotos que vienen después)
+    // el reproductor: la portada + play; el iframe de Vimeo lo pone el JS al clicar.
+    // La portada es la miniatura del propio video en Vimeo (la baja el build), con su
+    // proporción; sin ella (vista previa, sin red), la foto de portada y las siguientes
     const players = (p.vimeo || []).map((id, i) => {
-      const poster = foto(p.slug, i === 0 ? p.cover : p.photos[Math.min(i, p.photos.length - 1)] || p.cover);
-      return `<div class="player" role="button" tabindex="0" aria-label="${esc(`play ${titulo}`)}" data-vimeo="${esc(id)}">`
-        + `<img src="${raiz('/' + poster)}" alt="" loading="${i === 0 ? 'eager' : 'lazy'}" /><div class="player__play">▶</div></div>`;
+      const v = vimeoPoster(id);
+      const src = v ? v.src : foto(p.slug, i === 0 ? p.cover : p.photos[Math.min(i, p.photos.length - 1)] || p.cover);
+      return `<div class="player" role="button" tabindex="0" aria-label="${esc(`play ${titulo}`)}" data-vimeo="${esc(id)}"${v ? ` style="aspect-ratio: ${v.w} / ${v.h}"` : ''}>`
+        + `<img src="${raiz('/' + src)}" alt="" loading="${i === 0 ? 'eager' : 'lazy'}" /><div class="player__play">▶</div></div>`;
     }).join('');
     const ficha = [p.client, p.type].filter(Boolean).join(' · ');
     const stills = p.photos.map((n, i) => {
@@ -295,7 +312,7 @@ window.revelada = ${preview ? 'false' : "'onpagereveal' in window"} ? new Promis
       ruta: `/${p.slug}/`, titulo: `${titulo} — ${NOMBRE}`, oculto: p.oculto,
       desc: corto(p.description || `${titulo}${ficha ? ` (${ficha.toLowerCase()})` : ''}. ${site.description}`),
       imagen: foto(p.slug, p.cover), vista: 'project', nav: navA('/', 'back'),
-      main: `<article class="project">${players}<div class="project__head"><h1 class="project__title">${esc(titulo)}</h1>`
+      main: `<article class="project">${players}<div class="project__head"><h1 class="project__title">${esc(sinTildes(titulo))}</h1>`
         + `${ficha ? `<p class="project__meta">${esc(ficha)}</p>` : ''}</div>`
         + `<div class="stills">\n${stills}\n</div><a class="back" href="${url('/')}">← back</a></article>`,
     });

@@ -100,6 +100,32 @@ async function hacerOgs(rels) {
   }
 }
 
+/* La portada de cada video: su miniatura en Vimeo (la que eligió ella allí,
+   así siempre es de ese video), pedida a oEmbed y guardada en webp en
+   .cache/vimeo/. Sin red, sale la foto de portada y se avisa.
+   shortcut: en local se baja una vez; si cambia la miniatura en Vimeo, borrar
+   .cache/vimeo/ (en la Action y en Cloudflare se baja siempre). */
+const posters = new Map();   // id → { src, w, h }
+async function hacerPosters(ids) {
+  let sharp = null;
+  for (const id of ids) {
+    const rel = `.cache/vimeo/${id}.webp`;
+    try {
+      if (!existsSync(join(ROOT, rel))) {
+        const pedir = async u => { const r = await fetch(u, { signal: AbortSignal.timeout(15000) }); if (!r.ok) throw new Error(`${r.status} en ${u}`); return r; };
+        const o = await (await pedir(`https://vimeo.com/api/oembed.json?url=https://vimeo.com/${id}`)).json();
+        const jpg = Buffer.from(await (await pedir(o.thumbnail_url.replace(/-d_[\dx]+/, '-d_1920'))).arrayBuffer());
+        sharp ??= (await import('sharp')).default;
+        mkdirSync(join(ROOT, '.cache', 'vimeo'), { recursive: true });
+        await sharp(jpg).webp({ quality: 85 }).toFile(join(ROOT, rel));
+      }
+      posters.set(id, { src: `vimeo/${id}.webp`, ...medida(rel) });
+    } catch (e) {
+      console.warn(`⚠ vimeo ${id}: sin su miniatura (${e.message}); sale la foto de portada`);
+    }
+  }
+}
+
 const existe = rel => existsSync(join(ROOT, rel));
 const opciones = { site, about, projects, base, origen, indexar, medida, existe };
 
@@ -117,7 +143,8 @@ const pedidas = new Set();
 const prueba = crearSitio({ ...opciones, og: rel => (pedidas.add(rel), null) });
 for (const r of prueba.rutas()) r.pintar();
 await hacerOgs(pedidas);
-const sitio = crearSitio({ ...opciones, og: rel => ogHechas.get(rel) ?? null });
+await hacerPosters([...new Set(prueba.todos.flatMap(p => p.vimeo || []))]);
+const sitio = crearSitio({ ...opciones, og: rel => ogHechas.get(rel) ?? null, poster: id => posters.get(id) ?? null });
 
 /* ---------- escribir ---------- */
 rmSync(OUT, { recursive: true, force: true });
@@ -129,6 +156,7 @@ for (const dir of ['projects', 'data']) cpSync(join(ROOT, dir), join(OUT, dir), 
 cpSync(join(ROOT, '_headers'), join(OUT, '_headers'));   // la caché, en Cloudflare
 mkdirSync(join(OUT, 'og'), { recursive: true });
 for (const o of ogHechas.values()) cpSync(join(ROOT, '.cache', 'og', o.slice(3)), join(OUT, o));
+for (const v of posters.values()) cpSync(join(ROOT, '.cache', v.src), join(OUT, v.src));
 
 const rutas = sitio.rutas();
 for (const r of rutas) {

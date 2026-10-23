@@ -32,7 +32,7 @@ tools/build-assets.sh          los originales del cliente en bloque (ffmpeg + cw
   choca con una página o una carpeta (`RESERVADAS` en `paginas.mjs`).
 - **Welcome**: sale en la home una vez por visita (`sessionStorage`), encima del
   grid; un `<script>` justo después de `<body>` lo decide antes de pintar. Es el
-  loader: precarga las portadas y entra solo (2,4–8 s, `MIN_MS` / `MAX_MS` en
+  loader: precarga las portadas y entra solo (5,2–10 s: dos fotos del pase como poco; `MIN_MS` / `MAX_MS` en
   `js/welcome.js`), con un fundido lento (View Transition en la misma página,
   `data-paso` en `css/base.css`). En pantallas de más de 2200 px, siempre stills.
 - **Loops**: los gifs del cliente en webm (videoToWeb, modo loop, 960 px, ~7 MB

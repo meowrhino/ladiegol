@@ -86,9 +86,12 @@ for entry in "${MAP[@]}"; do
   # ---- gif → img/loop.webm (con sus fps: el ritmo entrecortado del gif se queda) ----
   gif="$(find "$src_dir/gifs hover" -maxdepth 1 -type f -iname '*.gif' | sort | head -1)"
   if [ -n "$gif" ]; then
+    # el gif de REHAB viene aplastado (4096×1502): la peli es 2,39:1, se le devuelve el alto
+    pre=""
+    [ "$slug" = "ringtone" ] && pre="scale=iw:trunc(iw/2.39/2)*2,"
     ffmpeg -nostdin -v error -i "$gif" -c:v libvpx -crf $LOOP_CRF -b:v $LOOP_BITRATE -cpu-used 5 \
       -lag-in-frames 16 -auto-alt-ref 1 -an -threads 4 \
-      -vf "scale='min($LOOP_MAX,iw)':'min($LOOP_MAX,ih)':force_original_aspect_ratio=decrease:force_divisible_by=2" \
+      -vf "${pre}scale='min($LOOP_MAX,iw)':'min($LOOP_MAX,ih)':force_original_aspect_ratio=decrease:force_divisible_by=2" \
       -pix_fmt yuv420p -y "$dst/img/loop.webm"
     echo "    loop.webm: $(du -h "$dst/img/loop.webm" | cut -f1)"
   else

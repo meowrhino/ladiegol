@@ -45,6 +45,10 @@
         "instagram": {
           "type": "string",
           "description": "El usuario, con o sin @. Vacío, no sale."
+        },
+        "vimeo": {
+          "type": "string",
+          "description": "El usuario de Vimeo (vimeo.com/ladiegol → \"ladiegol\"). Vacío, no sale."
         }
       }
     },

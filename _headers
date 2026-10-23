@@ -20,3 +20,6 @@
 
 /img/*
   Cache-Control: public, max-age=3600
+
+/vimeo/*
+  Cache-Control: public, max-age=86400

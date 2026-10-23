@@ -24,8 +24,10 @@ import { el, shuffled } from "./dom.js";
 const STILL_MS = 2600;
 const FUNDIDO_MS = 1100;
 
-const MIN_MS = 2400;
-const MAX_MS = 8000;
+/* como poco, dos fotos enteras del pase antes de entrar (lo pidió ella: con
+   una sola se quedaba corto) */
+const MIN_MS = STILL_MS * 2;
+const MAX_MS = 10000;
 
 /* Los loops miden 960 px de ancho: a pantalla completa en una pantalla enorme
    se verían borrosos, así que ahí el welcome usa los stills (2000 px). */

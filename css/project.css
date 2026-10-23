@@ -44,10 +44,12 @@
   position: relative;
   aspect-ratio: 16 / 9;
   background: #151515;
-  margin-bottom: var(--gap);
   cursor: pointer;
   overflow: hidden;
 }
+
+/* dos vídeos en un proyecto (coches.net, leroy): con mucho aire entre ellos */
+.player + .player { margin-top: 6rem; }
 
 .player iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
 
@@ -64,7 +66,8 @@
 
 .player:hover .player__play { transform: scale(1.12); }
 
-.stills { display: flex; flex-direction: column; gap: var(--gap); }
+/* aire entre stills: pegadas agobiaban */
+.stills { display: flex; flex-direction: column; gap: 3rem; }
 /* el build les pone width y height (su proporción de verdad); sin ellos (la
    vista previa), 16:9 de reserva hasta que llega la foto */
 .stills img { height: auto; aspect-ratio: auto 16 / 9; }
@@ -73,3 +76,9 @@
 .still { transition: opacity .8s ease; }
 .js .still { opacity: 0; }
 .still.ok { opacity: 1; }
+
+@media (max-width: 720px) {
+  .project__title { font-size: 1.15rem; }
+  .stills { gap: 1.5rem; }
+  .player + .player { margin-top: 3rem; }
+}

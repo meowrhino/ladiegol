@@ -73,7 +73,7 @@ El `project.json` de `projects/aftermatch/`:
 {
   "$schema": "../../schema/project.json",
   "title": "AFTERMATCH",
-  "client": "FCBARCELONA",
+  "client": "FC BARCELONA",
   "type": "COMMERCIAL",
   "vimeo": ["1174739797"],
   "cover": "5",
@@ -84,10 +84,10 @@ El `project.json` de `projects/aftermatch/`:
 | campo | qué es |
 |---|---|
 | `title` | El título. Sale en la home, en la página y en Google. |
-| `client` | Para quién. Sale debajo de la casilla de la home, al lado del título (si son iguales, como coches.net, solo una vez). |
+| `client` | Para quién. Sale con la casilla de la home (encima en ordenador, debajo en móvil), al lado del título (si son iguales, como coches.net, solo una vez). |
 | `type` | `COMMERCIAL`, `MUSIC VIDEO`… Cada tipo distinto es un botón del filtro de la home: escríbelo siempre igual. |
-| `vimeo` | Los vídeos, por su número de Vimeo (`vimeo.com/1174739797` → `"1174739797"`), en orden. |
-| `cover` | La portada: el número de la foto que sale en la casilla de la home, delante del primer vídeo y al compartir el enlace. |
+| `vimeo` | Los vídeos, por su número de Vimeo (`vimeo.com/1174739797` → `"1174739797"`), en orden. Su portada es la miniatura que tenga en Vimeo. |
+| `cover` | La portada: el número de la foto que sale en la casilla de la home y al compartir el enlace. |
 | `photos` | Las fotos de la página, en orden, por su número: `"3"` es `img/3.webp`. |
 | `featured` | `true`: en la home ocupa dos columnas y dos filas. Mejor dos o tres como mucho. Si no, no lo pongas. |
 | `description` | Opcional: la frase que sale en Google y al compartir. Si no está, se hace sola con el título, el cliente y el tipo. |
@@ -148,7 +148,7 @@ desde la web de GitHub, así lo bajas y no se pisan.
 | `title` | El título de la home en la pestaña y en Google. |
 | `description` | La frase de debajo en Google y al compartir la web. |
 | `url` | El dominio: `"https://ladiegol.com"`. Con él, Google la indexa. |
-| `email`, `social` → `instagram` | Salen al final del about. Vacíos (`""`), no salen. |
+| `email`, `social` → `instagram`, `vimeo` | Salen al final del about, bajo CONTACT (Instagram y Vimeo, como iconos). Vacíos (`""`), no salen. |
 | `loopSlowdown` | La velocidad de los loops: `1` es la del gif, `1.3` un 30 % más lentos. |
 | `welcome` | La portada de bienvenida: `on` (`true` o `false`), `mode` (`"stills"` o `"loop"`) y `photos`, las fotos del pase como `"proyecto/número"`: `"aftermatch/4"`. |
 | `lists` → `work` → `projects` | Los proyectos de la home, en orden. Cada nombre es una carpeta de `projects/`. |
