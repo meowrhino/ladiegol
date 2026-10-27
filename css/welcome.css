@@ -20,7 +20,7 @@
   opacity: 0;
   /* el fundido largo es lo que hace que el pase no parezca un parpadeo;
      si se cambia, cambiar también FUNDIDO_MS en js/welcome.js */
-  transition: opacity 1.1s ease;
+  transition: opacity .7s ease;
 }
 
 .welcome__slot.is-front { opacity: 1; }
@@ -40,8 +40,8 @@
   margin: 0;
   padding: 0 var(--pad);
   font-family: var(--font-title);
-  /* con Wild Trave el nombre mide ~8,8 veces esto: 6vw ≈ 53 % del ancho */
-  font-size: clamp(26px, 6vw, 12rem);
+  /* con Wild Trave el nombre mide ~8,8 veces esto: 4,5vw ≈ 40 % del ancho */
+  font-size: clamp(26px, 4.5vw, 9rem);
   white-space: nowrap;
   line-height: .95;
   font-weight: 400;

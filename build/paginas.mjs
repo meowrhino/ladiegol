@@ -90,9 +90,11 @@ export function validar(dato, esquema, fichero) {
 const RESERVADAS = ['about', 'welcome', 'welcome-loop', 'welcome-stills', 'projects', 'data',
   'css', 'js', 'fonts', 'img', 'og', 'vimeo', 'build', 'schema', 'tools'];
 
-/* Wild Trave (los títulos) no trae tildes, ¿ ni …: el título se pinta sin
-   ellas ("TÓMATELO" → "TOMATELO"); en la pestaña, Google y la home van bien. */
-const sinTildes = s => String(s).normalize('NFD').replace(/[\u0300-\u036f¿¡]/g, '').replace(/…/g, '...');
+/* Wild Trave (los títulos) no trae tildes, ¿, ¡ ni …: el título se pinta sin
+   tildes ("TÓMATELO" → "TOMATELO") y el ¿ y el ¡ son un ? y un ! girados; en la
+   pestaña, Google y la home van bien. Va después de esc(). */
+const paraWildTrave = s => s.normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/…/g, '...')
+  .replace(/¿/g, '<span class="al-reves">?</span>').replace(/¡/g, '<span class="al-reves">!</span>');
 
 /* Los iconos del about (Instagram y Vimeo), en línea para no pedir nada más. */
 const ICONO = {
@@ -192,7 +194,7 @@ window.revelada = ${preview ? 'false' : "'onpagereveal' in window"} ? new Promis
 
   <link rel="icon" href="${raiz('/img/icon.png')}" type="image/png" />
   <link rel="apple-touch-icon" href="${raiz('/img/icon.png')}" />
-  <link rel="preload" href="${raiz('/fonts/dm-sans-400.woff2')}" as="font" type="font/woff2" crossorigin />
+  <link rel="preload" href="${raiz('/fonts/rajdhani-400.woff2')}" as="font" type="font/woff2" crossorigin />
   <link rel="preload" href="${raiz('/fonts/wild-trave-rounded.woff2')}" as="font" type="font/woff2" crossorigin />
   ${headScript}
   <link rel="stylesheet" href="${raiz('/css/transicion.css')}" />
@@ -312,7 +314,7 @@ window.revelada = ${preview ? 'false' : "'onpagereveal' in window"} ? new Promis
       ruta: `/${p.slug}/`, titulo: `${titulo} — ${NOMBRE}`, oculto: p.oculto,
       desc: corto(p.description || `${titulo}${ficha ? ` (${ficha.toLowerCase()})` : ''}. ${site.description}`),
       imagen: foto(p.slug, p.cover), vista: 'project', nav: navA('/', 'back'),
-      main: `<article class="project">${players}<div class="project__head"><h1 class="project__title">${esc(sinTildes(titulo))}</h1>`
+      main: `<article class="project">${players}<div class="project__head"><h1 class="project__title" aria-label="${esc(titulo)}">${paraWildTrave(esc(titulo))}</h1>`
         + `${ficha ? `<p class="project__meta">${esc(ficha)}</p>` : ''}</div>`
         + `<div class="stills">\n${stills}\n</div><a class="back" href="${url('/')}">← back</a></article>`,
     });

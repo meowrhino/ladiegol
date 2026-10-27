@@ -7,8 +7,7 @@
   --line: #262626;
 
   --font-title: "Wild Trave", "Arial Black", sans-serif;
-  --font-body: "DM Sans", system-ui, sans-serif;
-  --font-about: "Barlow Condensed", "Arial Narrow", sans-serif;
+  --font-body: "Rajdhani", system-ui, sans-serif;
 
   --gap: .75rem;
   --pad: 1.25rem;
@@ -16,17 +15,14 @@
 
 }
 
-/* Wild Trave Rounded (gratis) para el nombre, el welcome y los títulos de los
-   proyectos; Barlow Condensed (OFL) para el about, 300 el texto y 700 CONTACT;
-   DM Sans para todo lo demás. Servidas desde fonts/. Wild Trave no trae el
+/* Dos fuentes, como pidió ella: Wild Trave Rounded (gratis) para el nombre, el
+   welcome y los títulos de los proyectos; Rajdhani (OFL, 400 y 700) para todo lo
+   demás, el about incluido. Servidas desde fonts/. Wild Trave no trae el
    espacio ni tildes: el espacio sale de la siguiente de la lista, y las tildes
    las quita la plantilla (build/paginas.mjs, sinTildes). */
 @font-face { font-family: "Wild Trave"; src: url(../fonts/wild-trave-rounded.woff2) format("woff2"); font-display: swap; }
-@font-face { font-family: "Barlow Condensed"; src: url(../fonts/barlow-condensed-300.woff2) format("woff2"); font-weight: 300; font-display: swap; }
-@font-face { font-family: "Barlow Condensed"; src: url(../fonts/barlow-condensed-700.woff2) format("woff2"); font-weight: 700; font-display: swap; }
-@font-face { font-family: "DM Sans"; src: url(../fonts/dm-sans-300.woff2) format("woff2"); font-weight: 300; font-display: swap; }
-@font-face { font-family: "DM Sans"; src: url(../fonts/dm-sans-400.woff2) format("woff2"); font-display: swap; }
-@font-face { font-family: "DM Sans"; src: url(../fonts/dm-sans-900.woff2) format("woff2"); font-weight: 900; font-display: swap; }
+@font-face { font-family: "Rajdhani"; src: url(../fonts/rajdhani-400.woff2) format("woff2"); font-display: swap; }
+@font-face { font-family: "Rajdhani"; src: url(../fonts/rajdhani-700.woff2) format("woff2"); font-weight: 700; font-display: swap; }
 
 *, *::before, *::after { box-sizing: border-box; }
 
@@ -104,14 +100,12 @@ body[data-vista="welcome"] .app { padding: 0; }
   text-align: justify;
   hyphens: auto;   /* justificado sin huecos grandes, sobre todo en móvil */
   padding: 1rem 2rem 0;
-  font-family: var(--font-about);
   font-size: 1.35rem;
   line-height: 1.4;
   color: #fff;
   text-shadow: 0 0 30px rgba(0, 0, 0, .6);
 }
 .about p { white-space: pre-wrap; }
-.about > p:not([class]) { font-weight: 300; }
 
 /* la foto del about (data/about/1.webp), fija detrás de todo */
 .about__media { position: fixed; inset: 0; z-index: -1; background: #000; }
@@ -120,7 +114,7 @@ body[data-vista="welcome"] .app { padding: 0; }
 /* CONTACT, el mail y los iconos de Instagram y Vimeo */
 .about__contact { margin-top: 3rem; }
 .about__contact h2 { margin: 0 0 .3rem; font-size: inherit; font-weight: 700; letter-spacing: .06em; }
-.about__contact p { margin: 0; font-weight: 300; }
+.about__contact p { margin: 0; }
 .about__social { display: flex; gap: 1rem; margin-top: 1rem; }
 .about__social a { display: block; width: 1.5rem; height: 1.5rem; opacity: .85; }
 .about__social a:hover { opacity: 1; }

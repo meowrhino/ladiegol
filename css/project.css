@@ -20,6 +20,8 @@
   text-transform: uppercase;
   letter-spacing: .02em;
 }
+/* el ¿ y el ¡ que no tiene Wild Trave: un ? y un ! del revés (build/paginas.mjs) */
+.al-reves { display: inline-block; transform: rotate(180deg); }
 
 .project__meta {
   margin: 0;

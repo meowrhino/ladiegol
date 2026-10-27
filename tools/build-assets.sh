@@ -78,7 +78,10 @@ for entry in "${MAP[@]}"; do
   n=0
   while IFS= read -r still; do
     n=$((n + 1))
-    ffmpeg -nostdin -v error -i "$still" -vf "$(fit $IMG_MAX)" -y "$TMP/still.png"
+    # Los originales son capturas con el perfil de la pantalla (Color LCD, gama amplia).
+    # ffmpeg tira el perfil y la foto sale desaturada: antes se pasa a sRGB, como el canvas de imgToWeb.
+    sips -s format png -m "/System/Library/ColorSync/Profiles/sRGB Profile.icc" "$still" --out "$TMP/srgb.png" >/dev/null
+    ffmpeg -nostdin -v error -i "$TMP/srgb.png" -vf "$(fit $IMG_MAX)" -y "$TMP/still.png"
     cwebp -quiet -q $IMG_Q "$TMP/still.png" -o "$dst/img/$n.webp"
   done < <(images_in "$src_dir/stills")
   echo "    $n stills · $(du -sh "$dst/img" | cut -f1)"

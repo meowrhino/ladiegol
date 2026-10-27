@@ -21,11 +21,11 @@ import { el, shuffled } from "./dom.js";
 /* El ritmo del pase de stills. Son los números a tocar si va rápido o lento:
    cada foto está STILL_MS en pantalla y el fundido entre dos dura FUNDIDO_MS
    (ese valor está también en css/welcome.css). */
-const STILL_MS = 2600;
-const FUNDIDO_MS = 1100;
+const STILL_MS = 1500;
+const FUNDIDO_MS = 700;
 
-/* como poco, dos fotos enteras del pase antes de entrar (lo pidió ella: con
-   una sola se quedaba corto) */
+/* como poco, dos fotos del pase antes de entrar (con una se quedaba corto; con
+   dos de 2,6 s, largo: ahora pasan más rápido) */
 const MIN_MS = STILL_MS * 2;
 const MAX_MS = 10000;
 

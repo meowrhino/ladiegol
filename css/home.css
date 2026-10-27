@@ -67,13 +67,13 @@
 .tile.is-playing .tile__loop { opacity: 1; }
 .tile.is-playing .tile__still { opacity: 0; }
 
-/* el rótulo, pequeño y encima de la imagen: CLIENTE   TÍTULO, en DM Sans.
-   En móvil va debajo (ver abajo): así lo prefirió ella en cada pantalla */
+/* el rótulo, pequeño y debajo de la imagen: CLIENTE   TÍTULO, en Rajdhani */
 .tile__meta {
+  order: 1;
   display: flex;
   gap: 1.6em;
   font-family: var(--font-body);
-  font-weight: 900;
+  font-weight: 700;
   font-size: .8rem;
   line-height: 1.2;
   text-transform: uppercase;
@@ -91,7 +91,7 @@
 @media (max-width: 720px) {
   .grid { grid-template-columns: minmax(0, 1fr); row-gap: 1.75rem; }
   /* en una columna: debajo de la imagen, cliente a la izquierda y proyecto a la derecha */
-  .tile__meta { order: 1; justify-content: space-between; }
+  .tile__meta { justify-content: space-between; }
   .tile__meta span:last-child:not(:first-child) { text-align: right; }
   .tile--big, .tile--big.tile--right { grid-column: auto; grid-row: auto; }
 }
