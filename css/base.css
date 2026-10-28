@@ -100,7 +100,7 @@ body[data-vista="welcome"] .app { padding: 0; }
   text-align: justify;
   hyphens: auto;   /* justificado sin huecos grandes, sobre todo en móvil */
   padding: 1rem 2rem 0;
-  font-size: 1.35rem;
+  font-size: .95rem;   /* al 70 %, lo pidió ella (antes 1,35) */
   line-height: 1.4;
   color: #fff;
   text-shadow: 0 0 30px rgba(0, 0, 0, .6);
@@ -160,7 +160,7 @@ html[data-paso="welcome"]::view-transition-new(root) { animation: welcome-dentro
 
 /* en ordenador, un poco más grande y con líneas de ~70 letras */
 @media (min-width: 721px) {
-  .about { font-size: 1.5rem; width: min(66.667vw, 42rem); }
+  .about { font-size: 1.05rem; width: min(66.667vw, 30rem); }   /* 70 % de 1,5 y la caja igual, para que no salgan líneas larguísimas */
 }
 
 @media (prefers-reduced-motion: reduce) {
