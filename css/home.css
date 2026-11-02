@@ -67,10 +67,12 @@
 .tile.is-playing .tile__loop { opacity: 1; }
 .tile.is-playing .tile__still { opacity: 0; }
 
-/* el rótulo, pequeño y debajo de la imagen: CLIENTE   TÍTULO, en Rajdhani */
+/* el rótulo, pequeño y debajo de la imagen, en Rajdhani: el cliente a la
+   izquierda y el proyecto a la derecha (como en móvil; lo pidió ella) */
 .tile__meta {
   order: 1;
   display: flex;
+  justify-content: space-between;
   gap: 1.6em;
   font-family: var(--font-body);
   font-weight: 700;
@@ -82,7 +84,7 @@
 }
 
 .tile__meta span { overflow: hidden; text-overflow: ellipsis; }
-.tile__meta span:last-child:not(:first-child) { color: var(--fg-dim); }
+.tile__meta span:last-child:not(:first-child) { color: var(--fg-dim); text-align: right; }
 
 @media (max-width: 1000px) {
   .grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
@@ -90,8 +92,5 @@
 
 @media (max-width: 720px) {
   .grid { grid-template-columns: minmax(0, 1fr); row-gap: 1.75rem; }
-  /* en una columna: debajo de la imagen, cliente a la izquierda y proyecto a la derecha */
-  .tile__meta { justify-content: space-between; }
-  .tile__meta span:last-child:not(:first-child) { text-align: right; }
   .tile--big, .tile--big.tile--right { grid-column: auto; grid-row: auto; }
 }
