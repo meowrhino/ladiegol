@@ -28,7 +28,7 @@
    porque cada casilla lleva su rótulo */
 .grid {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-columns: repeat(2, minmax(0, 1fr));   /* de 2 en 2 (antes 3), lo pidió ella */
   column-gap: 1.25rem;
   row-gap: 2.5rem;
   grid-auto-flow: row dense;
@@ -40,7 +40,7 @@
   gap: .6rem;
 }
 
-/* los proyectos destacados ocupan dos columnas y dos filas, alternando lado */
+/* los proyectos destacados ocupan las dos columnas: a lo ancho */
 .tile--big { grid-column: span 2; grid-row: span 2; }
 .tile--big.tile--right { grid-column: -3 / -1; }
 
@@ -85,10 +85,6 @@
 
 .tile__meta span { overflow: hidden; text-overflow: ellipsis; }
 .tile__meta span:last-child:not(:first-child) { color: var(--fg-dim); text-align: right; }
-
-@media (max-width: 1000px) {
-  .grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-}
 
 @media (max-width: 720px) {
   .grid { grid-template-columns: minmax(0, 1fr); row-gap: 1.75rem; }

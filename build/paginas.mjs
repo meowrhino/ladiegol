@@ -196,6 +196,7 @@ window.revelada = ${preview ? 'false' : "'onpagereveal' in window"} ? new Promis
   <link rel="apple-touch-icon" href="${raiz('/img/icon.png')}" />
   <link rel="preload" href="${raiz('/fonts/rajdhani-400.woff2')}" as="font" type="font/woff2" crossorigin />
   <link rel="preload" href="${raiz('/fonts/wild-trave-rounded.woff2')}" as="font" type="font/woff2" crossorigin />
+  ${vista === 'about' ? `<link rel="preload" href="${raiz('/fonts/dm-mono-400.woff2')}" as="font" type="font/woff2" crossorigin />` : ''}
   ${headScript}
   <link rel="stylesheet" href="${raiz('/css/transicion.css')}" />
   <link rel="stylesheet" href="${raiz('/css/base.css')}" />
@@ -277,14 +278,15 @@ window.revelada = ${preview ? 'false' : "'onpagereveal' in window"} ? new Promis
     const vimeo = String(site.social?.vimeo || '');
     const red = (url, nombre) => `<a href="${esc(url)}" target="_blank" rel="noopener" aria-label="${nombre}" title="${nombre}">${ICONO[nombre]}</a>`;
     const redes = (insta ? red(`https://instagram.com/${insta}`, 'instagram') : '') + (vimeo ? red(`https://vimeo.com/${vimeo}`, 'vimeo') : '');
-    const main = `<section class="about">`
-      + `<div class="about__media"><img src="${raiz('/' + FOTO_ABOUT)}" alt=""${wh(FOTO_ABOUT)} decoding="async" /><div class="welcome__veil about__veil"></div></div>`
+    // dos columnas en ordenador: el texto a la izquierda y la foto a la derecha
+    const main = `<section class="about"><div class="about__text">`
       + parrafos(about.text).map(p => `<p>${esc(p)}</p>`).join('')
       + (about.clients?.length ? `<p class="about__clients">clients: ${esc(about.clients.join(', '))}</p>` : '')
       + (site.email || redes ? `<div class="about__contact"><h2>CONTACT</h2>`
         + (site.email ? `<p><a href="mailto:${esc(site.email)}">${esc(site.email)}</a></p>` : '')
         + (redes ? `<div class="about__social">${redes}</div>` : '') + `</div>` : '')
-      + `<p class="about__credito">web: <a href="https://meowrhino.studio" target="_blank" rel="noopener">meowrhino.studio</a></p>`
+      + `<p class="about__credito">web: <a href="https://meowrhino.studio" target="_blank" rel="noopener">meowrhino.studio</a></p></div>`
+      + `<img class="about__foto" src="${raiz('/' + FOTO_ABOUT)}" alt="${esc(NOMBRE)}"${wh(FOTO_ABOUT)} decoding="async" />`
       + `</section>`;
     const desc = parrafos(about.text)[0] || site.description;
     return pagina({ ruta: '/about/', titulo: `about — ${NOMBRE}`, desc: corto(desc), imagen: FOTO_ABOUT,

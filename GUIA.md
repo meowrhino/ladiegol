@@ -11,7 +11,7 @@ Todo lo que cambia está en dos ficheros y una carpeta por proyecto:
 data/site.json                 lo general: el nombre, el welcome y la lista de
                                proyectos (qué sale en la home y en qué orden)
 data/about.json                el texto del about y los clientes
-data/about/1.webp              la foto de detrás del about
+data/about/1.webp              la foto del about (a la derecha del texto)
 projects/<slug>/project.json   un proyecto: título, cliente, tipo, vídeos y fotos
 projects/<slug>/img/           sus fotos (1.webp, 2.webp…) y su loop (loop.webm)
 ```

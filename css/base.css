@@ -8,6 +8,7 @@
 
   --font-title: "Wild Trave", "Arial Black", sans-serif;
   --font-body: "Rajdhani", system-ui, sans-serif;
+  --font-about: "DM Mono", ui-monospace, monospace;
 
   --gap: .75rem;
   --pad: 1.25rem;
@@ -15,14 +16,16 @@
 
 }
 
-/* Dos fuentes, como pidió ella: Wild Trave Rounded (gratis) para el nombre, el
-   welcome y los títulos de los proyectos; Rajdhani (OFL, 400 y 700) para todo lo
-   demás, el about incluido. Servidas desde fonts/. Wild Trave no trae el
+/* Tres fuentes, como pidió ella: Wild Trave Rounded (gratis) para el nombre, el
+   welcome y los títulos de los proyectos; DM Mono (OFL, 400 y 500) para el
+   about; Rajdhani (OFL, 400 y 700) para todo lo demás. Servidas desde fonts/. Wild Trave no trae el
    espacio ni tildes: el espacio sale de la siguiente de la lista, y las tildes
    las quita la plantilla (build/paginas.mjs, sinTildes). */
 @font-face { font-family: "Wild Trave"; src: url(../fonts/wild-trave-rounded.woff2) format("woff2"); font-display: swap; }
 @font-face { font-family: "Rajdhani"; src: url(../fonts/rajdhani-400.woff2) format("woff2"); font-display: swap; }
 @font-face { font-family: "Rajdhani"; src: url(../fonts/rajdhani-700.woff2) format("woff2"); font-weight: 700; font-display: swap; }
+@font-face { font-family: "DM Mono"; src: url(../fonts/dm-mono-400.woff2) format("woff2"); font-display: swap; }
+@font-face { font-family: "DM Mono"; src: url(../fonts/dm-mono-500.woff2) format("woff2"); font-weight: 500; font-display: swap; }
 
 *, *::before, *::after { box-sizing: border-box; }
 
@@ -94,26 +97,22 @@ body[data-vista="welcome"] .app { padding: 0; }
 
 /* ---------- about ---------- */
 
+/* en DM Mono y en mayúsculas; en ordenador, el texto a la izquierda y la foto
+   (data/about/1.webp) a la derecha, arriba los dos a la misma altura */
 .about {
-  width: 50vw;
-  box-sizing: border-box;
-  text-align: justify;
-  hyphens: auto;   /* justificado sin huecos grandes, sobre todo en móvil */
-  padding: 1rem 2rem 0;
-  font-size: .95rem;   /* al 70 %, lo pidió ella (antes 1,35) */
-  line-height: 1.4;
-  color: #fff;
-  text-shadow: 0 0 30px rgba(0, 0, 0, .6);
+  padding: 1rem 0 0;
+  font-family: var(--font-about);
+  font-size: 1.1rem;
+  line-height: 1.55;
+  letter-spacing: .04em;
+  text-transform: uppercase;
 }
-.about p { white-space: pre-wrap; }
-
-/* la foto del about (data/about/1.webp), fija detrás de todo */
-.about__media { position: fixed; inset: 0; z-index: -1; background: #000; }
-.about__veil { background: rgba(0, 0, 0, .55); }
+.about__text p { margin: 0 0 1.4em; }
+.about__foto { height: auto; margin-top: 3rem; }
 
 /* CONTACT, el mail y los iconos de Instagram y Vimeo */
 .about__contact { margin-top: 3rem; }
-.about__contact h2 { margin: 0 0 .3rem; font-size: inherit; font-weight: 700; letter-spacing: .06em; }
+.about__contact h2 { margin: 0 0 .3rem; font-size: inherit; font-weight: 500; letter-spacing: .06em; }
 .about__contact p { margin: 0; }
 .about__social { display: flex; gap: 1rem; margin-top: 1rem; }
 .about__social a { display: block; width: 1.5rem; height: 1.5rem; opacity: .85; }
@@ -129,7 +128,7 @@ body[data-vista="welcome"] .app { padding: 0; }
 }
 
 /* la firma del estudio, como en almarbra: pequeña, gris y al final */
-.about__credito {
+.about__text .about__credito {
   margin: 5rem 0 0;
   text-align: left;
   font-size: .75rem;
@@ -153,14 +152,21 @@ html[data-paso="welcome"]::view-transition-new(root) { animation: welcome-dentro
 @media (max-width: 720px) {
   :root { --gap: 6px; --pad: 12px; }
   .wordmark { font-size: 10vw; }
-  .about { width: auto; padding-inline: 0; }
   /* mismo aire sobre el nombre (bajo el nav) que debajo */
   .site-header { padding: calc(var(--pad) + 2.2rem + var(--pad) * 4) var(--pad) calc(var(--pad) * 4); }
 }
 
-/* en ordenador, un poco más grande y con líneas de ~70 letras */
+/* en ordenador, dos columnas iguales y con aire entre ellas */
 @media (min-width: 721px) {
-  .about { font-size: 1.05rem; width: min(66.667vw, 30rem); }   /* 70 % de 1,5 y la caja igual, para que no salgan líneas larguísimas */
+  body[data-vista="about"] .about {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    align-items: start;
+    gap: clamp(2rem, 6vw, 8rem);
+    max-width: 85rem;
+    margin: 0 auto;
+  }
+  .about__foto { margin-top: 0; }
 }
 
 @media (prefers-reduced-motion: reduce) {

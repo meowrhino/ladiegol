@@ -14,7 +14,7 @@
 .project__title {
   margin: 0;
   font-family: var(--font-title);
-  font-size: 1.5rem;
+  font-size: 2.4rem;   /* más grande, lo pidió ella (antes 1,5) */
   text-wrap: balance;
   font-weight: 400;
   text-transform: uppercase;
@@ -28,7 +28,7 @@
   color: var(--fg-dim);
   text-transform: lowercase;
   letter-spacing: .02em;
-  font-size: 1.05rem;
+  font-size: 1.5rem;   /* antes 1,05 */
 }
 
 /* el back del final: centrado, grande y con aire */
@@ -80,7 +80,8 @@
 .still.ok { opacity: 1; }
 
 @media (max-width: 720px) {
-  .project__title { font-size: 1.15rem; }
+  .project__title { font-size: 1.6rem; }
+  .project__meta { font-size: 1.2rem; }
   .stills { gap: 1.5rem; }
   .player + .player { margin-top: 3rem; }
 }
