@@ -11,7 +11,7 @@
 
    En la home sale la primera vez de cada visita, encima del grid: es también
    el loader. Mientras se ve, se descargan las portadas de la home y las
-   fuentes, con el porcentaje abajo. Cuando está todo (y ha pasado MIN_MS,
+   fuentes (sin porcentaje: lo quitó ella). Cuando está todo (y ha pasado MIN_MS,
    para que dé tiempo a verlo) entra solo en la home, con un fundido lento.
    Si algo tarda más de MAX_MS entra igual, y con un clic se entra antes. */
 
@@ -83,8 +83,7 @@ export function welcome({ name: nombre, mode: modo, home, stills, loops, covers 
 
   const name = el("h1", "welcome__name", nombre);
 
-  const hint = el("p", "welcome__hint", "0%");
-  wrap.append(media, el("div", "welcome__veil"), name, hint);
+  wrap.append(media, el("div", "welcome__veil"), name);
   document.getElementById("app").prepend(wrap);
 
   const stopPase = mode === "stills" ? runStills(layers, cola) : runLoops(layers, cola);
@@ -96,7 +95,7 @@ export function welcome({ name: nombre, mode: modo, home, stills, loops, covers 
 
   const t0 = performance.now();
   const timers = [setTimeout(entrar, MAX_MS)];
-  precargar(covers, (f) => (hint.textContent = `${Math.round(f * 100)}%`)).then(() => {
+  precargar(covers).then(() => {
     timers.push(setTimeout(entrar, Math.max(0, MIN_MS - (performance.now() - t0))));
   });
 
@@ -111,25 +110,18 @@ export function welcome({ name: nombre, mode: modo, home, stills, loops, covers 
   }
 }
 
-/* Descarga las portadas de la home y espera a las fuentes; avisa del avance
-   (de 0 a 1). Las fotos que fallan cuentan igual: el loader no se atasca. */
-function precargar(urls, avance) {
-  const total = urls.length + 1;
-  let hechas = 0;
-  const una = () => avance(++hechas / total);
-
+/* Descarga las portadas de la home y espera a las fuentes. Las fotos que
+   fallan cuentan igual: el loader no se atasca. */
+function precargar(urls) {
   const fotos = urls.map(
     (src) =>
       new Promise((ok) => {
         const img = new Image();
-        img.onload = img.onerror = () => {
-          una();
-          ok();
-        };
+        img.onload = img.onerror = ok;
         img.src = src;
       })
   );
-  return Promise.all([...fotos, document.fonts.ready.then(una)]);
+  return Promise.all([...fotos, document.fonts.ready]);
 }
 
 function slot(mode) {
