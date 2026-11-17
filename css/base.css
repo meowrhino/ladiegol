@@ -149,6 +149,30 @@ html[data-paso="welcome"]::view-transition-new(root) { animation: welcome-dentro
 @keyframes welcome-fuera { to { opacity: 0; } }
 @keyframes welcome-dentro { from { opacity: 0; } }
 
+/* el loader de la casa (si la página tarda más de medio segundo), en vez del
+   cuadradito: "LA DIEGOL" del tamaño del nombre, apagada, y una luz que la
+   recorre de izquierda a derecha hasta dejarla blanca. Fuera con .tapando
+   (atrás y adelante), como el de la casa */
+:is(.tapada, .cargando):not(.tapando) body::after {
+  content: "LA DIEGOL";
+  width: auto;
+  height: auto;
+  font-family: var(--font-title);
+  font-size: clamp(24px, 3.6vw, 7.2rem);
+  line-height: 1;
+  white-space: nowrap;
+  color: transparent;
+  background: linear-gradient(90deg, var(--fg) 45%, #262626 55%) 100% 0 / 220% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  --carga-anim: encender 1.4s cubic-bezier(.65, 0, .25, 1) .5s both;
+}
+@keyframes encender { to { background-position: 0 0; } }
+
+@media (prefers-reduced-motion: reduce) {
+  :is(.tapada, .cargando):not(.tapando) body::after { --carga-anim: none; background-position: 0 0; }
+}
+
 @media (max-width: 720px) {
   :root { --gap: 6px; --pad: 12px; }
   .wordmark { font-size: 10vw; }
