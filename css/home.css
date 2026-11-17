@@ -15,6 +15,9 @@
   border: 0;
   background: none;
   font: inherit;
+  /* un botón no hereda esto solo: sin ello, "all" salía en minúscula */
+  text-transform: inherit;
+  letter-spacing: inherit;
   color: var(--fg-dim);
   cursor: pointer;
 }
