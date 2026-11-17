@@ -1,5 +1,7 @@
 # Traspaso: la web a la cuenta de LA DIEGOL
 
+Traspaso hecho el 2026-11-17. Ya cumplió su uso: no se actualiza.
+
 LA DIEGOL ya tiene su copia: **`ladiegol/web`**, conectada a Workers Builds en su
 Cloudflare con **ladiegol.com**. Hasta octubre de 2026 publicaba una página
 provisional de *work in progress*. El de meowrhino se queda de copia nuestra en
@@ -46,7 +48,7 @@ Hecho el 2026-11-17 (su `main` = `abef543`, "La web de LA DIEGOL"):
 - [x] Cloudflare → `ladiegol.com` → **Email → Email Routing**: activarlo (añade los MX
       y el SPF solo; si el dominio ya tiene MX de otro correo, parar y hablarlo).
       En el panel de 2026 el botón es **Onboard Domain**, no *Get started*.
-- [x] Una regla: `hi@ladiegol.com` → su correo de siempre (`martadiegol@gmail.com`), y confirmar el mail que le llega.
+- [x] Una regla: `hi@ladiegol.com` → su correo de siempre, y confirmar el mail que le llega.
 - [x] Escribir a hi@ladiegol.com desde otra cuenta y ver que llega (si no, mirar spam).
       Hecho el 2026-11-17: hi@ → su Gmail, le llegó el de una amiga.
 - [x] Contestar: desde su Gmail. *Enviar como* hi@ desde Gmail no se pudo (2026-11-17: con
