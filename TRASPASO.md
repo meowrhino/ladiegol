@@ -16,22 +16,28 @@ Tiempo: unos 20 minutos (el dominio ya está).
 
 ## Antes
 
-- [ ] `main` está al día y sin cambios a medias (`git status` limpio), y la copia
+- [x] `main` está al día y sin cambios a medias (`git status` limpio), y la copia
       nuestra en github.io se ve bien.
-- [ ] **manu da el ok**: el paso 1 publica ladiegol.com y quita la página provisional.
+- [x] **manu da el ok**: el paso 1 publica ladiegol.com y quita la página provisional.
 
 ## 1. Su copia
 
-Su `main` es otra historia (la página provisional), así que se sustituye entera.
-Antes, por si acaso, se guarda la provisional en una rama suya:
+Su `main` es otra historia (la página provisional), así que se sustituye entera,
+y **sin nuestra historia** (JAMstack, receta, fase 3): un solo commit, sin
+`CLAUDE.md`, `TRASPASO.md` ni `.claude/` (son nuestros), y el README sin
+enlazarlos. Antes, por si acaso, se guarda la provisional en una rama suya.
+Hecho el 2026-11-17 (su `main` = `abef543`, "La web de LA DIEGOL"):
 
-- [ ] `git remote add web https://github.com/ladiegol/web.git` (si no está) y `git fetch web`
-- [ ] `git push web refs/remotes/web/main:refs/heads/wip` (la provisional, guardada en `wip`)
-- [ ] `git push --force-with-lease=main:web/main web main:main`
+- [x] `git remote add web https://github.com/ladiegol/web.git` (si no está) y `git fetch web`
+- [x] `git push web refs/remotes/web/main:refs/heads/wip` (la provisional, guardada en `wip`)
+- [x] Copia limpia: `git archive HEAD` a una carpeta aparte → fuera `CLAUDE.md`,
+      `TRASPASO.md` y `.claude/`, y la frase del README que los enlaza → `git init -b main`
+      → un commit → `git push --force-with-lease=main:<sha de web/main> <su repo> main:main`
 
 ## 2. Cloudflare (en la suya, ya conectada)
 
-- [ ] Workers & Pages → `ladiegol` → **Deployments**: el build de este push, en verde.
+- [x] Workers & Pages → `ladiegol` → **Deployments**: el build de este push, en verde
+      (no lo vimos en su panel: ladiegol.com salió con la web nueva al minuto).
       Lo demás lo lee de `wrangler.jsonc` (instala sharp con `npm install`, build
       `node build/build.mjs`, sale `dist/`). Si sale en rojo: [CLAUDE.md](CLAUDE.md).
 
@@ -40,8 +46,10 @@ Antes, por si acaso, se guarda la provisional en una rama suya:
 - [ ] Cloudflare → `ladiegol.com` → **Email → Email Routing**: activarlo (añade los MX
       y el SPF solo; si el dominio ya tiene MX de otro correo, parar y hablarlo).
 - [ ] Una regla: `hi@ladiegol.com` → su correo de siempre, y confirmar el mail que le llega.
-- [ ] Escribir a hi@ladiegol.com desde otra cuenta y ver que llega. Contesta desde su
-      correo de siempre: enviar *como* hi@ no va con esto.
+- [ ] Escribir a hi@ladiegol.com desde otra cuenta y ver que llega (si no, mirar spam).
+- [ ] Si quiere contestar *como* hi@: en Gmail, Enviar correo como, con `smtp.gmail.com`
+      y una contraseña de aplicación, y `include:_spf.google.com` en el SPF
+      (JAMstack, patrones §5, "Correo con el dominio").
 
 ## 3. Que nos deje entrar
 
@@ -50,13 +58,14 @@ Antes, por si acaso, se guarda la provisional en una rama suya:
 
 ## 4. Comprobar en ladiegol.com
 
-- [ ] La home (con el welcome la primera vez), `/about/`, dos proyectos y `/no-existe/` (404).
+- [x] La home (con el welcome la primera vez), `/about/`, dos proyectos y `/no-existe/` (404).
 - [ ] Un vídeo de Vimeo se reproduce y los loops arrancan al pasar el ratón.
-- [ ] Las direcciones viejas: `/aftermatch` → `/aftermatch/` y
+- [x] Las direcciones viejas: `/aftermatch` → `/aftermatch/` y
       `/_PROJECTS/cerca/stills/6.webp` → `/projects/cerca/img/6.webp` (301).
-- [ ] `view-source:`: `canonical` y `og:url` con ladiegol.com, y **sin** `<meta name="robots" content="noindex">`.
-- [ ] `/robots.txt` dice `Allow` y `/sitemap.xml` tiene las direcciones de ladiegol.com.
-- [ ] Compartir un proyecto por WhatsApp: sale su portada (la og).
+- [x] `view-source:`: `canonical` y `og:url` con ladiegol.com, y **sin** `<meta name="robots" content="noindex">`.
+- [x] `/robots.txt` dice `Allow` y `/sitemap.xml` tiene las direcciones de ladiegol.com.
+- [ ] Compartir un proyecto por WhatsApp: sale su portada (la og). La og ya responde
+      (`/og/….jpg`, 200); falta verla en WhatsApp.
 
 ## 5. Search Console, con su cuenta de Google
 
