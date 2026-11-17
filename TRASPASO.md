@@ -87,5 +87,5 @@ Con ella delante, siguiendo [GUIA.md](GUIA.md) ("La primera vez: preparar VS Cod
 
 ## 7. Al acabar
 
-- [ ] Fila de ladiegol en `JAMstack/inventario.md` con las dos direcciones.
-- [ ] La copia de meowrhino sigue en github.io con `noindex`: no compite en Google.
+- [x] Fila de ladiegol en `JAMstack/inventario.md` con las dos direcciones.
+- [x] La copia de meowrhino sigue en github.io con `noindex`: no compite en Google.
