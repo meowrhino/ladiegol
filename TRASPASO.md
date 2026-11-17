@@ -46,12 +46,14 @@ Hecho el 2026-11-17 (su `main` = `abef543`, "La web de LA DIEGOL"):
 - [x] Cloudflare → `ladiegol.com` → **Email → Email Routing**: activarlo (añade los MX
       y el SPF solo; si el dominio ya tiene MX de otro correo, parar y hablarlo).
       En el panel de 2026 el botón es **Onboard Domain**, no *Get started*.
-- [x] Una regla: `hi@ladiegol.com` → su correo de siempre, y confirmar el mail que le llega.
+- [x] Una regla: `hi@ladiegol.com` → su correo de siempre (`martadiegol@gmail.com`), y confirmar el mail que le llega.
 - [x] Escribir a hi@ladiegol.com desde otra cuenta y ver que llega (si no, mirar spam).
       Hecho el 2026-11-17: hi@ → su Gmail, le llegó el de una amiga.
-- [ ] Si quiere contestar *como* hi@: en Gmail, Enviar correo como, con `smtp.gmail.com`
-      y una contraseña de aplicación, y `include:_spf.google.com` en el SPF
-      (JAMstack, patrones §5, "Correo con el dominio").
+- [x] Contestar: desde su Gmail. *Enviar como* hi@ desde Gmail no se pudo (2026-11-17: con
+      la contraseña de aplicación, "No se ha podido terminar de configurar esta cuenta"):
+      Google lo quita en enero de 2027 y ya bloquea las altas nuevas. Que quite las
+      contraseñas de aplicación que creó. Si quiere enviar como hi@, es de pago
+      (JAMstack, patrones §5, "Correo con el dominio"). El DNS no se toca.
 
 ## 3. Que nos deje entrar
 
