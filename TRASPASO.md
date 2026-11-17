@@ -35,6 +35,14 @@ Antes, por si acaso, se guarda la provisional en una rama suya:
       Lo demás lo lee de `wrangler.jsonc` (instala sharp con `npm install`, build
       `node build/build.mjs`, sale `dist/`). Si sale en rojo: [CLAUDE.md](CLAUDE.md).
 
+## 2b. El correo (hi@ladiegol.com, el del about)
+
+- [ ] Cloudflare → `ladiegol.com` → **Email → Email Routing**: activarlo (añade los MX
+      y el SPF solo; si el dominio ya tiene MX de otro correo, parar y hablarlo).
+- [ ] Una regla: `hi@ladiegol.com` → su correo de siempre, y confirmar el mail que le llega.
+- [ ] Escribir a hi@ladiegol.com desde otra cuenta y ver que llega. Contesta desde su
+      correo de siempre: enviar *como* hi@ no va con esto.
+
 ## 3. Que nos deje entrar
 
 - [ ] GitHub, en su repo: ya tenemos **Write**.
