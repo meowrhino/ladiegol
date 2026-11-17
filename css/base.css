@@ -179,5 +179,11 @@ html[data-paso="welcome"]::view-transition-new(root) { animation: welcome-dentro
     margin: 0 auto;
   }
   .about__foto { order: 0; margin-bottom: 0; }
+  /* la columna del texto, tan alta como la foto: la bio en el medio y CONTACT
+     con la firma abajo, al pie de la foto (lo pidió ella) */
+  body[data-vista="about"] .about__text { align-self: stretch; display: flex; flex-direction: column; }
+  body[data-vista="about"] .about__text > :first-child,
+  body[data-vista="about"] .about__contact { margin-top: auto; }
+  body[data-vista="about"] .about__text .about__credito { margin: 2rem 0 0; }
 }
 
