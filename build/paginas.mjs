@@ -158,7 +158,7 @@ try {
   const d = JSON.parse(sessionStorage.getItem('transicion'));
   back = !d && performance.getEntriesByType('navigation')[0]?.type === 'back_forward';
   if (d?.carga) html.style.setProperty('--carga', d.carga);   // el color del loader, del dibujo
-  if (!matchMedia('(prefers-reduced-motion: reduce)').matches && (back || d)) html.classList.add('tapada');
+  if (back || d) html.classList.add('tapada');
 } catch {}
 window.revelada = ${preview ? 'false' : "'onpagereveal' in window"} ? new Promise((done) => addEventListener('pagereveal', (e) => {
   const vt = e.viewTransition;
@@ -196,7 +196,7 @@ window.revelada = ${preview ? 'false' : "'onpagereveal' in window"} ? new Promis
   <link rel="apple-touch-icon" href="${raiz('/img/icon.png')}" />
   <link rel="preload" href="${raiz('/fonts/rajdhani-400.woff2')}" as="font" type="font/woff2" crossorigin />
   <link rel="preload" href="${raiz('/fonts/wild-trave-rounded.woff2')}" as="font" type="font/woff2" crossorigin />
-  ${vista === 'about' ? `<link rel="preload" href="${raiz('/fonts/dm-mono-400.woff2')}" as="font" type="font/woff2" crossorigin />` : ''}
+  <link rel="preload" href="${raiz('/fonts/dm-mono-400.woff2')}" as="font" type="font/woff2" crossorigin />
   ${headScript}
   <link rel="stylesheet" href="${raiz('/css/transicion.css')}" />
   <link rel="stylesheet" href="${raiz('/css/base.css')}" />

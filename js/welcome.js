@@ -15,7 +15,7 @@
    para que dé tiempo a verlo) entra solo en la home, con un fundido lento.
    Si algo tarda más de MAX_MS entra igual, y con un clic se entra antes. */
 
-import { loopsEnabled, reducedMotion, velocidadLoops } from "./config.js";
+import { loopsEnabled, velocidadLoops } from "./config.js";
 import { el, shuffled } from "./dom.js";
 
 /* El ritmo del pase de stills. Son los números a tocar si va rápido o lento:
@@ -60,7 +60,7 @@ function salir(wrap, home, parar) {
     document.body.dataset.vista = "home";
     window.scrollTo(0, 0);
   };
-  if (reducedMotion || !document.startViewTransition) return quitar();
+  if (!document.startViewTransition) return quitar();
   html.dataset.paso = "welcome";
   const t = document.startViewTransition(quitar);
   // si la pestaña está en segundo plano el navegador se salta la animación
@@ -71,7 +71,7 @@ function salir(wrap, home, parar) {
 
 export function welcome({ name: nombre, mode: modo, home, stills, loops, covers }) {
   visto();
-  // sin loops (ahorro de datos o reduced motion) el modo loop no tiene sentido
+  // sin loops (ahorro de datos) el modo loop no tiene sentido
   const mode =
     modo === "loop" && loopsEnabled && innerWidth <= PANTALLA_ENORME ? "loop" : "stills";
 
@@ -257,7 +257,7 @@ function runStills(layers, todos) {
       img.classList.add("is-front");
       front = back;
       // un zoom lentísimo: la foto respira en vez de quedarse clavada
-      if (!reducedMotion && img.animate) {
+      if (img.animate) {
         img.animate([{ transform: "scale(1.015)" }, { transform: "scale(1.06)" }], {
           duration: STILL_MS + FUNDIDO_MS,
           easing: "linear",

@@ -15,7 +15,6 @@
   border: 0;
   background: none;
   font: inherit;
-  text-transform: lowercase;
   color: var(--fg-dim);
   cursor: pointer;
 }
@@ -29,8 +28,8 @@
 .grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));   /* de 2 en 2 (antes 3), lo pidió ella */
-  column-gap: 1.25rem;
-  row-gap: 2.5rem;
+  column-gap: 3rem;   /* más aire entre imágenes, lo pidió ella */
+  row-gap: 3.5rem;
   grid-auto-flow: row dense;
 }
 
@@ -67,16 +66,17 @@
 .tile.is-playing .tile__loop { opacity: 1; }
 .tile.is-playing .tile__still { opacity: 0; }
 
-/* el rótulo, pequeño y debajo de la imagen, en Rajdhani: el cliente a la
-   izquierda y el proyecto a la derecha (como en móvil; lo pidió ella) */
+/* el rótulo, pequeño y debajo de la imagen, en DM Mono como la bio: el
+   cliente a la izquierda, en 500, y el proyecto a la derecha, en 400 y gris
+   (como en móvil; lo pidió ella) */
 .tile__meta {
   order: 1;
   display: flex;
   justify-content: space-between;
   gap: 1.6em;
-  font-family: var(--font-body);
-  font-weight: 700;
-  font-size: .8rem;
+  font-family: var(--font-about);
+  font-weight: 500;
+  font-size: .75rem;
   line-height: 1.2;
   text-transform: uppercase;
   letter-spacing: .02em;
@@ -84,7 +84,7 @@
 }
 
 .tile__meta span { overflow: hidden; text-overflow: ellipsis; }
-.tile__meta span:last-child:not(:first-child) { color: var(--fg-dim); text-align: right; }
+.tile__meta span:last-child:not(:first-child) { font-weight: 400; color: var(--fg-dim); text-align: right; }
 
 @media (max-width: 720px) {
   .grid { grid-template-columns: minmax(0, 1fr); row-gap: 1.75rem; }
